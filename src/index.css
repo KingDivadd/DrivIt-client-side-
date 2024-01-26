@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Montserrat:wght@200;300;400;500;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+html,
+body,
+#root,
+.app {
+    height: 100%;
+    width: 100%;
+    font-family: "Manrope";
+}
+
+.input {
+    outline: none;
+    font-family: "Montserrat";
+    padding: 0 .5rem;
+    font-size: 1rem;
+    border-radius: .2rem;
+    border: none;
+}
+
+.smButton {
+    background-color: orange;
+}
+
+.smButton:hover {
+    cursor: pointer;
+    color: white;
+    background-color: greenyellow;
+}
+
+.btn-1 {
+    /* display: none; */
+    background-color: cornflowerblue;
+    color: white;
+    height: 2.5rem;
+    padding: 0 .25rem;
+    padding-left: .2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: .3rem;
+}
+
+.btn-1:hover {
+    cursor: pointer;
+    background-color: white;
+    color: cornflowerblue
+}
+
+.active-btn-1 {
+    cursor: pointer;
+    background-color: white;
+    color: cornflowerblue
+}
+
+.dormat:hover {
+    cursor: pointer;
+    background-color: rgb(126, 166, 239);
+    color: white;
+}
+
+.warning-btn-1:hover {
+    cursor: pointer;
+    background-color: rgba(255, 123, 0, 0.963);
+    color: white;
+}
+
+.btn-2 {
+    background-color: 'orange';
+    color: 'red'
+}
