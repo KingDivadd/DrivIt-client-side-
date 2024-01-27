@@ -8,11 +8,13 @@ import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
+import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, FeedbackCard, StatusCard, WorkbayMaintCard } from 'components/role-card';
 import Table, { CustomizedTables, ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
-import { FaArrowLeft } from "react-icons/fa"
+import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
+import { MdOutlinePendingActions } from "react-icons/md";
+import SideBar from '../components/side-bar'
 
 
 const WorkbayReport = ()=>{
@@ -28,6 +30,7 @@ const WorkbayReport = ()=>{
     const handlePage = (value)=>{
         console.log(value)
         localStorage.setItem("page", value)
+        navigate(`/${value}`)
     }
     
     const handlePlanMaint = ()=>{
@@ -47,42 +50,7 @@ const WorkbayReport = ()=>{
     }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'auto',}}>
-            <Grid item container xs={0} sm={4} md={2.5} lg={2} sx={{overflowY:'auto', p: '.25rem', background: 'cornflowerblue', height: '100vh'}} >
-                <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
-                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start',}}>
-                        <Typography component={"h2"} variant='h2' color={'white'} sx={{fontWeight: '500'}}>DRIVIT</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
-                        <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Dashboard</Typography> 
-                        </Box>
-                        <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', pl: 2, }}>
-                            <Typography variant='h5'>Workbay</Typography> 
-                        </Box>
-                        <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Vehicle log</Typography> 
-                        </Box>
-                        <Box className={page === "assigned-vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("assigned-vehicle")} sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Assigned Vehicle</Typography> 
-                        </Box>
-                        <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Reports</Typography> 
-                        </Box>
-                    </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
-                        <Box className='btn-1' sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Feedback</Typography> 
-                        </Box>
-                        <Box className='btn-1' sx={{width: '100%', pl: 2, }}>
-                            <Typography variant='h5'>Help Center</Typography> 
-                        </Box>
-                        <Box className='btn-1 warning-btn-1' sx={{width: '100%', pl: 2, }} >
-                            <Typography variant='h5'>Log Out</Typography> 
-                        </Box>
-                    </Box>
-                    
-                </Grid>
-            </Grid>
+            <SideBar />
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{background: 'gray', overflowY:'auto'}} >
                 {/* right top section */}
@@ -98,10 +66,16 @@ const WorkbayReport = ()=>{
                     </Box>
                 </Box>
                 {/* right bottom section */}
-                <Grid container sx={{ mt: '.75rem',  p: '0 .75rem', overflow: "hidden"}}  >
+                <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
                             <Typography variant='h3' sx={{fontWeight: '600'}}>FUTAWORK-0010</Typography>
+                            <Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.5rem', borderRadius: '.3rem', p: '0 .5rem' }}>
+                                {/* <Typography variant='h5' sx={{fontWeight: '500'}}>Status</Typography> */}
+                                <MdOutlinePendingActions size={'1.5rem'} color={'cornflowerblue'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>Pending...</Typography>
+
+                            </Box>
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
@@ -111,16 +85,27 @@ const WorkbayReport = ()=>{
                                 </Box>
                                 
                             </Box>
-                            <Box sx={{width: '100%', display: 'flex', justifyContent: 'flex-end', height: '100%', alignItems: 'center' }}>
-                                
+                            <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
+                                <Box className='hollow-btn' bgColor='primary.light' sx={{width: '8rem',  height: '2.5rem',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    Export
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
 
-                    <Box sx={{width: '100%',  mt: '.75rem',background: 'white', borderRadius: '.3rem',p:'1rem'}}>
+                    <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.5rem'}}>
                         {/* the table */}
-                        <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden'}}>
-                            fish    
+                        <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
+                            {/* The left side */}
+                            <Box sx={{width: '100%'}}>
+                                <WorkbayMaintCard />
+                                <StatusCard value={'Pending...'} icon={<MdOutlinePendingActions size={'2rem'} />} suffix={""} />
+                                
+                            </Box>
+                            {/* the right side */}
+                            <Box sx={{width: '100%'}}>
+                                <FeedbackCard />
+                            </Box>
                         </Box> 
                     </Box>
                 </Grid>

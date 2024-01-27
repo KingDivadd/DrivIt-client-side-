@@ -17,6 +17,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { EditLogModal } from './modal';
 
 
 export default function Tables(){
@@ -57,8 +58,7 @@ const sample = [
 // }
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: 'cornflowerblue',
-        color: 'white',
+        color: 'black',
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
@@ -103,7 +103,7 @@ export function CustomizedTables() {
         navigate(`./${row.maint.replace(/\//g, '-').toLowerCase()}`)
     }
     return (
-        <TableContainer component={Paper} sx={{height: '30.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
             <TableRow>
@@ -128,6 +128,89 @@ export function CustomizedTables() {
                     <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{cost}</Typography></StyledTableCell>
                     <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
                 </StyledTableRow>
+                )
+            })}
+            </TableBody>
+        </Table>
+        </TableContainer>
+    );
+}
+
+const StyledTableCellVlog = styled(TableCell)(({ theme }) => ({
+
+    [`&.${tableCellClasses.head}`]: {
+        color: 'black',
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRowVlog = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+    cursor: 'pointer',
+}));
+
+function createVlogData(date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy) {
+    return { date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy };
+}
+
+const vLogRows = [
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    ];
+
+export function CustomizedTablesVlog() {
+
+    const {} = chatState()
+    const navigate = useNavigate()
+    const handleClick = (row)=>{
+        console.log(row)
+    }
+    return (
+        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <Table sx={{ minWidth: 900 }} aria-label="customized table">
+            <TableHead>
+            <TableRow>
+                <StyledTableCellVlog><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Location</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Location</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Mileage</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Mileage</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Route</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Fuel Level</Typography></StyledTableCellVlog>
+                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Created By</Typography></StyledTableCellVlog>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            
+            {vLogRows.map((row, ind) => {
+                const {createdBy, date, startingLocation,startingMileage, endingLocation, endingMileage, route, fuelLevel, } = row
+                return (
+                <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{startingLocation}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog><Typography variant='h5' fontWeight={'400'}>{endingLocation}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{startingMileage}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog><Typography variant='h5' fontWeight={'400'}>{endingMileage}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{route}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{fuelLevel}</Typography></StyledTableCellVlog>
+                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{createdBy}</Typography></StyledTableCellVlog>
+                </StyledTableRowVlog>
                 )
             })}
             </TableBody>

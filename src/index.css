@@ -15,7 +15,19 @@ body,
     padding: 0 .5rem;
     font-size: 1rem;
     border-radius: .2rem;
+    border: 1px solid gray;
+}
+
+.input:focus {
     border: none;
+    outline: 2px solid cornflowerblue;
+}
+
+.warning-input {}
+
+.warning-input:focus {
+    border: none;
+    outline: 2px solid orangered;
 }
 
 .smButton {
@@ -28,13 +40,43 @@ body,
     background-color: greenyellow;
 }
 
+.mid-btn {
+    height: 2.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: .3rem;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: cornflowerblue;
+    color: white;
+}
+
+.primary-btn:hover {
+    cursor: pointer;
+    background-color: rgb(132, 169, 236);
+    color: white;
+}
+
+.back-btn {
+    background: orangered;
+    color: white;
+}
+
+.back-btn:hover {
+    cursor: pointer;
+    background-color: rgb(255, 124, 76);
+    color: white;
+}
+
 .btn-1 {
     /* display: none; */
     background-color: cornflowerblue;
     color: white;
     height: 2.5rem;
-    padding: 0 .25rem;
-    padding-left: .2rem;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -54,10 +96,31 @@ body,
     color: cornflowerblue
 }
 
-.dormat:hover {
+.dormant {}
+
+.dormant:hover {
     cursor: pointer;
-    background-color: rgb(126, 166, 239);
+    background-color: rgb(240, 172, 89);
     color: white;
+}
+
+.hollow-btn {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border-radius: .3rem;
+    border: 1px solid gray;
+}
+
+.hollow-btn:hover {
+    background-color: rgb(164, 187, 229);
+    border-color: rgb(164, 187, 229);
+    color: white;
+}
+
+.small-rounded-btn {
+    border-radius: .35rem;
+    border: '1px solid gray';
 }
 
 .warning-btn-1:hover {
