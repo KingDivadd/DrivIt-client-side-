@@ -76,7 +76,7 @@ const Report = ()=>{
                     {/* right bottom section */}
                     <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden",}}  >
                         <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
-                            <Box sx={{widht: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1.5fr))',justifyContent: 'space-between',gap: '1rem',mb: '1rem'}}>
+                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1.5fr))',justifyContent: 'space-between',gap: '1rem',mb: '1rem'}}>
                                 <Typography variant="h2" fontWeight={'600'}>Incedent Report</Typography>
                                 <Box sx={{width:'100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
                                     <ReportModal />

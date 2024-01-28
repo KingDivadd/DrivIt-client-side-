@@ -68,7 +68,7 @@ const Login = () => {
     
     return (
         <Grid container component="main" sx={{ height: '100vh', p:'.5rem', backgroundColor: "white",}}>
-            <Grid item xs={0} sm={5} md={6} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/auth-bg.88fd8dc0.png)',
+            <Grid item xs={0} sm={5} md={5} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/auth-bg.88fd8dc0.png)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
@@ -76,14 +76,14 @@ const Login = () => {
             borderRadius: '1.5rem'
             }}
             />
-            <Grid item xs={12} sm={7} md={6} sx={{background: theme.palette.background.alt}}> 
-                <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+            <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, display: 'flex', flexDirection: 'column', alignItems: 'center'}}> 
+                <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 , maxWidth: '550px'}}>
                     <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Welcome Back</Typography>
                     <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}> <LockOutlinedIcon /> </Avatar>
                     <Typography component="h5" variant="h4"> Sign in </Typography>
                 </Box>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 3rem' }}>
-                    <Box >
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 .5rem',width: '100%', maxWidth: '550px',  }}>
+                    <Box>
                         <Typography  variant='h5' sx={{mb: '.5rem'}}>Username</Typography>
                         <input className='input  search-input' name = {"username"} value={credentials.username} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
@@ -91,11 +91,11 @@ const Login = () => {
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Password</Typography>
                         <input className='input  search-input' name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Button className='smButton' type="submit" fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', color: 'white', background: "cornflowerblue",  }}>
+                    <Box className='mid-btn primary-btn' type="submit" fullWidth  sx={{ mt: 4, height: '2.8rem', textTransform: 'none', color: 'white', background: "cornflowerblue",  }}>
                         <Typography variant='h5'>Login</Typography>
-                    </Button>
+                    </Box>
                 </Box>
-                <Grid container sx={{p: '3rem'}}>
+                <Grid container sx={{p: '3rem', maxWidth: '550px', gap: '.75rem'}}>
                     <Grid item xs>
                         <Link href="/recover-password" variant="body2">
                             <Typography variant='h7' color= 'cornflowerblue' sx={{textTransform: 'none'}}>Forgot password?</Typography> 

@@ -17,6 +17,7 @@ import Select from '@mui/material/Select';
 import {CreateLogModal, ReportModal} from 'components/modal';
 import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending, TbList } from "react-icons/tb";
+import { BsFillMenuButtonWideFill } from "react-icons/bs";
 
 const MenuBar = ()=>{
     const [currentTime, setCurrentTime] = useState(new Date())
@@ -67,12 +68,12 @@ const MenuBar = ()=>{
                         <IoSearch size={'2rem'} />
                     </Box> :
                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
-                        {menuIcon && <TbList size={'2rem'} /> }
+                        {menuIcon && <BsFillMenuButtonWideFill color={'cornflowerblue'} size={'1.5rem'} /> }
                     </Box>}
-                    <Box sx={{width: '7rem', height: '100%', display: 'grid', placeItems: 'center'}}>
+                    <Box sx={{width: '10rem', height: '100%', display: 'grid', placeItems: 'center'}}>
                         <Typography variant={'h4'} fontWeight={'500'}>{formatDate(currentTime)}</Typography>
                     </Box>
-                    <Box sx={{width: '7rem', height: '100%', display: 'grid', placeItems: 'center'}}>
+                    <Box sx={{width: '9rem', height: '100%', display: 'grid', placeItems: 'center'}}>
                         <Typography variant={'h4'} fontWeight={'500'}>{currentTime.toLocaleTimeString()}</Typography>
                     </Box>
                 </Box>

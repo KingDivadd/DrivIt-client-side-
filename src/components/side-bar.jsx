@@ -8,9 +8,9 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
 // import '../index.css'
-import { IoMdHome } from "react-icons/io";
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
-import { FaCar } from "react-icons/fa";
+import { FaHouse } from "react-icons/fa6";
+import { FaCar, FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -46,13 +46,13 @@ const SideBar = ()=>{
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
-                            <IoMdHome size={'1.5rem'} />
+                            <FaHouse size={'1.4rem'} />
                         </Box>
                         <Typography variant='h5' >Dashboard</Typography> 
                     </Box>
                     <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
                         <Box className="icon">
-                            <CgNotes size={'1.3rem'} />
+                            <FaTools size={'1.2rem'} />
                         </Box>
                         <Typography variant='h5'>Workbay</Typography> 
                     </Box>

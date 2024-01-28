@@ -9,6 +9,7 @@ import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DriverCard } from 'components/role-card';
+import { AiOutlineRollback } from "react-icons/ai";
 
 
 const Signup = () => {
@@ -69,7 +70,7 @@ const Signup = () => {
     }
     
     return (
-        <Grid container component="main" sx={{ height: '100vh', p:'.5rem', overflowY: 'auto'}}>
+        <Grid container component="main"  sx={{ height: '100vh', p:'.5rem', overflowY: 'auto',}}>
         
             {userRole.boo ?
             <Grid item xs={0} sm={5} md={4} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/register-as-bg.4abc4436.png)',
@@ -78,8 +79,6 @@ const Signup = () => {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             borderRadius: '1.5rem',
-            borderTopRightRadius: '0',
-            borderBottomRightRadius: '0'
             }} />
             :
             <Grid item xs={0} sm={5} md={5} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/register-as-bg.4abc4436.png)',
@@ -88,13 +87,11 @@ const Signup = () => {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             borderRadius: '1.5rem',
-            borderTopRightRadius: '0',
-            borderBottomRightRadius: '0'
             }} />
             }
             {userRole.boo 
             ?
-            <Grid item xs={12} sm={7} md={8} sx={{background: theme.palette.background.alt, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Grid item xs={12} sm={7} md={8} sx={{background: theme.palette.background.alt, display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
                 <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Typography component={"h2"} variant='h2' color={'cornflowerblue'} sx={{fontWeight: '500', mb: 1}}>What are you registering as?</Typography>
                     <Typography component="h5" variant="h4" color= {'black'}> In order to preceed, you need to select your role. </Typography> 
@@ -106,7 +103,7 @@ const Signup = () => {
                 </Box>
             </Grid>
             :
-            <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, overflowY: 'auto',p: '.5rem 0'}}> 
+            <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, overflowY: 'auto',p: '.5rem 0',}}> 
                 <Box sx={{ my:1, mx: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '500'}}>Create Account</Typography>
                     <Link href="/login" variant="body2">
@@ -114,39 +111,40 @@ const Signup = () => {
                     </Link>
                 </Box>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 3rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <Box sx={{mb: 3, width: '100%', maxWidth: '500px'}} >
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}>First Name</Typography>
+                    <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
+                        <Typography  variant='h5' sx={{mb: '.45rem'}}>First Name</Typography>
                         <input className='input  search-input' name = {"firstName"} value={credentials.firstName} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box sx={{mb: 3, width: '100%', maxWidth: '500px'}} >
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}>Last Name</Typography>
+                    <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
+                        <Typography  variant='h5' sx={{mb: '.45rem'}}>Last Name</Typography>
                         <input className='input  search-input' name = {"lastName"} value={credentials.lastName} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box sx={{mb: 3, width: '100%', maxWidth: '500px'}} >
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}> Email</Typography>
+                    <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
+                        <Typography  variant='h5' sx={{mb: '.45rem'}}> Email</Typography>
                         <input className='input  search-input' name = {"email"} value={credentials.email} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box sx={{mb: 3, width: '100%', maxWidth: '500px'}} >
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}>Staff Id</Typography>
+                    <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
+                        <Typography  variant='h5' sx={{mb: '.45rem'}}>Staff Id</Typography>
                         <input className='input  search-input' name = {"staffId"} value={credentials.staffId} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box sx={{mb: 3, width: '100%', maxWidth: '500px'}} >
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}>Phone</Typography>
+                    <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
+                        <Typography  variant='h5' sx={{mb: '.45rem'}}>Phone</Typography>
                         <input className='input  search-input' name = {"phone"} value={credentials.phone} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box sx={{width: '100%', maxWidth: '500px'}}>
-                        <Typography variant='h5' sx={{mb: '.5rem', }}>Password</Typography>
+                    <Box sx={{width: '100%', maxWidth: '550px'}}>
+                        <Typography variant='h5' sx={{mb: '.45rem', }}>Password</Typography>
                         <input className='input  search-input' name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
                     
-                    <Box sx={{mt: 4, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', width: '100%',maxWidth: '500px', gap: 4, pr: 0}}>
+                    <Box sx={{mt: 4, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', width: '100%',maxWidth: '550px', gap: 4, pr: 0,}}>
                         
-                        <Button className='smButton'  onClick={()=> setUserRole({...userRole, "boo":true})} sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'orange'}}>
-                            <Typography variant='h5'>Select Role</Typography>
-                        </Button>
-                        <Button className='smButton' type="submit"  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
+                        <Box className='mid-btn back-btn'  onClick={()=> setUserRole({...userRole, "boo":true})} sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'orange'}}>
+                            <AiOutlineRollback size={'1.5rem'} color={'white'} />
+                            <Typography variant='h5' pl={'.5rem'} >Select Role</Typography>
+                        </Box>
+                        <Box className='mid-btn primary-btn' type="submit"  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
                             <Typography variant='h5'>Create Account</Typography>
-                        </Button>
+                        </Box>
 
                         
                     </Box>

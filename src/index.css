@@ -39,6 +39,14 @@ label {
     margin: auto .5rem;
 }
 
+.no-hover-icon {
+    color: 'white';
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+}
+
 .icon {
     color: 'white';
     height: 100%;

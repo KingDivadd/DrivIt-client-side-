@@ -8,16 +8,17 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
 // import '../index.css'
-import { IoMdHome, IoIosClose } from "react-icons/io";
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
-import { FaCar } from "react-icons/fa";
+import { FaHouse } from "react-icons/fa6";
+import { FaCar ,FaTools} from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
-import { RiLogoutBoxFill } from "react-icons/ri";
+import { RiLogoutBoxFill,RiArrowGoBackFill } from "react-icons/ri";
 import { TfiLayoutAccordionList } from "react-icons/tfi";
 import { FaLocationDot } from "react-icons/fa6";
 import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
 import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
+import { AiOutlineRollback } from "react-icons/ai";
 
 const SideBarMobile = ()=>{
     const [page, setPage] = useState("")
@@ -57,22 +58,22 @@ const SideBarMobile = ()=>{
         
         <Grid className={menu?"show-menu":"hide-menu"} item container sx={{p: '.25rem', background: 'cornflowerblue', height: '100vh', width: '15rem',}} >
             <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
-                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%',pt: '.75rem', alignItems: 'flex-start',pl: '.5rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%',pt: '.75rem', alignItems: 'flex-start',pl: '.5rem', pr: '.5rem'}}>
                     <Typography component={"h2"} variant='h4' color={'white'} sx={{fontWeight: '500'}}>DRIVIT</Typography>
                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
-                        <IoIosClose size={'2.5rem'} color={'white'} /> 
+                        <AiOutlineRollback size={'1.5rem'} color={'white'} /> 
                     </Box>
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-12rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
-                            <IoMdHome size={'1.5rem'} />
+                            <FaHouse size={'1.4rem'} />
                         </Box>
                         <Typography variant='h5' >Dashboard</Typography> 
                     </Box>
                     <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
                         <Box className="icon">
-                            <CgNotes size={'1.3rem'} />
+                            <FaTools size={'1.3rem'} />
                         </Box>
                         <Typography variant='h5'>Workbay</Typography> 
                     </Box>
@@ -108,7 +109,7 @@ const SideBarMobile = ()=>{
                         </Box>
                         <Typography variant='h5'>Help Center</Typography> 
                     </Box>
-                    <Box className='btn-1 warning-btn-1' sx={{width: '100%', }} >
+                    <Box className='btn-1 warning-btn-1' onClick={()=> handlePage("/")}  sx={{width: '100%', }} >
                         <Box className="icon">
                             <RiLogoutBoxFill size={'1.5rem'} />
                         </Box>

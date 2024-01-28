@@ -188,34 +188,35 @@ export function CreateLogModal() {
         </div>
     );
 }
-
-
 export function ReportModal() {
+    const [createLog, setCreateLog] = useState({startLocation: '', endLocation: '', startMileage: '', endMileage: '', route: '', fuelLevel: '' })
     const [report, setReport] = useState({location: '', description: '', image: 'Clicks Here to upload image'})
+
     const [age, setAge] = useState("")
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const handleChange = (e)=>{
+        setAge(e.target.value)
         const name = e.target.name
         const value = e.target.value
-        setReport({...report,[name]: value})
+        setReport({...createLog, [name]: value})
     }
 
     const handleCreateLog = (e)=>{
-        
+        e.preventDefaults()
     }
-
     return (
         <div>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '11rem', pl: 2, }} >
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
                 <Typography variant='h5'>Create Log</Typography> 
             </Box>
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
                     <Box >
-                        <Typography variant="h4" fontWeight={'500'}>Create Report Log</Typography>
+                        <Typography variant="h4" fontWeight={'500'}>Create 
+                        Report</Typography>
                     </Box>
 
                     <Box sx={{mt: 4}}>
@@ -227,40 +228,21 @@ export function ReportModal() {
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Description</Typography>
                         <textarea className="input" onChange={(e)=> handleChange(e) } value={report.description} name="description" id="description" cols="30" rows="10" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}></textarea>
                     </Box>
-                    
-                    
 
                     <Box sx={{mt: 3, width: '100%'}}>
                         <Typography  variant='h5' sx={{mb: '.5rem'}}>Upload Image</Typography>
-                        <input className='input' id="image" name = {"image"} value={report.image} onChange={(e)=> handleChange(e) } type="file" style={{width: '0', height:'0rem', background: "white", color: 'black', visibility: 'hidden', cursor: 'pointer'}}/>
+                        <input className='input' id="image" name = {"image"} onChange={(e)=> handleChange(e) } type="file" style={{width: '0', height:'0rem', background: "white", color: 'black', visibility: 'hidden', cursor: 'pointer'}}/>
                         <Box bgcolor={'primary.light'} sx={{height: '2.5rem', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid gray', borderRadius: '.2rem', mt: '-1.5rem', cursor: 'pointer'}}>
-                            <label htmlFor="image" style={{cursor: 'pointer'}} >{report.image}</label>
+                            <label htmlFor="image" style={{cursor: 'pointer', height: '2.5rem', width: '100%',display:'flex', alignItems: 'center', }}> {report.image}</label> 
                         </Box>
                     </Box>
-
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Preview Image</Typography>
-                        <Box sx={{backgroundImage: `url(${four})`, //correct this later
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        bacground: 'cornflowerblue',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        borderRadius: '.3rem',
-                        mb: '1rem',
-                        mt: '.5rem',
-                        height: '8rem',
-                        width: '100%',
-                        }}>
-                        </Box>
-                    </Box>
-
+                    
                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{  textTransform: 'none' , width: '9rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Create Report</Typography>
+                        <Box className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+                            <Typography variant='h5'>Create Log</Typography>
                         </Box>
                     </Box>
                 </Box>
@@ -268,3 +250,4 @@ export function ReportModal() {
         </div>
     );
 }
+

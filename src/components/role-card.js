@@ -10,6 +10,8 @@ import { PersonOutlineOutlined,NotificationsActiveOutlined } from '@mui/icons-ma
 import { ChatState } from 'context/chatContext';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import BarChart from './bar-chart';
+import david from "../asset/david.jpg"
 
 
 export default function MaintPersonnel() {
@@ -114,6 +116,7 @@ export const MaintAnalyticsCard = ({})=>{
             </Typography>
             <Typography variant="h6" component="div">
                 An individual that legally posseses and has ownership rights over a particular vehicle.
+                {/* <BarChart /> */}
             </Typography>
             
             </CardContent>
@@ -144,12 +147,13 @@ export const ActiveDriverCard = ({})=>{
 
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', height: '20rem', cursor: 'pointer', }}>
+        <Card  sx={{ bgcolor:'primary.light' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
             <CardContent>
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
-                    Assigned Driver
+                    Assigned Drivers
                 </Typography>
-                <Avatar sizes='10rem' sx={{ m: 1,  background: 'cornflowerblue', color: 'white', height:'7rem', width: '7rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <PersonOutlineOutlined /> </Avatar>
+                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
+                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: 'cornflowerblue', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
                         { "Iroegbu David"}
