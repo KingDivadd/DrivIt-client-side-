@@ -157,29 +157,28 @@ const StyledTableRowVlog = styled(TableRow)(({ theme }) => ({
     cursor: 'pointer',
 }));
 
-function createVlogData(date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy) {
-    return { date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy };
+function createVlogData(id,date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy) {
+    return { id,date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy };
 }
 
 const vLogRows = [
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0001','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0002','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0003','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0004','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0005','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0006','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0007','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0008','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0009','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
+    createVlogData('VHLOG-0010','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
     ];
 
 export function CustomizedTablesVlog() {
 
-    const {} = chatState()
     const navigate = useNavigate()
     const handleClick = (row)=>{
-        console.log(row)
+        navigate(`./${row.id.toLowerCase()}`)
     }
     return (
         <TableContainer component={Paper} sx={{height: '32.5rem'}}>
@@ -199,9 +198,9 @@ export function CustomizedTablesVlog() {
             <TableBody>
             
             {vLogRows.map((row, ind) => {
-                const {createdBy, date, startingLocation,startingMileage, endingLocation, endingMileage, route, fuelLevel, } = row
+                const {createdBy, date, startingLocation,startingMileage, endingLocation, endingMileage, route, fuelLevel,id } = row
                 return (
-                <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
+                <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
                     <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCellVlog>
                     <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{startingLocation}</Typography></StyledTableCellVlog>
                     <StyledTableCellVlog><Typography variant='h5' fontWeight={'400'}>{endingLocation}</Typography></StyledTableCellVlog>

@@ -19,15 +19,35 @@ import { FaLocationDot } from "react-icons/fa6";
 import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
 import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
 import SideBar from 'components/side-bar';
+import SideBarMobile from 'components/side-bar-mobile'
+import MenuBar from 'components/menu-bar';
 
 const Dashboard = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
+    const [menuIcon, setMenuIcon] = useState(false)
+    const [width, setWidth] = useState(window.innerWidth)
 
-    useEffect(() => {
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useEffect(() => { 
         const getPage = localStorage.getItem("page")
         setPage(getPage)
-    }, [])
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setMenuIcon(true)
+        }
+        if (width > 599){
+            setMenuIcon(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width])
+
+    
     const handlePage = (value)=>{
         console.log(value)
         localStorage.setItem("page", value)
@@ -35,24 +55,16 @@ const Dashboard = ()=>{
     }
 
     return (
-        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'auto',}}>
+        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden'}}>
+            {menuIcon && <SideBarMobile />}
             <SideBar />
             {/* right side */}
-            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{background: 'white', overflowY:'auto'}} >
+            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{background: 'white', height: '100vh', overflowY:'auto'}} >
+                <Box sx={{width: '100%', height: 'auto'}}>
                 {/* right top secction */}
-                <Box sx={{background: 'white',height: '3rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Box>left</Box>
-                    <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Box>
-                            <Avatar sizes='2rem' sx={{ m: 1, bgcolor: 'primary.light', color: 'cornflowerblue' }}> <NotificationsActiveOutlined /> </Avatar>
-                        </Box>
-                        <Box>
-                            <Avatar sx={{ m: 1, bgcolor: 'warning.main', color: 'cornflowerblue' }}> <PersonOutlineOutlined  sx={{color: 'cornflowerblue'}} /> </Avatar>
-                        </Box>
-                    </Box>
-                </Box>
+                <MenuBar />
                 {/* right bottom section */}
-                <Grid container sx={{ mt: '.75rem', pl: '.5rem'}}  >
+                <Grid container sx={{ mt: '.75rem'}}  >
                     <Grid  item xs={12} sm={12} md={7.5} lg={8.5}  sx={{background: 'whitesmoke', borderRadius: '.3rem', overflowY:'auto', p: '.75rem'}}>
                         <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: 1 }}>
                             <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Welcome {"David"}</Typography>
@@ -78,6 +90,7 @@ const Dashboard = ()=>{
 
                     </Grid>
                 </Grid>
+                </Box>
             </Grid> 
         </Grid>
     )

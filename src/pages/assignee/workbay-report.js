@@ -14,7 +14,8 @@ import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
 import { MdOutlinePendingActions } from "react-icons/md";
-import SideBar from '../components/side-bar'
+import SideBar from '../../components/side-bar'
+import MenuBar from 'components/menu-bar';
 
 
 const WorkbayReport = ()=>{
@@ -49,22 +50,13 @@ const WorkbayReport = ()=>{
         navigate(-1)
     }
     return (
-        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'auto',}}>
+        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             <SideBar />
             {/* right side */}
-            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{background: 'gray', overflowY:'auto'}} >
+            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
+                <Box sx={{width: '100%', height: 'auto'}}>
                 {/* right top section */}
-                <Box sx={{background: 'white',height: '3rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Box>left</Box>
-                    <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Box>
-                            <Avatar sizes='2rem' sx={{ m: 1, bgcolor: 'primary.light', color: 'cornflowerblue' }}> <NotificationsActiveOutlined /> </Avatar>
-                        </Box>
-                        <Box>
-                            <Avatar sx={{ m: 1, bgcolor: 'warning.main', color: 'cornflowerblue' }}> <PersonOutlineOutlined  sx={{color: 'cornflowerblue'}} /> </Avatar>
-                        </Box>
-                    </Box>
-                </Box>
+                <MenuBar />
                 {/* right bottom section */}
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
@@ -109,6 +101,7 @@ const WorkbayReport = ()=>{
                         </Box> 
                     </Box>
                 </Grid>
+                </Box>
             </Grid> 
         </Grid>
     )

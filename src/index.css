@@ -9,6 +9,16 @@ body,
     font-family: "Manrope";
 }
 
+::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    width: .5rem;
+    height: .5rem;
+}
+
 .input {
     outline: none;
     font-family: "Montserrat";
@@ -23,6 +33,27 @@ body,
     outline: 2px solid cornflowerblue;
 }
 
+label {
+    font-family: "Montserrat";
+    width: 100%;
+    margin: auto .5rem;
+}
+
+.icon {
+    color: 'white';
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-right: .3rem;
+    margin-left: .5rem;
+    font-size: '1.5rem';
+}
+
+.icon:hover {
+    color: cornflowerblue;
+}
+
 .warning-input {}
 
 .warning-input:focus {
@@ -32,6 +63,7 @@ body,
 
 .smButton {
     background-color: orange;
+    transition: all 150ms ease;
 }
 
 .smButton:hover {
@@ -53,6 +85,7 @@ body,
 .primary-btn {
     background: cornflowerblue;
     color: white;
+    transition: all 150ms ease;
 }
 
 .primary-btn:hover {
@@ -64,6 +97,7 @@ body,
 .back-btn {
     background: orangered;
     color: white;
+    transition: all 150ms ease;
 }
 
 .back-btn:hover {
@@ -82,6 +116,7 @@ body,
     justify-content: flex-start;
     align-items: center;
     border-radius: .3rem;
+    transition: all 150ms ease;
 }
 
 .btn-1:hover {
@@ -96,7 +131,9 @@ body,
     color: cornflowerblue
 }
 
-.dormant {}
+.dormant {
+    transition: all 150ms ease;
+}
 
 .dormant:hover {
     cursor: pointer;
@@ -110,17 +147,25 @@ body,
     cursor: pointer;
     border-radius: .3rem;
     border: 1px solid gray;
+    transition: all 150ms ease;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+    gap: .5rem;
 }
 
 .hollow-btn:hover {
-    background-color: rgb(164, 187, 229);
+    /* background-color: rgb(132, 169, 236);
     border-color: rgb(164, 187, 229);
-    color: white;
+    color: white; */
 }
 
 .small-rounded-btn {
     border-radius: .35rem;
     border: '1px solid gray';
+    transition: all 150ms ease;
 }
 
 .warning-btn-1:hover {
@@ -132,4 +177,55 @@ body,
 .btn-2 {
     background-color: 'orange';
     color: 'red'
+}
+
+.car-box {
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.car-box:hover {
+    transform: translateY(.5rem);
+}
+
+.show-menu {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: -15rem;
+    -webkit-animation: hide 200ms linear forwards;
+    animation: show 200ms linear forwards
+}
+
+@keyframes show {
+    100% {
+        left: 0rem;
+    }
+}
+
+@-webkit-keyframes show {
+    100% {
+        left: 0rem;
+    }
+}
+
+.hide-menu {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0rem;
+    -webkit-animation: hide 200ms linear forwards;
+    animation: hide 200ms linear forwards;
+}
+
+@-webkit-keyframes hide {
+    100% {
+        left: -15rem;
+    }
+}
+
+@keyframes hide {
+    100% {
+        left: -15rem;
+    }
 }

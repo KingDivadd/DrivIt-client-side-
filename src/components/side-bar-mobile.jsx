@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
 // import '../index.css'
-import { IoMdHome } from "react-icons/io";
+import { IoMdHome, IoIosClose } from "react-icons/io";
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
 import { FaCar } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
@@ -19,31 +19,51 @@ import { FaLocationDot } from "react-icons/fa6";
 import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
 import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
 
-const SideBar = ()=>{
+const SideBarMobile = ()=>{
     const [page, setPage] = useState("")
+
+    const {menu, setMenu} = ChatState()
     const navigate = useNavigate()
 
     useEffect(() => {
         const pathname = window.location.pathname;
+
+        // Split the pathname by '/'
         const parts = pathname.split('/');
+
+        // Get the last part which should be "reports"
         const lastPart = parts[parts.length - 1];
 
+        // Log the last part to the console
+        console.log(lastPart);
         setPage(lastPart)
-    }, [])
+        localStorage.setItem("menu", menu)
+    }, [menu, page])
 
     const handlePage = (value)=>{
         navigate(`/${value}`)
     }
 
+    const handleMenu =()=>{
+        if (menu){
+            setMenu(false)
+        }
+        if (!menu){
+            setMenu(true)
+        }
+    }
 
     return (
-        <Hidden only={'xs'}>
-        <Grid item container xs={0} sm={4} md={2.5} lg={2} sx={{overflowY:'auto', p: '.25rem', background: 'cornflowerblue', height: '100vh'}} >
+        
+        <Grid className={menu?"show-menu":"hide-menu"} item container sx={{p: '.25rem', background: 'cornflowerblue', height: '100vh', width: '15rem',}} >
             <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start',pl: '.5rem'}}>
-                    <Typography component={"h2"} variant='h2' color={'white'} sx={{fontWeight: '500'}}>DRIVIT</Typography>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%',pt: '.75rem', alignItems: 'flex-start',pl: '.5rem'}}>
+                    <Typography component={"h2"} variant='h4' color={'white'} sx={{fontWeight: '500'}}>DRIVIT</Typography>
+                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
+                        <IoIosClose size={'2.5rem'} color={'white'} /> 
+                    </Box>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-12rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <IoMdHome size={'1.5rem'} />
@@ -98,8 +118,7 @@ const SideBar = ()=>{
                 
             </Grid>
         </Grid>
-        </Hidden>
     )
 }
 
-export default SideBar
+export default SideBarMobile

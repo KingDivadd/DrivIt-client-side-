@@ -8,10 +8,11 @@ export const ChatProvider = ({children})=>{
     const [isAuth, setIsAuth] = useState(false)
     const [userRole, setUserRole] = useState({boo: true, value: ""})
     const [persistData, setPersistData] = useState({mode: 'light', user: null, isAuth: false, chat: null,})
+    const [menu, setMenu] = useState(false)
 
 
     return <ChatContext.Provider 
-            value={{mode, setMode, user, setUser, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole}}
+            value={{mode, setMode, user, setUser, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu}}
             >
             {children}
         </ChatContext.Provider>

@@ -84,10 +84,10 @@ export const DashCard = ({title, value, icon, suffix})=>{
 
     
     return (
-        <Card  sx={{ minWidth: '18rem', height: '7.5rem', cursor: 'pointer' }}>
+        <Card  sx={{ minWidth: '18rem', height: '6.5rem', cursor: 'pointer' }}>
             <CardContent sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',gap: 1.5,  }}>
-                <Avatar sx={{ bgcolor: 'primary.light', color: 'cornflowerblue', height: '5rem', width: '5rem', borderRadius: '.3rem', mt: '.25rem' }}> {icon} </Avatar>
-                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start', mt: '.25rem'}}>
+                <Avatar sx={{ bgcolor: 'primary.light', color: 'cornflowerblue', height: '4.5rem', width: '4.5rem', borderRadius: '.3rem', }}> {icon} </Avatar>
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start',}}>
                     <Typography variant="h5" component="div" sx={{height: '2.75rem', fontWeight: '500'}}>
                         {title}
                     </Typography>
@@ -253,6 +253,36 @@ export const FeedbackCard = ({})=>{
                     <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>31 January, 2024</Typography>
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
                     <Avatar sizes='10rem' sx={{ background: 'cornflowerblue', color: 'white', height:'7rem', width: '100%', borderRadius: '.3rem', }}> <PersonOutlineOutlined /> </Avatar>        
+            </CardContent>
+        
+        </Card>
+    )
+}
+
+export const ReportCard = ({image, location, description})=>{
+
+    return (
+        <Card  sx={{ minWidth: '15rem', cursor: 'pointer', p: '0' }}>
+            <CardContent sx={{p: '0 .5rem'}}>
+                <Box sx={{backgroundImage: `url(${image})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: '.3rem',
+                    mb: '1rem',
+                    mt: '.5rem',
+                    height: '8rem',
+                    }}>
+                </Box>
+
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'flex-start', mb: '-.85rem'}}>
+                    <Typography variant={'h6'} fontWeight={'400'} mb={'.5rem'} >Incident Location</Typography>
+                    <Typography variant={'h6'} fontWeight={'500'} mb={'.5rem'} >{location}</Typography>
+
+                    <Typography variant={'h6'} fontWeight={'400'} mb={'.5rem'} >Description</Typography>
+                    <Typography variant={'h6'} fontWeight={'500'}  >{description}</Typography>
+                </Box>
             </CardContent>
         
         </Card>

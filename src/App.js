@@ -8,11 +8,14 @@ import Login from "auth/loginPage";
 import RecoverPassword from "auth/recover-password";
 import SignUp from "auth/signupPage";
 import SignInSign from "auth/signIn.js"
-import Dashboard from "pages/dashboard";
+import Dashboard from "pages/assignee/dashboard";
 import "./index.css";
-import Workbay from "pages/workbay";
-import WorkbayReport from "pages/workbay-report";
-import VehicleLog from 'pages/vehicle-log'
+import Workbay from "pages/assignee/workbay";
+import WorkbayReport from "pages/assignee/workbay-report";
+import VehicleLog from 'pages/assignee/vehicle-log'
+import VehicleLogReport from "pages/assignee/vehicle-log-report";
+import VehiclePage from 'pages/assignee/vehicle-page'
+import Report from 'pages/assignee/reports'
 
 function App() {
   const {isAuth, setIsAuth, mode, persistData} = ChatState()
@@ -33,6 +36,9 @@ function App() {
               <Route path="/workbay" element={<Workbay />} />
               <Route path="/workbay/:id" element={<WorkbayReport />} />
               <Route path="/vehicle-log" element={<VehicleLog />} />
+              <Route path="/vehicle-log/:id" element={<VehicleLogReport />} />
+              <Route path="/vehicle" element={<VehiclePage />} />
+              <Route path="/reports" element={<Report />} />
 
               {/* <Route
                 path="/home"

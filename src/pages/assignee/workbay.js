@@ -9,24 +9,23 @@ import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
-import Table, { CustomizedTables,CustomizedTablesVlog ,ReactVirtualizedTable } from 'components/table';
+import Table, { CustomizedTables, ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import {CreateLogModal} from 'components/modal';
+import WorkModal from 'components/modal';
 import SideBar from 'components/side-bar';
-import { TbSortAscending, TbSortDescending } from "react-icons/tb";
+import MenuBar from 'components/menu-bar';
 
 
-const VehicleLog = ()=>{
+const Workbay = ()=>{
     const [page, setPage] = useState("")
     const [text, setText] = useState("")
     const [age, setAge] = useState("")
     const [modal, setModal] = useState(false)
-    const [filter, setFilter] = useState(true)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -53,37 +52,23 @@ const VehicleLog = ()=>{
         setText(e.target.value)
     }
 
-    const handleFilter = ()=>{
-        if (filter){
-            setFilter(false)
-        }
-        if (!filter){
-            setFilter(true)
-        }
+    const handleChange = (e)=>{
+        setAge(e.target.value)
     }
     return (
-        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'auto',}}>
+        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             <SideBar />
             {/* right side */}
-            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{background: 'gray', overflowY:'auto'}} >
+            <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
+                <Box sx={{width: '100%', height: 'auto'}}>
                 {/* right top section */}
-                <Box sx={{background: 'white',height: '3rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Box>left</Box>
-                    <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Box>
-                            <Avatar sizes='2rem' sx={{ m: 1, bgcolor: 'primary.light', color: 'cornflowerblue' }}> <NotificationsActiveOutlined /> </Avatar>
-                        </Box>
-                        <Box>
-                            <Avatar sx={{ m: 1, bgcolor: 'warning.main', color: 'cornflowerblue' }}> <PersonOutlineOutlined  sx={{color: 'cornflowerblue'}} /> </Avatar>
-                        </Box>
-                    </Box>
-                </Box>
+                <MenuBar />
                 {/* right bottom section */}
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
-                            <Typography variant='h2' sx={{fontWeight: '600'}}>Vehicle Log</Typography>
-                            <CreateLogModal />
+                            <Typography variant='h2' sx={{fontWeight: '600'}}>Workbay</Typography>
+                            <WorkModal />
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
@@ -91,11 +76,10 @@ const VehicleLog = ()=>{
                                     <Box sx={{position: 'absolute', p: '.2rem', height: '100%', left: '.15rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}><IoSearch size={'1.5rem'} /></Box>
                                     <input className='input  search-input' name = 'serch-text' value={text} placeholder='Search for maint. logs' onChange={(e)=> handleWorkbay(e) }type="text" style={{width: '23rem', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', paddingLeft: '2.5rem'}}/>   
                                 </Box>
-                                <Box className='btn-1' onClick={handleFilter} sx={{width: '10rem', pl: 2, background: 'white', color: 'black', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' , gap: '.5rem', border: '1px solid gray', }}>
-                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center'}}>{filter ? <TbSortAscending size={'1.5rem'} /> : <TbSortDescending size={'1.5rem'} /> }</Box>
+                                {/* <Box className='btn-1' sx={{width: '10rem', pl: 2, background: 'white', color: 'black', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' , gap: '.5rem', border: '1px solid gray', }}>
+                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center'}}><IoFilterOutline size={'1.5rem'} /></Box>
                                     <Typography variant='h5' fontWeight={'500'}>Filter</Typography> 
                                 </Box>
-                                {/* 
                                 <Box className='btn-1' sx={{width: '10rem', pl: 2, background: 'white', color: 'black', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' , gap: '.5rem', }}>
                                     <FormControl fullWidth>
                                         <InputLabel size='small' id="demo-select-small-label">Age</InputLabel>
@@ -108,7 +92,7 @@ const VehicleLog = ()=>{
                                 </Box> */}
                             </Box>
                             <Box sx={{width: '100%', display: 'flex', justifyContent: 'flex-end', height: '100%', alignItems: 'center' }}>
-                                <input type="date" name="" id="" style={{height: '2.5rem', width: '10rem', outline: 'none', padding: '0 .75rem', fontSize: '1rem', outline: 'none'}} />
+                                <input className='input' type="date" name="" id="" style={{height: '2.5rem', width: '11rem', outline: 'none', padding: '0 .75rem', fontSize: '1rem'}} />
                             </Box>
                         </Box>
                     </Box>
@@ -116,13 +100,14 @@ const VehicleLog = ()=>{
                     <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         {/* the table */}
                         <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden'}}>
-                            <CustomizedTablesVlog />
+                            <CustomizedTables />
                         </Box> 
                     </Box>
                 </Grid>
+                </Box>
             </Grid> 
         </Grid>
     )
 }
 
-export default VehicleLog
+export default Workbay
