@@ -19,6 +19,7 @@ import axios from 'axios';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({username: "", password: ""})
+    const navigate  = useNavigate()
 
     const {mode, setMode} = ChatState()
         const [width, setWidth] = useState(window.innerWidth)
@@ -91,20 +92,20 @@ const Login = () => {
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Password</Typography>
                         <input className='input  search-input' name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box className='mid-btn primary-btn' type="submit" fullWidth  sx={{ mt: 4, height: '2.8rem', textTransform: 'none', color: 'white', background: "cornflowerblue",  }}>
+                    <Box className='mid-btn primary-btn' onClick={()=> navigate('/dashboard')} type="submit" fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none'}}>
                         <Typography variant='h5'>Login</Typography>
                     </Box>
                 </Box>
-                <Grid container sx={{p: '3rem', maxWidth: '550px', gap: '.75rem'}}>
+                <Grid container sx={{p: '2rem .5rem', maxWidth: '550px', gap: '.75rem'}}>
                     <Grid item xs>
-                        <Link href="/recover-password" variant="body2">
+                        <Box onClick={()=> navigate('/recover-password') } sx={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-start' , alignItems: 'center'}}>
                             <Typography variant='h7' color= 'cornflowerblue' sx={{textTransform: 'none'}}>Forgot password?</Typography> 
-                        </Link>
+                        </Box>
                     </Grid>
-                    <Grid item>
-                    <Link href="/signup" variant="body2">
-                        <Typography variant='h7' color='cornflowerblue' sx={{textTransform: 'none'}}>{"Don't have an account? Sign Up"}</Typography> 
-                    </Link>
+                    <Grid item xs>
+                        <Box onClick={()=> navigate('/signup')} sx={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}} >
+                            <Typography variant='h7' color='cornflowerblue' sx={{textTransform: 'none'}}>{"Don't have an account? Sign Up"}</Typography> 
+                        </Box>
                     </Grid>
                 </Grid>
                 {/* <Copyright sx={{ mt: 5 }} /> */}

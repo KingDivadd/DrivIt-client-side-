@@ -12,11 +12,29 @@ import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import "../index.css"
 import four from '../asset/one.jpg';
-
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { FaCaretDown } from "react-icons/fa"
+import { FaCaretUp } from "react-icons/fa"
+import { IoSquareOutline } from "react-icons/io5"
+import { FaRegSquareCheck } from "react-icons/fa6";
+import { FormGroup } from '@mui/material';
+import { RiCloseCircleLine } from "react-icons/ri";
 
 const style = {
     position: 'absolute',
     top: '40%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '.3rem'
+};
+const planMaintStyle = {
+    position: 'absolute',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
@@ -56,6 +74,8 @@ export default function WorkModal() {
     const [planMaint, setPlanMaint] = useState({conserns: '', services: '', date: ''})
     const [age, setAge] = useState("")
     const [open, setOpen] = React.useState(false);
+    const [statusIcon, setStatusIcon] = useState(true)
+    const [activeService, setActiveService] = useState(true)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -66,32 +86,67 @@ export default function WorkModal() {
     const handleSubmit = ()=>{
 
     }
+    const handleService = ()=>{
+        console.log('hanllo')
+        if (statusIcon){
+            setStatusIcon(false)
+        }
+        if(!statusIcon){
+            setStatusIcon(true)
+        }
+    }
+    const handleActiveService = (den)=>{
+        console.log(den)
+        if (activeService) {
+            setActiveService(false)
+        }
+        if (!activeService){
+            setActiveService(true)
+        }
+    }
     return (
         <div>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '12rem' }} >
                 <Typography variant='h5'>Plan Maintenance</Typography> 
             </Box>
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-                <Box sx={style}>
+                <Box sx={planMaintStyle}>
                     <Box >
                         <Typography variant="h4" fontWeight={'500'}>Plan Maintenance</Typography>
                     </Box>
                     <Box sx={{width: '100%', mt: 4 }}>
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
-                        <FormControl sx={{ width: '100%'}} size="small">
-                            <Select labelId="demo-select-small-label"  id="demo-select-small" value={age} label="Age" onChange={handleChange} >
-                                <MenuItem value="">
-                                </MenuItem>
-                                    <MenuItem value={"Oil Change"}><Typography variant="h6">Oil Change</Typography> </MenuItem>
-                                    <MenuItem value={"Type Change"}><Typography variant="h6">{"Type Change"}</Typography> </MenuItem>
-                                    <MenuItem value={"Brake Inspection"}><Typography variant="h6">{"Brake Inspection"}</Typography> </MenuItem>
-                                    <MenuItem value={"Suspension Inspection"}><Typography variant="h6">{"Suspension Inspection"}</Typography> </MenuItem>
-                                    <MenuItem value={"Engine Inspection"}><Typography variant="h6">{"Engine Inspection"}</Typography> </MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Box sx={{borderRadius: '.3rem', border: '1px solid red', width: '100%', height: '7rem',   mb: '.75rem', height: '7rem', overFlowY: 'hidden'}}>
 
-                        
-                    </Box> 
+                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', gap: '.5rem',padding: '.25rem', background: 'orange', overflowY:'auto'}}>                                
+                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+                                </Box>
+                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+                                </Box>
+                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+                                </Box>
+                            </Box>    
+                        </Box>
+
+                        <Box onClick={handleService } sx={{cursor: 'pointer',width: '100%', height: '2.5rem',display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid gray', borderRadius: '.3rem', p: '0 .5rem'}}>
+                            <Typography variant='h5' fontWeight={'500'}>{"Select ..."}</Typography>
+                            <Box sx={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{statusIcon ?<FaCaretDown /> : <FaCaretUp />} </Box>
+                        </Box>
+                        {statusIcon && 
+                        <Box sx={{ positon: 'absolute', top: '0', left: '0', background: 'red', mt: '.5rem', height: 'auto', }}>
+                            <Box onClick={()=>handleActiveService("Check Oil")} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '.5rem', p: '0 .5rem', height: '2.5rem', borderRadius: '.3rem', background: 'cyan'}}>
+                                <Box sx={{display: 'flex', alignItems: 'center', height: '100%'}}>{activeService ? <IoSquareOutline size={'1.5rem'} /> : <FaRegSquareCheck size={'1.5rem'} />} </Box>
+                                <Typography variant={'h5'} fontWeight={'500'}>Check Oil</Typography>
+                            </Box>
+                        </Box>
+                        }
+                    </Box>
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
                         <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>

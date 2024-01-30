@@ -9,6 +9,7 @@ import RecoverPassword from "auth/recover-password";
 import SignUp from "auth/signupPage";
 import SignInSign from "auth/signIn.js"
 import Dashboard from "pages/assignee/dashboard";
+import DriverDashboard from "pages/driver/dashboard";
 import "./index.css";
 import Workbay from "pages/assignee/workbay";
 import WorkbayReport from "pages/assignee/workbay-report";
@@ -16,6 +17,7 @@ import VehicleLog from 'pages/assignee/vehicle-log'
 import VehicleLogReport from "pages/assignee/vehicle-log-report";
 import VehiclePage from 'pages/assignee/vehicle-page'
 import Report from 'pages/assignee/reports'
+import LandingPage from 'pages/landing-page'
 
 function App() {
   const {isAuth, setIsAuth, mode, persistData} = ChatState()
@@ -28,11 +30,11 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/recover-password" element={<RecoverPassword />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/recover-password" element={<RecoverPassword />} />
+              <Route path="/dashboard" element={<DriverDashboard />} />
               <Route path="/workbay" element={<Workbay />} />
               <Route path="/workbay/:id" element={<WorkbayReport />} />
               <Route path="/vehicle-log" element={<VehicleLog />} />

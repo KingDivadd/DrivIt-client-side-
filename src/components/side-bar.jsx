@@ -14,10 +14,7 @@ import { FaCar, FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
-import { TfiLayoutAccordionList } from "react-icons/tfi";
-import { FaLocationDot } from "react-icons/fa6";
-import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
-import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
+
 
 const SideBar = ()=>{
     const [page, setPage] = useState("")
@@ -26,7 +23,14 @@ const SideBar = ()=>{
     useEffect(() => {
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
-        const lastPart = parts[parts.length - 1];
+        let lastPart = parts[parts.length - 1];
+        if (parts.length === 3){
+            lastPart = parts[parts.length - 1];
+            console.log('fuck ',parts.length)
+            // it has to interact with localstorage 
+        }
+        console.log('parts', parts, parts.length)
+
 
         setPage(lastPart)
     }, [])
@@ -38,10 +42,10 @@ const SideBar = ()=>{
 
     return (
         <Hidden only={'xs'}>
-        <Grid item container xs={0} sm={4} md={2.5} lg={2} sx={{overflowY:'auto', p: '.25rem', background: 'cornflowerblue', height: '100vh'}} >
+        <Grid item container xs={0} sm={4} md={2.5} lg={2} sx={{overflowY:'auto', p: '.25rem', background: '#1B61E4', height: '100vh'}} >
             <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start',pl: '.5rem'}}>
-                    <Typography component={"h2"} variant='h2' color={'white'} sx={{fontWeight: '500'}}>DRIVIT</Typography>
+                    <Typography component={"h2"} variant='h3' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
@@ -88,7 +92,7 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Help Center</Typography> 
                     </Box>
-                    <Box className='btn-1 warning-btn-1' sx={{width: '100%', }} >
+                    <Box className='btn-1 warning-btn-1' onClick={()=> navigate('/')} sx={{width: '100%', }} >
                         <Box className="icon">
                             <RiLogoutBoxFill size={'1.5rem'} />
                         </Box>

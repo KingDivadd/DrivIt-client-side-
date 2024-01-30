@@ -18,6 +18,7 @@ import {CreateLogModal, ReportModal} from 'components/modal';
 import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending, TbList } from "react-icons/tb";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
+import david from '../asset/david.jpg'
 
 const MenuBar = ()=>{
     const [currentTime, setCurrentTime] = useState(new Date())
@@ -60,7 +61,7 @@ const MenuBar = ()=>{
         }
     }
     return (
-            <Box sx={{background: 'white',height: '3rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', p: '0 .5rem'}}>
+            <Box sx={{background: 'white',height: '3.5rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', p: '0 .5rem'}}>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start',height: '100%', gap: '.75rem'}}>
                     {menu ? 
                     <Box sx={{height: '100', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
@@ -68,7 +69,7 @@ const MenuBar = ()=>{
                         <IoSearch size={'2rem'} />
                     </Box> :
                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
-                        {menuIcon && <BsFillMenuButtonWideFill color={'cornflowerblue'} size={'1.5rem'} /> }
+                        {menuIcon && <BsFillMenuButtonWideFill color={'#1B61E4'} size={'1.5rem'} /> }
                     </Box>}
                     <Box sx={{width: '10rem', height: '100%', display: 'grid', placeItems: 'center'}}>
                         <Typography variant={'h4'} fontWeight={'500'}>{formatDate(currentTime)}</Typography>
@@ -79,10 +80,14 @@ const MenuBar = ()=>{
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
-                        <Avatar sizes='2rem' sx={{ m: 1, bgcolor: 'primary.light', color: 'cornflowerblue' }}> <NotificationsActiveOutlined /> </Avatar>
+                        <Avatar sizes='2rem' sx={{ m: 1, background: '#E8EFFC', color: '#1B61E4' }}> <NotificationsActiveOutlined /> </Avatar>
                     </Box>
-                    <Box>
-                        <Avatar sx={{ m: 1, bgcolor: 'warning.main', color: 'cornflowerblue' }}> <PersonOutlineOutlined  sx={{color: 'cornflowerblue'}} /> </Avatar>
+                    <Box sx={{
+                        backgroundImage: `url(${david})`,
+                        backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
+                        height: '2.5rem', width: '2.5rem', borderRadius: '50%',
+                    }}>
+                        
                     </Box>
                 </Box>
             </Box>

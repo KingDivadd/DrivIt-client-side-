@@ -15,12 +15,16 @@ import { useNavigate } from 'react-router-dom'
 import LoginForm from 'components/loginForm'
 import SmallInputBar, { MidInputBar, SemiBigInputBar } from 'components/input-bars';
 import axios from 'axios';
+import { AiOutlineRollback } from "react-icons/ai";
+import { MdOutlineNavigateNext } from "react-icons/md";
+
 
 
 const RecoverPassword = () => {
     const [credentials, setCredentials] = useState({username: "", password: "", password02: "", code: ''})
     const [card, setCard] = useState(true)
     const [butt, setButt] = useState(true)
+    const navigate = useNavigate()
 
 
     const {mode, setMode} = ChatState()
@@ -99,7 +103,7 @@ const RecoverPassword = () => {
             <Grid item xs={12} sm={7} md={6} sx={{background: theme.palette.background.alt}}> 
                 <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Recover Password</Typography>
-                    <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}> <LockOutlinedIcon /> </Avatar>
+                    <Avatar sx={{ m: 1, background: '#FF571A' }}> <LockOutlinedIcon /> </Avatar>
                     {card ? 
                     <Typography component="h5" variant="h4"> Password reset </Typography> 
                     :
@@ -129,30 +133,38 @@ const RecoverPassword = () => {
                     </Box>}
 
                     {butt ? 
-                    <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: '4rem'}}>
-                        <Button className='smButton'  onClick={()=> handleBack()} fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', color: 'white', background: "orange",  }}>
-                            <Typography variant='h5'>Back</Typography>
-                        </Button>
-                        <Button className='smButton' onClick={()=> handleNext()} fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', color: 'white', background: "cornflowerblue",  }}>
-                            <Typography variant='h5'>Next</Typography>
-                        </Button>
+                    <Box sx={{}}>
+                        <Box className='mid-btn primary-btn' onClick={()=> handleNext()} fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', width: '100%'  }}>
+                            <Typography variant='h5' pr={'.5rem'}>Next</Typography>
+                            <MdOutlineNavigateNext size={'1.6rem'} />
+                        </Box>
                     </Box>
                     :
-                    <Button className='smButton' type= "submit" onClick={(e)=>handleResetPassword(e)} fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', color: 'white', background: "cornflowerblue",  }}>
-                            <Typography variant='h5'>Reset Password</Typography>
-                    </Button>
+                    <Box sx={{mt: 4, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', width: '100%', gap: 4, pr: 0,}}>
+                        <Box className='mid-btn back-btn'  onClick={handleBack} sx={{height: '2.8rem',  textTransform: 'none',}}>
+                            <AiOutlineRollback size={'1.5rem'} />
+                            <Typography variant='h5' pl={'.5rem'} >Back</Typography>
+                        </Box>
+                        <Box className='mid-btn primary-btn' type="submit" onClick={(e)=>handleResetPassword(e)}  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
+                            <Typography variant='h5' pr={'.5rem'} >Reset Password</Typography>
+                            <MdOutlineNavigateNext size={'1.6rem'} />
+                        </Box>
+
+                        
+                    </Box>
+
                     }
                 </Box>
-                <Grid container sx={{p: '3rem'}}>
+                <Grid container sx={{p: '2rem 3rem'}}>
                     <Grid item xs>
-                        <Link href="/login" variant="body2">
+                        <Box onClick={()=> navigate('/login')} sx={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
                             <Typography variant='h7' color= 'cornflowerblue' sx={{textTransform: 'none'}}>Already have an account? Login.</Typography> 
-                        </Link>
+                        </Box>
                     </Grid>
                     <Grid item>
-                    <Link href="/signup" variant="body2">
-                        <Typography variant='h7' color='cornflowerblue' sx={{textTransform: 'none'}}>Dont have an account, Sign up.</Typography> 
-                    </Link>
+                        <Box onClick={()=> navigatie('/signup')} sx={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <Typography variant='h7' color='cornflowerblue' sx={{textTransform: 'none'}}>Dont have an account, Sign up.</Typography> 
+                        </Box>
                     </Grid>
                 </Grid>
                 

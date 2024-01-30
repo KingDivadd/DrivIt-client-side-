@@ -9,6 +9,16 @@ body,
     font-family: "Manrope";
 }
 
+
+/* fullbackground= #F2F2F2 */
+
+
+/* deepblue=#1B61E4 */
+
+
+/* white #FFFFFF
+ */
+
 ::-webkit-scrollbar {
     width: .5rem;
     height: .5rem;
@@ -30,7 +40,7 @@ body,
 
 .input:focus {
     border: none;
-    outline: 2px solid cornflowerblue;
+    outline: 1px solid #1B61E4;
 }
 
 label {
@@ -59,7 +69,7 @@ label {
 }
 
 .icon:hover {
-    color: cornflowerblue;
+    color: #1B61E4;
 }
 
 .warning-input {}
@@ -91,32 +101,46 @@ label {
 }
 
 .primary-btn {
-    background: cornflowerblue;
+    background: #1B61E4;
     color: white;
     transition: all 150ms ease;
 }
 
 .primary-btn:hover {
     cursor: pointer;
-    background-color: rgb(132, 169, 236);
-    color: white;
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #1B61E4;
+}
+
+.send-msg {
+    background: #ffffff;
+    color: #1B61E4;
+    transition: all 200ms ease;
+}
+
+.send-msg:hover {
+    background: #1B61E4;
+    color: #ffffff;
+    border: 1px solid #ffffff;
 }
 
 .back-btn {
-    background: orangered;
+    background: #FF571A;
     color: white;
-    transition: all 150ms ease;
+    transition: all 200ms ease;
 }
 
 .back-btn:hover {
     cursor: pointer;
-    background-color: rgb(255, 124, 76);
-    color: white;
+    background: #ffffff;
+    color: black;
+    border: 1px solid #FF571A;
 }
 
 .btn-1 {
     /* display: none; */
-    background-color: cornflowerblue;
+    background-color: #1B61E4;
     color: white;
     height: 2.5rem;
     display: flex;
@@ -130,13 +154,13 @@ label {
 .btn-1:hover {
     cursor: pointer;
     background-color: white;
-    color: cornflowerblue
+    color: #1B61E4
 }
 
 .active-btn-1 {
     cursor: pointer;
     background-color: white;
-    color: cornflowerblue
+    color: #1B61E4
 }
 
 .dormant {
@@ -162,12 +186,29 @@ label {
     align-items: center;
     height: 2.5rem;
     gap: .5rem;
+    transition: all 200ms ease;
 }
 
 .hollow-btn:hover {
-    /* background-color: rgb(132, 169, 236);
-    border-color: rgb(164, 187, 229);
-    color: white; */
+    background-color: #1B61E4;
+    color: white;
+}
+
+.register {
+    height: 2.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: .3rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.register:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #1B61E4;
 }
 
 .small-rounded-btn {
@@ -193,7 +234,7 @@ label {
 }
 
 .car-box:hover {
-    transform: translateY(.5rem);
+    transform: scale(1.01);
 }
 
 .show-menu {
@@ -236,4 +277,46 @@ label {
     100% {
         left: -15rem;
     }
+}
+
+.status {
+    height: 2.75rem;
+    width: 10rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid gray;
+    border-radius: .3rem;
+    gap: '.5rem';
+    padding: 0 .5rem;
+    transition: all 200ms ease;
+}
+
+.status:hover {
+    transform: scale(1.05);
+}
+
+.pending-status {
+    background-color: steelblue;
+    border-color: steelblue;
+    color: white;
+}
+
+.in-shop-status {
+    background-color: orange;
+    border-color: orange;
+    color: white;
+}
+
+.in-progress-status {
+    background-color: #1B61E4;
+    border-color: #1B61E4;
+    color: white;
+}
+
+.completed-status {
+    background-color: green;
+    border-color: green;
+    color: white;
 }

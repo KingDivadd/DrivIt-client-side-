@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,7 +8,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { PersonOutlineOutlined,NotificationsActiveOutlined } from '@mui/icons-material';
+import { MdOutlinePendingActions } from "react-icons/md";
+import { GrInProgress } from "react-icons/gr";
+import { GiHomeGarage } from "react-icons/gi";
 import { ChatState } from 'context/chatContext';
+import { FaSquareCheck } from "react-icons/fa6";
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import BarChart from './bar-chart';
@@ -88,7 +93,7 @@ export const DashCard = ({title, value, icon, suffix})=>{
     return (
         <Card  sx={{ minWidth: '18rem', height: '6.5rem', cursor: 'pointer' }}>
             <CardContent sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',gap: 1.5,  }}>
-                <Avatar sx={{ bgcolor: 'primary.light', color: 'cornflowerblue', height: '4.5rem', width: '4.5rem', borderRadius: '.3rem', }}> {icon} </Avatar>
+                <Avatar sx={{ background: '#E8EFFC', color: '#1B61E4', height: '4.5rem', width: '4.5rem', borderRadius: '.3rem', }}> {icon} </Avatar>
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start',}}>
                     <Typography variant="h5" component="div" sx={{height: '2.75rem', fontWeight: '500'}}>
                         {title}
@@ -109,7 +114,7 @@ export const MaintAnalyticsCard = ({})=>{
 
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', height: '20rem', cursor: 'pointer' }}>
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', height: '20rem', cursor: 'pointer' }}>
             <CardContent>
             <Typography variant="h5" gutterBottom>
                 Maintenacne Jobs Analytics
@@ -129,7 +134,7 @@ export const ServiceChartCard = ({})=>{
 
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', height: '25rem', cursor: 'pointer' }}>
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', height: '25rem', cursor: 'pointer' }}>
             <CardContent>
             <Typography variant="h5" gutterBottom>
                 Maintenacne Jobs Analytics
@@ -143,17 +148,43 @@ export const ServiceChartCard = ({})=>{
         </Card>
     )
 }
-export const ActiveDriverCard = ({})=>{
-
+export const ActiveAssigneeCard = ({})=>{
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
+            <CardContent>
+                <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
+                    Vehicle Onwer
+                </Typography>
+                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
+                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
+                <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
+                    <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
+                        { "Isogun Oluwakemi"}
+                    </Typography>
+                    <Typography variant="h5" sx={{mb: '1rem'}} gutterBottom>
+                        {"FUTA/133/2024"}
+                    </Typography>
+                    <Typography variant="h5" gutterBottom>
+                        {"07044907610"}
+                    </Typography>
+                </Typography>
+            
+            </CardContent>
+        
+        </Card>
+    )
+}
+export const ActiveDriverCard = ({})=>{
+    
+    return (
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
             <CardContent>
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
                     Assigned Drivers
                 </Typography>
                 <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
-                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: 'cornflowerblue', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
+                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
                         { "Iroegbu David"}
@@ -181,7 +212,7 @@ export const WorkbayMaintCard = ({})=>{
     };
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', cursor: 'pointer' }}>
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', cursor: 'pointer' }}>
             <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
                     <Typography variant='h5' mb={'1.25rem'} fontWeight={'500'}>Services</Typography>
                     <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', justifyContent: 'start', gap: '.75rem'}} mb={'1.25rem'}>
@@ -213,19 +244,33 @@ export const WorkbayMaintCard = ({})=>{
 
 
 
-export const StatusCard = ({value, icon, suffix})=>{
+export const StatusCard = ()=>{
 
+    const [status, setStatus] = useState('completed')
     return (
-        <Card  sx={{ minWidth: '18rem', height: '7.5rem', cursor: 'pointer', mt: '.75rem'}}>
-            <CardContent sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',gap: 1.5,  }}>
-                <Avatar sx={{ bgcolor: 'primary.light', color: 'cornflowerblue', height: '5rem', width: '5rem', borderRadius: '.3rem', mt: '.25rem' }}> {icon} </Avatar>
-                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start', mt: '.25rem'}}>
-                    <Typography variant="h5" component="div" sx={{height: '2.75rem', fontWeight: '500'}}>
-                        Status
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                        {value}{suffix}
-                    </Typography>
+        <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
+            <CardContent sx={{ }}>
+                <Typography variant='h4' fontWeight={'500'} >Vehicle Maintenance Status</Typography>
+                <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))', mt: '1.25rem', gap: '.75rem'}}>
+                    <Box className={status === "pending"?"pending-status status":"status"} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
+                    </Box>                    
+
+                    <Box className={status === "in-shop"?"in-shop-status status":"status"} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GiHomeGarage size={'1.5rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Shop</Typography>
+                    </Box>                    
+
+                    <Box className={status === "in-progress"?"in-progress-status status":"status"} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GrInProgress size={'1.3rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Progress</Typography>
+                    </Box>                    
+
+                    <Box className={status === "completed"?"completed-status status":"status"} sx={{}}>
+                        <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Completed</Typography>
+                    </Box>                    
 
                 </Box>
             
@@ -243,7 +288,7 @@ export const FeedbackCard = ({})=>{
     };
     
     return (
-        <Card  sx={{ bgcolor:'primary.light' , width: '100%', cursor: 'pointer', }}>
+        <Card  sx={{ background: '#E8EFFC' , width: '100%', cursor: 'pointer', }}>
             <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Personal Feeback</Typography>
                     
@@ -256,7 +301,7 @@ export const FeedbackCard = ({})=>{
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
                     <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>31 January, 2024</Typography>
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
-                    <Avatar sizes='10rem' sx={{ background: 'cornflowerblue', color: 'white', height:'7rem', width: '100%', borderRadius: '.3rem', }}> <PersonOutlineOutlined /> </Avatar>        
+                    <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'7rem', width: '100%', borderRadius: '.3rem', }}> <PersonOutlineOutlined /> </Avatar>        
             </CardContent>
         
         </Card>
@@ -291,4 +336,25 @@ export const ReportCard = ({image, location, description})=>{
         
         </Card>
     )
+}
+
+
+export const LandingPageCard = ({title, note})=>{
+
+
+
+    return (
+    <Card sx={{ width: '100%', cursor: 'pointer' }}>
+        <CardContent>
+            <Typography variant="h3" fontWeignt={'800'} gutterBottom>
+                {title}
+            </Typography>
+            <Typography variant="h5" fontWeight={'500'} mt={'.75rem'} lineHeight={'1.65rem'} component="div">
+                {note}
+            </Typography>
+        
+        </CardContent>
+        
+    </Card>
+    );
 }

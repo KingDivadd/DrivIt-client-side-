@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DriverCard } from 'components/role-card';
 import { AiOutlineRollback } from "react-icons/ai";
+import { MdOutlineNavigateNext } from "react-icons/md";
 
 
 const Signup = () => {
@@ -106,9 +107,9 @@ const Signup = () => {
             <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, overflowY: 'auto',p: '.5rem 0',}}> 
                 <Box sx={{ my:1, mx: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '500'}}>Create Account</Typography>
-                    <Link href="/login" variant="body2">
+                    <Box sx={{cursor: 'pointer'}} onClick={()=> navigate('/login')} >
                         <Typography variant='h7' color='cornflowerblue' sx={{textTransform: 'none'}}>Already have an account, Login</Typography> 
-                    </Link>
+                    </Box>
                 </Box>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 3rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <Box sx={{mb: 3, width: '100%', maxWidth: '550px'}} >
@@ -138,18 +139,16 @@ const Signup = () => {
                     
                     <Box sx={{mt: 4, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', width: '100%',maxWidth: '550px', gap: 4, pr: 0,}}>
                         
-                        <Box className='mid-btn back-btn'  onClick={()=> setUserRole({...userRole, "boo":true})} sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'orange'}}>
-                            <AiOutlineRollback size={'1.5rem'} color={'white'} />
+                        <Box className='mid-btn back-btn'  onClick={()=> setUserRole({...userRole, "boo":true})} sx={{height: '2.8rem',  textTransform: 'none',}}>
+                            <AiOutlineRollback size={'1.5rem'} />
                             <Typography variant='h5' pl={'.5rem'} >Select Role</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' type="submit"  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
-                            <Typography variant='h5'>Create Account</Typography>
-                        </Box>
-
-                        
+                        <Box className='mid-btn primary-btn' onClick={()=> navigate('/dashboard')} type="submit"  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
+                            <Typography variant='h5' pr={'.5rem'} >Create Account</Typography>
+                            <MdOutlineNavigateNext size={'1.7rem'} />
+                        </Box>                        
                     </Box>
                 </Box>
-                
             </Grid>
             }
         </Grid>

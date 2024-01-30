@@ -6,7 +6,7 @@ import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
+import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard, ActiveAssigneeCard } from 'components/role-card';
 // import '../index.css'
 import { IoMdHome } from "react-icons/io";
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
@@ -22,7 +22,7 @@ import SideBar from 'components/side-bar';
 import SideBarMobile from 'components/side-bar-mobile'
 import MenuBar from 'components/menu-bar';
 
-const Dashboard = ()=>{
+const DriverDashboard = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
     const [menuIcon, setMenuIcon] = useState(false)
@@ -85,7 +85,7 @@ const Dashboard = ()=>{
                     </Grid>
                     <Grid item xs={12} sm={12} md={4.5} lg={3.5} sx={{ overflowY:'auto', p: '0 .5rem', pl:'.75rem'}}>
                         <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: '.75rem' }}>
-                            <ActiveDriverCard />
+                            <ActiveAssigneeCard />
                             <ServiceChartCard />
                         </Box>
 
@@ -97,4 +97,4 @@ const Dashboard = ()=>{
     )
 }
 
-export default Dashboard
+export default DriverDashboard
