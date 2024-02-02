@@ -14,14 +14,9 @@ import { IoSquareOutline } from "react-icons/io5"
 import { FaRegSquareCheck } from "react-icons/fa6";
 import { FormGroup } from '@mui/material';
 import { RiCloseCircleLine } from "react-icons/ri";
-import { GoStarFill } from "react-icons/go";
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
+import { GoStarFill, GoStar } from "react-icons/go";
 import MenuItem from '@mui/material/MenuItem';
-
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const style = {
     position: 'absolute',
@@ -474,6 +469,7 @@ export function MaintFeedBackModal() {
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
                 <Typography variant='h5'>View Feedback</Typography> 
             </Box>
+
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
                     <Typography variant="h4" fontWeight={'600'}>Personnel Rating</Typography>
@@ -501,17 +497,19 @@ export function MaintFeedBackModal() {
 }
 
 export function CreateMaintLogModal() {
-    const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: '0000'})
+    const [open, setOpen] = React.useState(false);
+    const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: ''})
     const [openServices, setOpenServices]= useState(false)
-    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection / Repair']
+    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
 
 
-
     const handleChange = (e)=>{
-        setAge(e.target.value)
+        const name = e.target.name
+        const value = e.target.value
+        setMaintLog({...maintLog, [cost]: Number(value).toLocaleString})
         
     }
 
@@ -519,20 +517,32 @@ export function CreateMaintLogModal() {
     }
     
     const handleServices = ()=>{
-        console.log('open')
         if(openServices){setOpenServices(false)}
         if(!openServices){setOpenServices(true)}
     }
     const handleServiceSelect =(data)=>{
-        console.log(data)
-        setMaintLog({...maintLog, services: [...data]})
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
         console.log(maintLog.services)
+        }
     }
+
+    const handleRemoveService = (data)=>{
+        const newServices = maintLog.services.filter((res)=> res !== data)
+        setMaintLog({...maintLog, services: newServices})
+    }
+
     return (
         <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem' }} >
                 <Typography variant='h5'>Create Log</Typography> 
             </Box>
+
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={planMaintStyle}>
                     <Box >
@@ -540,23 +550,33 @@ export function CreateMaintLogModal() {
                     </Box>
 
                     <Box sx={{mt: 4}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
+                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Concerns</Typography>
                         <textarea cols={'30'} rows={'10'} className='input' name = {"concern"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
                     </Box>
 
                     <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
-                        <Box sx={{height: '4.5rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Services</Typography>
+                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                            {maintLog.services.map((data, ind)=>{
+                                return(
+                                        <Box key={ind} className={'small-rounded-btn'}>
+                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                            <Typography variant='h6'>{data}</Typography> 
+                                        </Box>
+
+                                )
+                            })}
+                        </Box>}
 
                         <Box  sx={{ position: 'relative', }}>
 
-                            <Box onClick={handleServices} sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',p:'0 .5rem' ,borderRadius: '.3rem',cursor: 'pointer', height: '2.5rem',cursor: 'pointer', border: '1px solid gray',}}>
+                            <Box className={'mid-btn primary-btn'} onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem'}}>
 
-                                <Typography variant='h5'>Select Service(s)</Typography>
+                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
                                 <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
                             </Box>
 
-                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-1%', width: '100%', background: 'coral', p: '.5rem 0', borderRadius: '.3rem', width: '102%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
                                 {services.map((data,ind)=>{
                                     return (
                                         <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
@@ -569,8 +589,8 @@ export function CreateMaintLogModal() {
                     </Box>
 
                     <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Cost</Typography>
-                        <input className='input' name = {"cost"} value={Number(maintLog.cost).toLocaleString()} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Cost</Typography>
+                        <input className='input' name = {"cost"} value={maintLog.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
 
                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>

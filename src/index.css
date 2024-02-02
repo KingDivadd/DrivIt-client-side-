@@ -217,9 +217,34 @@ body,
 }
 
 .small-rounded-btn {
+    display: flex;
+    align-items: center;
     border-radius: .35rem;
-    border: '1px solid gray';
+    padding: 0 .75rem;
+    height: 1.75rem;
+    width: fit-content;
+    border: 1px solid gray;
+    color: black;
     transition: all 150ms ease;
+    margin-bottom: .5rem;
+}
+
+.small-rounded-btn:last-child {
+    margin-bottom: 0;
+}
+
+.small-rounded-btn:hover {
+    border-color: #1B61E4;
+    cursor: pointer;
+}
+
+.service-icon {
+    cursor: pointer;
+    color: black;
+}
+
+.service-icon:hover {
+    color: red;
 }
 
 .warning-btn-1:hover {
@@ -399,9 +424,10 @@ body,
     justify-content: space-between;
     align-items: center;
     margin-bottom: .25rem;
-    padding: 0 .5rem
+    padding: 0 .5rem;
+    transition: all 200ms ease;
 }
 
 .service-list:hover {
-    background: orange;
+    background: whitesmoke;
 }
