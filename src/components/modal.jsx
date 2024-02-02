@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../index.css"
+import AlertMessage from '../components/snackbar'
 import four from '../asset/one.jpg';
 import { FaCaretDown } from "react-icons/fa"
 import { FaCaretUp } from "react-icons/fa"
@@ -17,6 +18,8 @@ import { RiCloseCircleLine } from "react-icons/ri";
 import { GoStarFill, GoStar } from "react-icons/go";
 import MenuItem from '@mui/material/MenuItem';
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const style = {
     position: 'absolute',
@@ -180,7 +183,7 @@ export function CreateLogModal() {
     }
 
     const handleCreateLog = (e)=>{
-        e.preventDefaults()
+        // e.preventDefault()
     }
     return (
         <div style={{borderColor: '#FFFFF'}}>
@@ -500,6 +503,8 @@ export function CreateMaintLogModal() {
     const [open, setOpen] = React.useState(false);
     const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: ''})
     const [openServices, setOpenServices]= useState(false)
+    const {alertMsg, setAlertMsg, openAlert,setOpenAlert, alertSeverity, setAlertSeverity} = ChatState()
+
     const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -509,11 +514,27 @@ export function CreateMaintLogModal() {
     const handleChange = (e)=>{
         const name = e.target.name
         const value = e.target.value
-        setMaintLog({...maintLog, [cost]: Number(value).toLocaleString})
+        
+        console.log(name, value, alert, typeof(Number(value)))
+        
+        if(name === 'cost' && typeof(Number(value)) !== 'number'){
+            console.log('error, not a number')
+        }
+        if(name === 'cost' && typeof(Number(value)) === 'number'){
+            setMaintLog({...maintLog, [name]: value})
+        }
+        if(name ==='concerns'){
+            setMaintLog({...maintLog, [name]: value})
+        }
         
     }
 
     const handleSubmit = ()=>{
+        // e.target.preventDefault()
+        // const ned = {serverity: 'warning', msg: 'Cost cannot be string', open: true}
+        // setAlertMsg("Cost cannot...sss") ;setOpenAlert(true) ;setAlertSeverity("warning")
+        // console.log( alertMsg, openAlert, alertSeverity )
+        setOpenAlert(true)
     }
     
     const handleServices = ()=>{
@@ -550,12 +571,12 @@ export function CreateMaintLogModal() {
                     </Box>
 
                     <Box sx={{mt: 4}}>
-                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Concerns</Typography>
-                        <textarea cols={'30'} rows={'10'} className='input' name = {"concern"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Concerns</Typography>
+                        <textarea cols={'30'} rows={'10'} className='input' name = {"concerns"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
                     </Box>
 
                     <Box sx={{mt: 3}}>
-                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Services</Typography>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
                         {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
                             {maintLog.services.map((data, ind)=>{
                                 return(
@@ -570,7 +591,7 @@ export function CreateMaintLogModal() {
 
                         <Box  sx={{ position: 'relative', }}>
 
-                            <Box className={'mid-btn primary-btn'} onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem'}}>
+                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
 
                                 <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
                                 <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
@@ -589,7 +610,7 @@ export function CreateMaintLogModal() {
                     </Box>
 
                     <Box sx={{mt: 3}}>
-                        <Typography variant='h5' fontWeight={'400'} sx={{mb: '.5rem'}}>Cost</Typography>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Cost</Typography>
                         <input className='input' name = {"cost"} value={maintLog.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
 
@@ -597,12 +618,154 @@ export function CreateMaintLogModal() {
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+                        <Box className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
                             <Typography variant='h5'>Create Log</Typography>
                         </Box>
                     </Box>
                 </Box>
             </Modal>
+            <AlertMessage />
+        </div>
+    );
+}
+
+export function MaintHisModal() {
+    const [open, setOpen] = React.useState(false);
+    const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: ''})
+    const [openServices, setOpenServices]= useState(false)
+    const [loading, setLoading] = useState(false);
+    const {alertMsg, setAlertMsg, openAlert,setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData,} = ChatState()
+
+    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {setOpen(false); setShowHis(false)}
+
+    useEffect(()=>{
+        handleOpen()
+    }, [showHis])
+
+
+    const handleChange = (e)=>{
+        const name = e.target.name
+        const value = e.target.value
+        
+        console.log(name, value, alert, typeof(Number(value)))
+        
+        if(name === 'cost' && typeof(Number(value)) !== 'number'){
+            console.log('error, not a number')
+        }
+        if(name === 'cost' && typeof(Number(value)) === 'number'){
+            setMaintLog({...maintLog, [name]: value})
+        }
+        if(name ==='concerns'){
+            setMaintLog({...maintLog, [name]: value})
+        }
+        
+    }
+
+  
+    const handleServices = ()=>{
+        if(openServices){setOpenServices(false)}
+        if(!openServices){setOpenServices(true)}
+    }
+    const handleServiceSelect =(data)=>{
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
+        console.log(maintLog.services)
+        }
+    }
+
+    const handleRemoveService = (data)=>{
+        const newServices = maintLog.services.filter((res)=> res !== data)
+        setMaintLog({...maintLog, services: newServices})
+    }
+
+    const handleEdit = ()=>{
+        setAlertSeverity("success")
+        setAlertMsg("Log updated successfully.")
+        setOpenAlert(true)
+
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+    }
+
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            {/* <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem' }} >
+                <Typography variant='h5'>Create Log</Typography> 
+            </Box> */}
+
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={planMaintStyle}>
+                    <Box >
+                        <Typography variant="h4" fontWeight={'500'}>Create Maintenance Log</Typography>
+                        <Typography variant="h5" mt={'1.2rem'} fontWeight={'500'}>{maintData.maint_id}</Typography>
+                    </Box>
+
+                    <Box sx={{mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Concerns</Typography>
+                        <textarea cols={'30'} rows={'10'} className='input' name = {"concerns"} value={maintData.concern} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
+                    </Box>
+
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
+                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                            {maintData.services.map((data, ind)=>{
+                                return(
+                                        <Box key={ind} className={'small-rounded-btn'}>
+                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                            <Typography variant='h6'>{data}</Typography> 
+                                        </Box>
+
+                                )
+                            })}
+                        </Box>}
+
+                        <Box  sx={{ position: 'relative', }}>
+
+                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
+
+                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
+                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                            </Box>
+
+                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                                {services.map((data,ind)=>{
+                                    return (
+                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
+                                            <Typography variant='h6'>{data}</Typography>
+                                        </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box>
+
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Cost</Typography>
+                        <input className='input' name = {"cost"} value={maintData.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>
+
+                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+                            <Typography variant='h5'>Close</Typography>
+                        </Box>
+
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleEdit}  sx={{ height: '2.5rem',width: '8rem', textTransform: 'none', position: 'relative'}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Update Log</Typography> : ''}
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+            <AlertMessage />
         </div>
     );
 }

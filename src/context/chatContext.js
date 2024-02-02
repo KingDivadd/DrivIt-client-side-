@@ -10,20 +10,20 @@ export const ChatProvider = ({children})=>{
     const [persistData, setPersistData] = useState({mode: 'light', user: null, isAuth: false, chat: null,})
     const [menu, setMenu] = useState(false)
     const [status, setStatus] = useState("pending")
-    // const [loginAlert, setLoginAlert] = useState({serverity: 'warning', msg: 'Field cannot be empty', openAlert: true})
     const [alertMsg, setAlertMsg]= useState("Field cannot be empty")
     const [openAlert, setOpenAlert] = useState(false)
     const [alertSeverity, setAlertSeverity] = useState('warning')
+    const [showHis, setShowHis] = useState(false)
+    const [maintData, setMaintData] = useState()
 
     useEffect(() => {
     const fetched_status = localStorage.getItem('status')
     setStatus(fetched_status)
-    console.log('hello', status)
     }, [])
 
 
     return <ChatContext.Provider 
-            value={{mode, setMode, user, setUser, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity}}
+            value={{mode, setMode, user, setUser, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData }}
             >
             {children}
         </ChatContext.Provider>

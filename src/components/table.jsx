@@ -18,6 +18,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { EditLogModal } from './modal';
+import {MaintHisModal } from './modal'
 
 
 export default function Tables(){
@@ -286,9 +287,9 @@ function createMaintLog(date, maint_id, concern, personnel, cost) {
 }
 
 const maintLogRows = [
-    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
-    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
-    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('02 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('04 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('05 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
     createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
     createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
     createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
@@ -309,10 +310,12 @@ const maintLogRows = [
     ];
 
 export function MaintLogTable() {
+    const {showHis, setShowHis, maintData, setMaintData} = ChatState()
     const navigate = useNavigate()
+    
     const handleClick = (row)=>{
-        // navigate(`./${row.maint.replace(/\//g, '-').toLowerCase()}`)
-        console.log(row)
+        setMaintData(row)
+        setShowHis(true)
     }
     return (
         <TableContainer component={Paper} sx={{height: '32.5rem'}}>
@@ -344,6 +347,9 @@ export function MaintLogTable() {
             })}
             </TableBody>
         </Table>
+
+        {showHis && <MaintHisModal />}
+
         </TableContainer>
     );
 }

@@ -46,7 +46,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             horizontal: 'center',
             }}
         >
-            <Alert onClose={handleClose} severity="warning">
+            <Alert onClose={handleClose} severity={alertSeverity}>
                 <Typography variant='h5' fontWeight={'500'}>{alertMsg}</Typography>
             </Alert>
         </Snackbar>

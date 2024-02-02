@@ -19,7 +19,7 @@ const Login = () => {
     const [nam, setNam] = useState([])
     const navigate  = useNavigate()
 
-    const {alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity} = ChatState() //serverity: 'warning', msg: 'Field cannot be empty', openAlert: true
+    const {alertMsg, setAlertMsg, openAlert,setOpenAlert, alertSeverity, setAlertSeverity} = ChatState() //serverity: 'warning', msg: 'Field cannot be empty', openAlert: true
         const [width, setWidth] = useState(window.innerWidth)
     const theme = useTheme();
 
@@ -42,37 +42,57 @@ const Login = () => {
         setCredentials({...credentials, [name]: value})
     }
 
-    const handleSubmit = async(e)=>{
-        e.preventDefault()
-        if(!credentials.password || !credentials.username){
-            setOpenAlert(true); setAlertMsg("Fields cannot be empty!!!"); setAlertSeverity('warning')
-        }
-
-        // here, the loading wont work on setTimeout, but rather when the request has been received.
+    function handleSubmit(){
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
             // setNam([])
         }, 3000);
+        if(openAlert){
+            setOpenAlert(false)
+        }if(!openAlert){
+            setOpenAlert(true)
+            setAlertMsg("Provide you username and password")
+            setAlertSeverity('success')
+        }
+        console.log("OpenAlert :", openAlert, alertMsg, alertSeverity) // it worked
+    }
+
+    // const handleSubmit = async(e)=>{
+    //     e.preventDefault()
+    //     console.log(alertMsg, openAlert, alertSeverity)
+    //     setOpenAlert(true); setAlertMsg("Please enter username and password!!!"); setAlertSeverity('warning')
+    //     console.log(alertMsg, openAlert, alertSeverity)
+    //     if(!credentials.password || !credentials.username){
+    //         // setOpenAlert(true); setAlertMsg("Fields cannot be empty!!!"); setAlertSeverity('warning')
+    //         // console.log(alertMsg, openAlert, alertSeverity)
+    //     }
+
+    //     // here, the loading wont work on setTimeout, but rather when the request has been received.
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         setLoading(false);
+    //         // setNam([])
+    //     }, 3000);
 
 
         
-        try {
-            const auth = await axios.post("http://localhost:5500/api/auth/login", {email, password}, {
-                headers: {
-                    "Content-type": "Application/json"
-                }
-            })
-            console.log(auth.data);
-            localStorage.setItem('token', auth.data.token)
-            setPersistData({...persistData, user: auth.data, isAuth: true}) 
-            setUser(auth.data)
-            sessionStorage.setItem("persistData", persistData)
-            navigate('/home')
-        } catch (err) {
-            console.log("Incorrect credentials")
-        }
-    }
+    //     try {
+    //         const auth = await axios.post("http://localhost:5500/api/auth/login", {email, password}, {
+    //             headers: {
+    //                 "Content-type": "Application/json"
+    //             }
+    //         })
+    //         console.log(auth.data);
+    //         localStorage.setItem('token', auth.data.token)
+    //         setPersistData({...persistData, user: auth.data, isAuth: true}) 
+    //         setUser(auth.data)
+    //         sessionStorage.setItem("persistData", persistData)
+    //         navigate('/home')
+    //     } catch (err) {
+    //         // console.log("Incorrect credentials")
+    //     }
+    // }
     
     
     return (
