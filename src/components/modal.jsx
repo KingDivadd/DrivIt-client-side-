@@ -1,24 +1,27 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { ChatState } from 'context/chatContext';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Avatar from '@mui/material/Avatar';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import NativeSelect from '@mui/material/NativeSelect';
 import "../index.css"
 import four from '../asset/one.jpg';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { FaCaretDown } from "react-icons/fa"
 import { FaCaretUp } from "react-icons/fa"
 import { IoSquareOutline } from "react-icons/io5"
 import { FaRegSquareCheck } from "react-icons/fa6";
 import { FormGroup } from '@mui/material';
 import { RiCloseCircleLine } from "react-icons/ri";
+import { GoStarFill } from "react-icons/go";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 
 const style = {
     position: 'absolute',
@@ -84,10 +87,8 @@ export default function WorkModal() {
         
     }
     const handleSubmit = ()=>{
-
     }
     const handleService = ()=>{
-        console.log('hanllo')
         if (statusIcon){
             setStatusIcon(false)
         }
@@ -96,7 +97,6 @@ export default function WorkModal() {
         }
     }
     const handleActiveService = (den)=>{
-        console.log(den)
         if (activeService) {
             setActiveService(false)
         }
@@ -105,7 +105,7 @@ export default function WorkModal() {
         }
     }
     return (
-        <div>
+        <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '12rem' }} >
                 <Typography variant='h5'>Plan Maintenance</Typography> 
             </Box>
@@ -186,10 +186,9 @@ export function CreateLogModal() {
 
     const handleCreateLog = (e)=>{
         e.preventDefaults()
-        console.log(createLog)
     }
     return (
-        <div>
+        <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
                 <Typography variant='h5'>Create Log</Typography> 
             </Box>
@@ -263,7 +262,7 @@ export function ReportModal() {
         e.preventDefaults()
     }
     return (
-        <div>
+        <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
                 <Typography variant='h5'>Create Log</Typography> 
             </Box>
@@ -306,3 +305,284 @@ export function ReportModal() {
     );
 }
 
+export function FeedBackModal() {
+    const [feedback, setFeedback] = useState("")
+    const [open, setOpen] = React.useState(false);
+    const [count, setCount] = useState(0)
+    const [index, setIndex] = useState([])
+    const [inputError, setInputError] = useState(false)
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleChange = (e)=>{
+        setFeedback(e.target.value)
+        setInputError(false)
+    }
+
+    const handleSubmit = (e)=>{
+        if(!feedback){
+            console.log('feedback missing.')
+            setInputError(true)
+        }
+        if(feedback){
+
+        console.log('feedback not missing.')
+        localStorage.setItem('count', count)
+        localStorage.setItem('feedback', feedback)
+        setOpen(false)
+        }
+    }
+    const handleClick = (ind)=>{
+        setIndex([...index, ind])
+        if(!index.includes(ind)){
+            setCount(count + 1)
+        }
+        if(index.includes(ind)){
+            setCount(count - 1)
+            const newIndex = index.filter(data => data !== ind)
+            setIndex(newIndex)
+        }
+    }
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
+                <Typography variant='h5'>Give Feedback</Typography> 
+            </Box>
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={reportStyle}>
+                    <Typography variant="h4" fontWeight={'600'}>Rate your experience</Typography>
+                    <Typography variant='h5' fontWeight={'500'} sx={{mt: '.75rem'}}>Are you satisfied with your service</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', m: '1.25rem 0', gap: '.75rem'}}>
+                        <Box onClick={()=>handleClick('1')} sx={{cursor: 'pointer'}}>{count >= 1? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box onClick={()=>handleClick('2')} sx={{cursor: 'pointer'}}>{count >= 2? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box onClick={()=>handleClick('3')} sx={{cursor: 'pointer'}}>{count >= 3? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box onClick={()=>handleClick('4')} sx={{cursor: 'pointer'}}>{count >= 4? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box onClick={()=>handleClick('5')} sx={{cursor: 'pointer'}}>{count >= 5? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                    </Box>
+                    
+                    <Typography variant='h5' fontWeight={'500'} sx={{mb: '1.3rem'}}>Drop Feedback</Typography>
+                    <input className={inputError?'input input-error':'input'} name = {"feedback"} value={feedback} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+
+                    <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{mt: '1.5rem' }}>
+                        <Typography variant='h5'>Submit</Typography>
+                    </Box>
+                    
+                </Box>
+            </Modal>
+        </div>
+    );
+}
+
+export function AcceptRequestModal() {
+    const [feedback, setFeedback] = useState("")
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleChange = (e)=>{
+        setFeedback(e.target.value)
+    }
+
+    const handleProceed = (e)=>{
+        // run a request to patch the planMaint and change it to accepted
+        setOpen(false)
+    }
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem',mt: '1rem' }} >
+                <Typography variant='h5'>Accept Request</Typography> 
+            </Box>
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={reportStyle}>
+                    <Typography variant="h4" fontWeight={'500'}>Accept Request</Typography>
+                    <Typography variant='h5' fontWeight={'400'} sx={{mt: '1rem'}}>You have accepted this request, click the button below to proceed</Typography>                    
+
+                    <Box className='mid-btn primary-btn' onClick={handleProceed}  sx={{mt: '1.5rem' }}>
+                        <Typography variant='h5'>Proceed</Typography>
+                    </Box>
+                    
+                </Box>
+            </Modal>
+        </div>
+    );
+}
+
+export function SelectMaintStatusModal({id, classname, name,title,icon }) {
+    const [open, setOpen] = React.useState(false);
+    const {status, setStatus} = ChatState()
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+    const handleProceed = (id)=>{
+        // run a request to patch the planMaint and change it to accepted
+        setStatus(id)
+        localStorage.setItem("status", id)
+        setOpen(false)
+
+    }
+    return (
+        <div style={{borderColor: '#FFFFF', width: '100%'}}>
+            <Box onClick={handleOpen} className={status === `${id}`?`${classname} `:"stat"} sx={{width: '100%'}}>
+                <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}>{icon}</Box>
+                <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">{name}</Typography>
+            </Box> 
+
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={reportStyle}>
+                    <Typography variant="h4" fontWeight={'600'}>{title}</Typography>
+                    <Typography variant='h5' fontWeight={'500'} sx={{mt: '1rem'}}>Click the button below to proceed</Typography>                    
+                    
+                    <Box sx={{display: 'flex',alignItems: 'center',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem' }}>
+                            <Typography variant='h5'>Cancel</Typography>
+                        </Box>
+                        <Box className='mid-btn primary-btn' onClick={()=>handleProceed(id)}  sx={{  textTransform: 'none' , width: '8rem', }}>
+                            <Typography variant='h5'>Proceed</Typography>
+                        </Box>
+                    </Box>
+
+                </Box>
+            </Modal>
+        </div>
+    );
+}
+
+
+export function MaintFeedBackModal() {
+    const [feedback, setFeedback] = useState("")
+    const [open, setOpen] = React.useState(false);
+    const [count, setCount] = useState(0)
+
+    useEffect(() => {
+        const rateCount = localStorage.getItem('count')
+        const feedback = localStorage.getItem('feedback')
+        setFeedback(feedback)
+        setCount(rateCount)
+    }, [])
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+
+    const handleCreateLog = (e)=>{
+    }
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
+                <Typography variant='h5'>View Feedback</Typography> 
+            </Box>
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={reportStyle}>
+                    <Typography variant="h4" fontWeight={'600'}>Personnel Rating</Typography>
+                    {/* <Typography variant='h5' fontWeight={'500'} sx={{mt: '.75rem'}}>Are you satisfied </Typography> */}
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', m: '1.25rem 0', gap: '.75rem'}}>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 1? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 2? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 3? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 4? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 5? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+
+                    </Box>
+                    
+                    <Typography variant='h5' fontWeight={'600'} sx={{mb: '1.3rem'}}>Feedback</Typography>
+                    <Typography variant='h5' fontWeight={'500'} sx={{mb: '1.3rem'}}>{feedback}</Typography>
+
+                    <Box className='mid-btn back-btn' onClick={handleClose}  sx={{mt: '1.5rem' }}>
+                        <Typography variant='h5'>Close</Typography>
+                    </Box>
+                    
+                </Box>
+            </Modal>
+        </div>
+    );
+}
+
+export function CreateMaintLogModal() {
+    const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: '0000'})
+    const [openServices, setOpenServices]= useState(false)
+    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection / Repair']
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+
+
+    const handleChange = (e)=>{
+        setAge(e.target.value)
+        
+    }
+
+    const handleSubmit = ()=>{
+    }
+    
+    const handleServices = ()=>{
+        console.log('open')
+        if(openServices){setOpenServices(false)}
+        if(!openServices){setOpenServices(true)}
+    }
+    const handleServiceSelect =(data)=>{
+        console.log(data)
+        setMaintLog({...maintLog, services: [...data]})
+        console.log(maintLog.services)
+    }
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem' }} >
+                <Typography variant='h5'>Create Log</Typography> 
+            </Box>
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={planMaintStyle}>
+                    <Box >
+                        <Typography variant="h4" fontWeight={'500'}>Create Maintenance Log</Typography>
+                    </Box>
+
+                    <Box sx={{mt: 4}}>
+                        <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
+                        <textarea cols={'30'} rows={'10'} className='input' name = {"concern"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
+                    </Box>
+
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
+                        <Box sx={{height: '4.5rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray'}}></Box>
+
+                        <Box  sx={{ position: 'relative', }}>
+
+                            <Box onClick={handleServices} sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',p:'0 .5rem' ,borderRadius: '.3rem',cursor: 'pointer', height: '2.5rem',cursor: 'pointer', border: '1px solid gray',}}>
+
+                                <Typography variant='h5'>Select Service(s)</Typography>
+                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                            </Box>
+
+                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-1%', width: '100%', background: 'coral', p: '.5rem 0', borderRadius: '.3rem', width: '102%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                                {services.map((data,ind)=>{
+                                    return (
+                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
+                                            <Typography variant='h6'>{data}</Typography>
+                                        </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box>
+
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' sx={{mb: '.5rem'}}>Cost</Typography>
+                        <input className='input' name = {"cost"} value={Number(maintLog.cost).toLocaleString()} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>
+
+                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+                            <Typography variant='h5'>Back</Typography>
+                        </Box>
+                        <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+                            <Typography variant='h5'>Create Log</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+        </div>
+    );
+}

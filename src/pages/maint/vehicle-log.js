@@ -1,10 +1,21 @@
 import React, {useState, useEffect} from 'react'
+import Avatar from '@mui/material/Avatar';
+import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import { PersonOutlineOutlined, NotificationsActiveOutlined, LensBlurRounded } from '@mui/icons-material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
+import Table, { CustomizedTables,CustomizedTablesVlog ,ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
+import { IoFilterOutline } from "react-icons/io5";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import {CreateLogModal} from 'components/modal';
 import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
@@ -12,11 +23,22 @@ import MenuBar from 'components/menu-bar';
 
 
 const VehicleLog = ()=>{
+    const [page, setPage] = useState("")
     const [text, setText] = useState("")
+    const [age, setAge] = useState("")
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState(true)
     const navigate = useNavigate()
 
+    useEffect(() => {
+        const getPage = localStorage.getItem("page")
+        setPage(getPage)
+    }, [])
+    const handlePage = (value)=>{
+        console.log(value)
+        localStorage.setItem("page", value)
+        navigate(`/${value}`)
+    }
 
     const handlePlanMaint = ()=>{
         console.log("plan maintenance")

@@ -16,7 +16,7 @@ import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
 
 
-const SideBar = ()=>{
+const MaintSideBar = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
 
@@ -39,8 +39,8 @@ const SideBar = ()=>{
     return (
         <Hidden only={'xs'}>
         <Grid item container xs={0} sm={4} md={2.5} lg={2} sx={{overflowY:'auto', p: '.25rem', background: '#1B61E4', height: '100vh'}} >
-            <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end',pl: '.5rem', mt: '1rem'}}>
+            <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" sx={{pt: '.75rem'}} >
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start',pl: '.5rem'}}>
                     <Typography component={"h2"} variant='h3' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
@@ -50,30 +50,22 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5' >Dashboard</Typography> 
                     </Box>
-                    <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
+
+                    <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>
                         <Box className="icon">
                             <FaTools size={'1.2rem'} />
                         </Box>
-                        <Typography variant='h5'>Workbay</Typography> 
+                        <Typography variant='h5'>Vehicle Service</Typography> 
                     </Box>
-                    <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', }} >
+
+                    <Box className={page === "maint-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("maint-history")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <CgNotes size={'1.3rem'} />
                         </Box>
-                        <Typography variant='h5'>Vehicle log</Typography> 
+                        <Typography variant='h5'>Service History</Typography> 
                     </Box>
-                    <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
-                        <Box className="icon">
-                            <FaCar size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Assigned Vehicle</Typography> 
-                    </Box>
-                    <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
-                        <Box className="icon">
-                            <MdNoteAlt size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Reports</Typography> 
-                    </Box>
+
+                
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
                     <Box className='btn-1' sx={{width: '100%', }} >
@@ -102,4 +94,4 @@ const SideBar = ()=>{
     )
 }
 
-export default SideBar
+export default MaintSideBar

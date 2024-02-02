@@ -10,6 +10,7 @@ import SignUp from "auth/signupPage";
 import SignInSign from "auth/signIn.js"
 import Dashboard from "pages/assignee/dashboard";
 import DriverDashboard from "pages/driver/dashboard";
+import MaintDashboard from "pages/maint/dashboard";
 import "./index.css";
 import Workbay from "pages/assignee/workbay";
 import WorkbayReport from "pages/assignee/workbay-report";
@@ -18,6 +19,9 @@ import VehicleLogReport from "pages/assignee/vehicle-log-report";
 import VehiclePage from 'pages/assignee/vehicle-page'
 import Report from 'pages/assignee/reports'
 import LandingPage from 'pages/landing-page'
+import VehicleService from "pages/maint/vehicle-service";
+import VehicleServiceReport from "pages/maint/vehilce-service-report";
+import ServiceHistory from "pages/maint/service-history"
 
 function App() {
   const {isAuth, setIsAuth, mode, persistData} = ChatState()
@@ -34,13 +38,16 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/recover-password" element={<RecoverPassword />} />
-              <Route path="/dashboard" element={<DriverDashboard />} />
+              <Route path="/dashboard" element={<MaintDashboard />} />
               <Route path="/workbay" element={<Workbay />} />
               <Route path="/workbay/:id" element={<WorkbayReport />} />
               <Route path="/vehicle-log" element={<VehicleLog />} />
               <Route path="/vehicle-log/:id" element={<VehicleLogReport />} />
               <Route path="/vehicle" element={<VehiclePage />} />
               <Route path="/reports" element={<Report />} />
+              <Route path="/vehicle-service" element={<VehicleService />} />
+              <Route path="/vehicle-service/:id" element={<VehicleServiceReport />} />
+              <Route path="/maint-history" element={<ServiceHistory />} />
 
               {/* <Route
                 path="/home"

@@ -11,6 +11,9 @@ import axios from 'axios';
 import MaintPersonnel, { Assigee, DriverCard } from 'components/role-card';
 import { AiOutlineRollback } from "react-icons/ai";
 import { MdOutlineNavigateNext } from "react-icons/md";
+import david from "../asset/david.jpg"
+import auth1 from '../asset/auth1.png'
+import auth2 from '../asset/auth2.png'
 
 
 const Signup = () => {
@@ -74,21 +77,54 @@ const Signup = () => {
         <Grid container component="main"  sx={{ height: '100vh', p:'.5rem', overflowY: 'auto',}}>
         
             {userRole.boo ?
-            <Grid item xs={0} sm={5} md={4} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/register-as-bg.4abc4436.png)',
+            <Grid item xs={0} sm={5} md={4} sx={{backgroundImage: `url(${auth2})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             borderRadius: '1.5rem',
-            }} />
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between',
+            p: '2.5rem'
+            }}> 
+                <Typography variant={'h2'} fontWeight={'400'} color={'white'}>FleetPro</Typography>
+                
+            </Grid>
             :
-            <Grid item xs={0} sm={5} md={5} sx={{backgroundImage: 'url(https://futa-mechanic.netlify.app/img/register-as-bg.4abc4436.png)',
+            <Grid item xs={0} sm={5} md={5} sx={{backgroundImage: `url(${auth1})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             borderRadius: '1.5rem',
-            }} />
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between',
+            p: '2.5rem'
+
+            }}>
+                <Box>
+                <Typography variant={'h2'} fontWeight={'400'} color={'white'}>FleetPro</Typography>
+                    <Box sx={{width: '100%', mt: '4rem'}}>
+                        <Typography variant={'h2'} fontWeight={'600'} color={'white'}> Are you wanting to stay connected with your vehicle ?</Typography>
+                        <Typography mt={'1rem'} variant={'h6'} fontWeight={'500'} color={'white'}>Start managing your maintenance needs with our user-friendly app.  </Typography>
+                    </Box>
+                </Box>
+
+                <Box sx={{width: '100%',p: '.75rem', border: '1px solid white', borderRadius: '.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', gap: '.75rem', background: '#D1DFFA'}}>
+                    <Typography variant={'h6'} fontWeight={'500'} color={'#1B61E4'}>I find it very easy to monitor and get all maintenance issues relating to my vehicle sorted without having to stress myself.</Typography>
+                    <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: '.5rem'}}>
+                        <Box sx={{
+                        backgroundImage: `url(${david})`,
+                        backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
+                        height: '3rem', width: '3rem', borderRadius: '50%',p: '0.25rem', backgroundColor: '#1B61E4'
+                        }}></Box>
+                        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+                        <Typography variant={'h5'} fontWeight={'500'} color={'#1B61E4'}>Prof Dahunsi</Typography>
+                        <Typography variant={'h6'} fontWeight={'500'} color={'#1B61E4'}>Director of CESRA </Typography>
+                    </Box>
+                    </Box>
+                    
+                </Box>
+
+            </Grid>
             }
             {userRole.boo 
             ?

@@ -71,7 +71,7 @@ const LandingPage = ()=>{
             <Box sx={{minHeight: '90vh',height: 'auto', hackground: 'cyan',}}>
                 {/* the first part */}
                 <Grid container component={'main'}  sx={{height: '100%', overflowY: 'hidden'}}>
-                    <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', pl: '5rem'}} >
+                    <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', pl: '5rem', height: '80vh'}} >
                         <Box sx={{width: '80%', }}>
                             <Typography variant='h1' fontWeight={'700'} lineHeight={'3.5rem'}>Efficient Vehicle Management Made Easy</Typography>
                             <Typography variant='h4' fontWeight={'500'} mt={'1.75rem'} lineHeight={'2rem'}>From preventive maintenance scheduling to repair tracking, this system is designed to simplified to allow you experience seamless management and enhanced productivity. </Typography>
@@ -80,16 +80,16 @@ const LandingPage = ()=>{
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderRadius: '.3rem', pr: '5rem' }} >
+                    <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderRadius: '.3rem',p: '3rem 0', pr: '5rem',  }} >
                         {/* in the future wer are to add slider here */}
-                        <Box sx={{width: '90%',height: '85%',
+                        <Box sx={{width: '90%',height: '80vh',
                         backgroundImage: `url(${five})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         borderRadius: '.3rem',
-                        maxWidth: '40rem'
+                        maxWidth: '40rem',
                         }}></Box>
                     </Grid>
                 </Grid>
@@ -145,19 +145,22 @@ const LandingPage = ()=>{
                 </Grid>
 
                 <Grid item container spacing={'1.5rem'} xs={12} sx={{background: '#E8F0FC'}} minHeight={'3.5rem'} padding={'0 .5rem'} borderRadius={'.3rem'} m={'1.5rem 0'} >
-                    <Grid item s={12} md={4} lg={4} sx={{display: 'flex',  alignItems: 'center', justifyContent: 'flex-start', gap:'.5rem'}}>
-                        <Avatar sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+                    <Grid item s={12} md={4} lg={4} sx={{display: 'flex', flexDirection: 'row',  alignItems: 'center', justifyContent: 'flex-start', gap:'.5rem', height: '100%', background: 'red'}}>
+
+                        <Box sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
                             <FaFacebookF color={'white'} sx={{background: '#1B61E4'}} size={'1.15rem'}/>
-                        </Avatar>
-                        <Avatar sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+                        </Box>
+                        <Box sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
                             <FaInstagram color={'white'} sx={{background: '#1B61E4'}} size={'1.15rem'}/>
-                        </Avatar>
-                        <Avatar sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+                        </Box>
+                        <Box sx={{background: '#1B61E4', height: '2rem', width: '2rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
                             <FaLinkedinIn color={'white'} sx={{background: '#1B61E4'}} size={'1.15rem'}/>
-                        </Avatar>
+                        </Box>
                     </Grid>
-                    <Grid item s={12} md={4} lg={4}sx={{display: 'flex',  alignItems: 'center', justifyContent: 'center'}} ><Typography variant={'h5'} fontWeight={'500'}>© 2023 Rayna. All rights reserved.</Typography> </Grid>
-                    <Grid item s={12} md={4} lg={4}sx={{display: 'flex',  alignItems: 'center', justifyContent: 'flex-end'}} > <Typography variant='h4' fontWeight={'500'}>FleetPro</Typography> </Grid>
+
+                    <Grid item s={12} md={4} lg={4}sx={{display: 'flex',  alignItems: 'center', justifyContent: 'center', height: '100%'}} ><Typography variant={'h5'} fontWeight={'500'}>© 2023 Rayna. All rights reserved.</Typography> </Grid>
+
+                    <Grid item s={12} md={4} lg={4}sx={{display: 'flex',  alignItems: 'center', justifyContent: 'flex-end', height: '100%'}} > <Typography variant='h4' fontWeight={'500'}>FleetPro</Typography> </Grid>
                 </Grid>
             </Grid>
 

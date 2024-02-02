@@ -19,6 +19,7 @@ import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending, TbList } from "react-icons/tb";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import david from '../asset/david.jpg'
+import NotificationPopover from './notification';
 
 const MenuBar = ()=>{
     const [currentTime, setCurrentTime] = useState(new Date())
@@ -79,9 +80,7 @@ const MenuBar = ()=>{
                     </Box>
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                        <Avatar sizes='2rem' sx={{ m: 1, background: '#E8EFFC', color: '#1B61E4' }}> <NotificationsActiveOutlined /> </Avatar>
-                    </Box>
+                    <NotificationPopover />
                     <Box sx={{
                         backgroundImage: `url(${david})`,
                         backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',

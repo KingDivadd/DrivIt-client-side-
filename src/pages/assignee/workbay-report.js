@@ -16,6 +16,7 @@ import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
 import { MdOutlinePendingActions } from "react-icons/md";
 import SideBar from '../../components/side-bar'
 import MenuBar from 'components/menu-bar';
+import { AiOutlineRollback } from "react-icons/ai";
 
 
 const WorkbayReport = ()=>{
@@ -71,14 +72,14 @@ const WorkbayReport = ()=>{
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                <Box className='btn-1 dormant' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '12rem', pl: 2, }} >
-                                    <FaArrowLeft />
+                                <Box className='mid-btn back-btn' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '8rem'}} >
+                                    <AiOutlineRollback  size={'1.5rem'} />
                                     <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                 </Box>
                                 
                             </Box>
                             <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                <Box className='hollow-btn' bgColor='primary.light' sx={{width: '8rem',  height: '2.5rem',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <Box className='mid-btn hollow-btn' bgColor='primary.light' sx={{width: '8rem',height: '2.5rem'}}>
                                     Export
                                 </Box>
                             </Box>

@@ -104,7 +104,7 @@ export function CustomizedTables() {
     }
     return (
         <TableContainer component={Paper} sx={{height: '32.5rem'}}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 800 }} aria-label="customized table">
             <TableHead>
             <TableRow>
                 <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
@@ -210,6 +210,136 @@ export function CustomizedTablesVlog() {
                     <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{fuelLevel}</Typography></StyledTableCellVlog>
                     <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{createdBy}</Typography></StyledTableCellVlog>
                 </StyledTableRowVlog>
+                )
+            })}
+            </TableBody>
+        </Table>
+        </TableContainer>
+    );
+}
+
+
+function createMaintData(date, maint_id, concern, personnel, status) {
+    return {date, maint_id, concern, personnel, status };
+}
+
+const maintRows = [
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    ];
+
+export function VehicleServiceTables() {
+    const navigate = useNavigate()
+    const handleClick = (row)=>{
+        navigate(`./${row.maint_id.replace(/\//g, '-').toLowerCase()}`)
+    }
+    return (
+        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <Table sx={{ minWidth: 800 }} aria-label="customized table">
+            <TableHead>
+            <TableRow>
+                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCell>
+                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Attending personnel</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            
+            {maintRows.map((row, ind) => {
+                const {date,maint_id, concern, personnel, status } = row
+                return (
+                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{concern}</Typography></StyledTableCell>
+                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{personnel}</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
+                </StyledTableRow>
+                )
+            })}
+            </TableBody>
+        </Table>
+        </TableContainer>
+    );
+}
+
+
+
+function createMaintLog(date, maint_id, concern, personnel, cost) {
+    return {date, maint_id, concern, personnel, cost };
+}
+
+const maintLogRows = [
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '12,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '20,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '13,000'),
+    createMaintLog('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", '15,000'),
+    ];
+
+export function MaintLogTable() {
+    const navigate = useNavigate()
+    const handleClick = (row)=>{
+        // navigate(`./${row.maint.replace(/\//g, '-').toLowerCase()}`)
+        console.log(row)
+    }
+    return (
+        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <Table sx={{ minWidth: 900 }} aria-label="customized table">
+            <TableHead>
+            <TableRow>
+                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCell>
+                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Supervisor</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Cost</Typography></StyledTableCell>
+                {/* <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell> */}
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            
+            {maintLogRows.map((row, ind) => {
+                const {date, maint_id, concern, personnel, cost } = row
+                return (
+                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} style={{ height: '2rem' }} onClick={()=> handleClick(row)} >
+                    <StyledTableCell  style={{ height: '2rem' }}><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCell>
+                    <StyledTableCell  style={{ height: '2rem' }}><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
+                    <StyledTableCell style={{ height: '2rem' }}><Typography variant='h5' fontWeight={'400'}>{concern}</Typography></StyledTableCell>
+                    <StyledTableCell  style={{ height: '2rem' }}><Typography variant='h5' fontWeight={'400'}>{personnel}</Typography></StyledTableCell>
+                    <StyledTableCell style={{ height: '2rem' }}><Typography variant='h5' fontWeight={'400'}>{cost}</Typography></StyledTableCell>
+                    {/* <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell> */}
+                </StyledTableRow>
                 )
             })}
             </TableBody>

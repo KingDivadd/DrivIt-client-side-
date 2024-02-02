@@ -20,9 +20,10 @@ import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
 import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
 import { AiOutlineRollback } from "react-icons/ai";
 
-const SideBarMobile = ()=>{
+const MaintSideBarMobile = ()=>{
     const [page, setPage] = useState("")
 
+    const {menu, setMenu} = ChatState()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const SideBarMobile = ()=>{
         }
         setPage(lastPart)
     }, [page])
-    
+
     const handlePage = (value)=>{
         navigate(`/${value}`)
     }
@@ -66,30 +67,21 @@ const SideBarMobile = ()=>{
                         </Box>
                         <Typography variant='h5' >Dashboard</Typography> 
                     </Box>
-                    <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
+
+                    <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>
                         <Box className="icon">
                             <FaTools size={'1.3rem'} />
                         </Box>
-                        <Typography variant='h5'>Workbay</Typography> 
+                        <Typography variant='h5'>Vehicle Service</Typography> 
                     </Box>
-                    <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', }} >
+
+                    <Box className={page === "maint-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("maint-history")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <CgNotes size={'1.3rem'} />
                         </Box>
-                        <Typography variant='h5'>Vehicle log</Typography> 
+                        <Typography variant='h5'>Service History</Typography> 
                     </Box>
-                    <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
-                        <Box className="icon">
-                            <FaCar size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Assigned Vehicle</Typography> 
-                    </Box>
-                    <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
-                        <Box className="icon">
-                            <MdNoteAlt size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Reports</Typography> 
-                    </Box>
+                    
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
                     <Box className='btn-1' sx={{width: '100%', }} >
@@ -117,4 +109,4 @@ const SideBarMobile = ()=>{
     )
 }
 
-export default SideBarMobile
+export default MaintSideBarMobile

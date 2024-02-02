@@ -16,7 +16,6 @@ import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
 import { MdOutlinePendingActions } from "react-icons/md";
 import SideBar from '../../components/side-bar'
 import MenuBar from 'components/menu-bar';
-import { AiOutlineRollback } from "react-icons/ai";
 
 
 const VehicleLogReport = ()=>{
@@ -72,8 +71,8 @@ const VehicleLogReport = ()=>{
                             </Box>
                             <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                    <Box className='mid-btn back-btn' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '8rem' }} >
-                                        <AiOutlineRollback size={'1.5rem'} />
+                                    <Box className='btn-1 dormant' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '12rem', pl: 2, }} >
+                                        <FaArrowLeft />
                                         <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                     </Box>
                                     
