@@ -12,14 +12,11 @@ import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, Serv
 import Table, { CustomizedTables, DriverLogTable ,ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import {CreateLogModal} from 'components/modal';
 import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import MenuBar from 'components/menu-bar';
+import AlertMessage from 'components/snackbar';
 
 
 const VehicleLog = ()=>{
@@ -98,6 +95,7 @@ const VehicleLog = ()=>{
                 </Grid>
                 </Box>
             </Grid> 
+            <AlertMessage />
         </Grid>
     )
 }

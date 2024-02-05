@@ -171,7 +171,7 @@ export default function PlanMaintenance() {
     const [maintLog, setMaintLog] = useState({vehicle:'', concerns: '', services: [], date: ''})
     const [submit, setSubmit] = useState(false)
     const [openServices, setOpenServices]= useState(false)
-    const {setAlertMsg, setOpenAlert, setAlertSeverity, setNewPlannedMaint} = ChatState()
+    const {setAlertMsg, setOpenAlert, setAlertSeverity,newPlannedMaint, setNewPlannedMaint} = ChatState()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -220,12 +220,14 @@ export default function PlanMaintenance() {
                         }
                     });
                         console.log(maint.data)
-                        setNewPlannedMaint(true)
+                        if(newPlannedMaint){setNewPlannedMaint(false)}
+                        if (!newPlannedMaint){setNewPlannedMaint(true)}
                         setMaintLog({vehicle:'', concerns: '', services: [], date: ''})
                         handleClose()
                         clearInterval(handleSubmit)
                         setLoading(false)
                     } catch (err) {
+                        console.log(err)
                         if (!navigator.onLine) {
                             setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
                             // setInterval(handleSubmit, 3000)
@@ -242,6 +244,7 @@ export default function PlanMaintenance() {
                     }
 
                 } catch (err) {
+                    console.log(err)
                     if (!navigator.onLine) {
                         setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
                         // setInterval(handleSubmit, 3000)
@@ -357,13 +360,13 @@ export default function PlanMaintenance() {
 
 
 export function CreateLogModal() {
-    const [createLog, setCreateLog] = useState({logTime: 'Morning', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
+    const [createLog, setCreateLog] = useState({vehicle_id: '', logTime: 'Morning', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
     const [logTime, setLogTime] = useState(false)
     const [startingFuel, setStartingFuel] = useState(false)
     const [endingFuel, setEndingFuel] = useState(false)
     const [openServices, setOpenServices]= useState(false)
     const [loading, setLoading] = useState(false)
-    const {setOpenAlert, setAlertMsg, setAlertSeverity, setNewDailyLog} = ChatState()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, newDailyLog, setNewDailyLog} = ChatState()
 
 
     const [age, setAge] = useState("")
@@ -380,14 +383,43 @@ export function CreateLogModal() {
 
     const handleSubmit = async(e)=>{
         // e.preventDefault()
-        console.log(createLog)
         setLoading(true)
         if (!navigator.onLine){ 
-            setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true) 
+            setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true); setLoading(false);
         }
-        else if (navigator.onLline){
+        else{
+            console.log(createLog)
             console.log('still here')
-           
+            try {
+            const token = localStorage.getItem('token');
+            if (token === null){navigate('/login')}
+            const user = JSON.parse(sessionStorage.getItem('userInfo'))
+            if (user=== null){navigate('/login')}
+            const vehicle = JSON.parse(sessionStorage.getItem('userInfo')).loggedInUser.vehicle
+            setCreateLog({...createLog, vehicle_id: vehicle })
+            console.log(createLog)
+
+            const logInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/new-log", {vehicle_id: createLog.vehicle_id, currentLocation: createLog.currentLocation, startingMileage: createLog.startingMileage, endingMileage: createLog.endingMileage, startingFuelLevel: createLog.startingFuelLevel, endingFuelLevel: createLog.endingFuelLevel, logTime: createLog.logTime}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            console.log(logInfo.data)
+            setLoading(false)
+            if (newDailyLog){setNewDailyLog(false)}
+            if (!newDailyLog){setNewDailyLog(true)}
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+            }
+        }
+
         }
     }
 
@@ -505,7 +537,7 @@ export function CreateLogModal() {
                     </Box>}
                     
                     <Box sx={{display: 'flex', alignItems: 'flex-end' ,justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
-                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', position: 'relative' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
                         

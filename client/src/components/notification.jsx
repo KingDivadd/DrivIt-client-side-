@@ -7,6 +7,7 @@ import { Avatar } from '@mui/material';
 import ExpandableButton from './collapse-msg';
 import { ChatState } from 'context/chatContext';
 import axios from 'axios'
+import AlertMessage from './snackbar';
 
 export default function NotificationPopover() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,7 +22,7 @@ export default function NotificationPopover() {
 
     const fetchUserInfo = async()=>{
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
             {},{
                 headers: {
@@ -50,7 +51,7 @@ export default function NotificationPopover() {
     const fetchNotification = async(role)=>{
 
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const fetchNotification = await axios.post("https://futa-fleet-guard.onrender.com/api/notification/filter-notifications",
             {role},{
                 headers: {
@@ -111,6 +112,7 @@ export default function NotificationPopover() {
                 }) }
             </Box>
         </Popover>
+        <AlertMessage />
         </div> } </>
     )
 }

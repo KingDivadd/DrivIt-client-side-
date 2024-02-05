@@ -107,26 +107,21 @@ export function PlannedMaintTables() {
 
     useEffect(() => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-        if(userInfo !== null){
-            setUser(userInfo)
+        if (userInfo === null){
+            navigate('/login')
+        }else{
+            setUser(userInfo.loggedInUser)
             if(!navigator.onLine){
                 setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
             }else if (navigator.onLine){
-                // fetchTableInfo() 
+                fetchTableInfo() 
             }
         }
-
-        if(!navigator.onLine){
-            setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
-        }else if(navigator.onLine){
-            fetchUserInfo()
-        }
-        console.log(planMaintInput)
     }, [planMaintInput, newPlannedMaint])
 
     const fetchTableInfo = async() =>{
         try {
-        const vehicle = user.loggedInUser.vehicle
+        const vehicle = JSON.parse(sessionStorage.getItem('userInfo')).loggedInUser.vehicle
             const token = sessionStorage.getItem('token')
             if(token === null){
                 navigate('/login')
@@ -183,7 +178,7 @@ export function PlannedMaintTables() {
                         }
                     });
 
-                    setPlanMaintTable(table.data.allPlannedMaint.reverse())
+                    setPlanMaintTable(table.data.allPlannedMaint)
                     setLoading(false)
                     clearInterval(fetchUserInfo)
                 } catch (err) {
@@ -353,7 +348,7 @@ export function DriverLogTable() {
                     if(token === null){
                         navigate('/login')
                     }
-                    const table = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/all-log", {start_date, end_date, filter}, {
+                    const table = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/all-logs", {start_date, end_date, filter}, {
                         headers: {
                             "Content-Type":  "Application/json",
                             "Authorization": `Bearer ${token}`
@@ -364,6 +359,7 @@ export function DriverLogTable() {
                     setLoading(false)
                     clearInterval(fetchTableInfo)
                 } catch (err) {
+                    console.log(err)
                     if(!navigator.onLine){
                     setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
                     setLoading(false)
@@ -514,6 +510,7 @@ export function DriverLogTable() {
             </Box>
 
             }
+            <AlertMessage />
             </>
 
         }
