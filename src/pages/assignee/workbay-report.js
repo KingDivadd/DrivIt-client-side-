@@ -20,18 +20,22 @@ import { AiOutlineRollback } from "react-icons/ai";
 
 
 const WorkbayReport = ()=>{
-    const [page, setPage] = useState("")
+    const [rowInfo, setRowInfo] = useState(null)
     const [text, setText] = useState("")
-    const [age, setAge] = useState("")
+    const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
     const navigate = useNavigate()
 
     useEffect(() => {
-        const getPage = localStorage.getItem("page")
-        setPage(getPage)
+        const workbayRow = JSON.parse(sessionStorage.getItem('workbayRow'))
+        if (workbayRow === null){
+            navigate(-1)
+        }else{
+            setRowInfo(workbayRow)
+        }
+
     }, [])
     const handlePage = (value)=>{
         console.log(value)
-        localStorage.setItem("page", value)
         navigate(`/${value}`)
     }
     
@@ -51,7 +55,8 @@ const WorkbayReport = ()=>{
         navigate(-1)
     }
     return (
-        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
+        <>
+        {rowInfo !== null && <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             <SideBar />
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
@@ -62,17 +67,37 @@ const WorkbayReport = ()=>{
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
-                            <Typography variant='h3' sx={{fontWeight: '600'}}>FUTAWORK-0010</Typography>
-                            <Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.5rem', borderRadius: '.3rem', p: '0 .5rem' }}>
-                                {/* <Typography variant='h5' sx={{fontWeight: '500'}}>Status</Typography> */}
-                                <MdOutlinePendingActions size={'1.5rem'} color={'#1B61E4'} />
-                                <Typography variant='h5' sx={{fontWeight: '500'}}>Pending...</Typography>
+                            <Typography variant='h3' sx={{fontWeight: '600'}}>{rowInfo.maint_id}</Typography>
+                            
+                            {rowInfo.status ==="pending" && <Box className={ "pending-stat stat"} sx={{width: '10rem', gap: '.5rem'}}>
+                                <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
+                                <Typography variant="h5" fontWeight={'500'}  component="div">Pending</Typography>
+                            </Box>   }                 
 
-                            </Box>
+                            {rowInfo.status ==="accepted" && <Box className={ "accepted-stat stat"} sx={{width: '10rem', gap: '.5rem'}}>
+                                <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
+                                <Typography variant="h5" fontWeight={'500'}  component="div">Accepted</Typography>
+                            </Box>   }                 
+
+                            {rowInfo.status ==="in-shop"  && <Box className={"in-shop-stat stat"} sx={{width: '10rem', gap: '.5rem'}}>
+                                <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GiHomeGarage size={'1.5rem'} /> </Box>
+                                <Typography variant="h5" fontWeight={'500'}  component="div">In Shop</Typography>
+                            </Box> }                   
+
+                            {rowInfo.status === "in-progress" && <Box className={"in-progress-stat stat"} sx={{width: '10rem', gap: '.5rem'}}>
+                                <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GrInProgress size={'1.3rem'} /> </Box>
+                                <Typography variant="h5" fontWeight={'500'}  component="div">In Progress</Typography>
+                            </Box> }                   
+
+                            {rowInfo.status === "completed" && <Box className={"completed-stat stat"} sx={{width: '10rem', gap: '.5rem'}}>
+                                <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
+                                <Typography variant="h5" fontWeight={'500'}  component="div">Completed</Typography>
+                            </Box> }
+
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                <Box className='mid-btn back-btn' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '8rem'}} >
+                                <Box className='mid-btn back-btn' onClick={()=> navigate(-1)} sx={{width: '8rem'}} >
                                     <AiOutlineRollback  size={'1.5rem'} />
                                     <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                 </Box>
@@ -91,8 +116,8 @@ const WorkbayReport = ()=>{
                         <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
                             {/* The left side */}
                             <Box sx={{width: '100%'}}>
-                                <WorkbayMaintCard />
-                                <StatusCard status={status}/>
+                                <WorkbayMaintCard data={rowInfo} />
+                                <StatusCard data={rowInfo}/>
                                 
                             </Box>
                             {/* the right side */}
@@ -104,7 +129,7 @@ const WorkbayReport = ()=>{
                 </Grid>
                 </Box>
             </Grid> 
-        </Grid>
+        </Grid>} </>
     )
 }
 

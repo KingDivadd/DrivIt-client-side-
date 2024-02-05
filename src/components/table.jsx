@@ -19,6 +19,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { EditLogModal } from './modal';
 import {MaintHisModal } from './modal'
+import CircularAnimation, {SkeletonAnimations} from './skeleton';
+import Skeleton from '@mui/material/Skeleton';
+import AlertMessage from './snackbar';
 
 
 export default function Tables(){
@@ -77,63 +80,204 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     cursor: 'pointer',
 }));
 
-function createData(maint, concern, mileage, supervisor, cost, status) {
-    return { maint, concern, mileage, supervisor, cost, status };
+function createData(date,maint, concern, mileage, supervisor, cost, status) {
+    return {date, maint, concern, mileage, supervisor, cost, status };
 }
 
 const rows = [
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0003', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0004', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0005', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0006', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0007', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0008', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0009', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
+    createData('23 Feb, 2024','FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'Pnding'),
+    createData('22 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'Pending'),
+    createData('20 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'Pending'),
+    createData('19 Feb, 2024','FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'Pending'),
+    createData('18 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Progress'),
+    createData('17 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Progress'),
+    createData('16 Feb, 2024','FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'Completed'),
+    createData('15 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'Completed'),
+    createData('14 Feb, 2024','FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'Completed'),
+
     
     ];
 
-export function CustomizedTables() {
+export function PlannedMaintTables() {
     const navigate = useNavigate()
-    const handleClick = (row)=>{
-        navigate(`./${row.maint.replace(/\//g, '-').toLowerCase()}`)
+    const {planMaintInput, setPlanMaintInput, setOpenAlert, setAlertMsg, setAlertSeverity, newPlannedMaint, setNewPlannedMaint} = ChatState()
+    const [planMaintTable, setPlanMaintTable] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState({})
+
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        if(userInfo !== null){
+            setUser(userInfo)
+            if(!navigator.onLine){
+                setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
+            }else if (navigator.onLine){
+                // fetchTableInfo() 
+            }
+        }
+
+        if(!navigator.onLine){
+            setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
+        }else if(navigator.onLine){
+            fetchUserInfo()
+        }
+        console.log(planMaintInput)
+    }, [planMaintInput, newPlannedMaint])
+
+    const fetchTableInfo = async() =>{
+        try {
+        const vehicle = user.loggedInUser.vehicle
+            const token = localStorage.getItem('token')
+            if(token === null){
+                navigate('/login')
+            }
+            const table = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/all-planned-maint", {vehicle}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setUser(table.data.allPlannedMaint)
+            setPlanMaintTable(table.data.allPlannedMaint)
+            setLoading(false)
+            clearInterval(fetchTableInfo)
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                setInterval(fetchTableInfo, 3000)
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            }
+        }
+    }
+
+    const fetchUserInfo = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
+                {},
+                {
+                    headers: {
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                    }
+                }
+                );
+                const user = userInfo.data.loggedInUser
+                const vehicle = user.vehicle
+                clearInterval(fetchUserInfo)
+                try {
+                    const token = localStorage.getItem('token')
+                    if(token === null){
+                        navigate('/login')
+                    }
+                    const table = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/all-planned-maint", {vehicle}, {
+                        headers: {
+                            "Content-Type":  "Application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    setPlanMaintTable(table.data.allPlannedMaint.reverse())
+                    setLoading(false)
+                    clearInterval(fetchUserInfo)
+                } catch (err) {
+                    console.log(err)
+                    if (!navigator.onLine) {
+                        setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                        setInterval(fetchUserInfo, 3000)
+                        setLoading(false)
+                    } else if (err.response) {
+                        // Handle server errors
+                        setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                        setLoading(false)
+                    } else {
+                        // Handle network errors
+                        setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                        setLoading(false)
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+                if (!navigator.onLine) {
+                    setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                    setInterval(handleSubmit, 3000)
+                    setLoading(false)
+                } else if (err.response) {
+                    // Handle server errors
+                    setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                    setLoading(false)
+                } else {
+                    // Handle network errors
+                    setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                    setLoading(false)
+                }
+            }
+            };
+
+    const handleClick = (row, ind)=>{ 
+        sessionStorage.setItem("workbayRow", JSON.stringify(row))
+        navigate(`./${row.maint_id}`)
     }
     return (
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
-        <Table sx={{ minWidth: 800 }} aria-label="customized table">
-            <TableHead>
-            <TableRow>
-                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Mileage</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Supervisor</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Cost</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
-            </TableRow>
-            </TableHead>
-            <TableBody>
+        <>
+            {loading ?  
+                <Box sx={{height: '32.5rem', width:'100%',display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+                    <Skeleton animation="wave" width={'100%'} height={"15.5rem" }   />
+                    <Skeleton animation="wave" width={'100%'} height={"15.5rem" }  />
+                    <AlertMessage />
+
+                </Box>
+            :
+            <>
+                {planMaintTable.length ? 
             
-            {rows.map((row, ind) => {
-                const {maint, concern, cost,mileage, status, supervisor } = row
-                return (
-                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{concern}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{mileage}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{supervisor}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{cost}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
-                </StyledTableRow>
-                )
-            })}
-            </TableBody>
-        </Table>
-        </TableContainer>
+            <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
+            <Table sx={{ minWidth: 900 }} aria-label="customized table">
+                <TableHead>
+                <TableRow>
+                    <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Personnel In Charge</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                </TableRow>
+                </TableHead>
+
+                <TableBody>
+                
+                {planMaintTable.map((row, ind) => {
+                    const {proposedDate, services, personnel, status, maint_id} = row
+                    return (
+                    <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{services[0]}</Typography></StyledTableCell>
+                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{"Oladimeji"}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{proposedDate}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
+                    </StyledTableRow>
+                    )
+                })}
+
+                </TableBody>
+            </Table>
+            </TableContainer>
+            :
+            <Box sx={{height: '31.5rem', display: 'flex', jusitifyContent: 'center', alignItems: 'center'}}>
+                <Typography variant='h3' fontWeight={'500'} >
+                    Click the plan maintenance button to plan a maintenance
+                </Typography>
+            </Box>
+            }
+            </>
+            
+            }
+        </>
     );
 }
 
@@ -175,48 +319,210 @@ const vLogRows = [
     createVlogData('VHLOG-0010','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
     ];
 
-export function CustomizedTablesVlog() {
-
+export function DriverLogTable() {
     const navigate = useNavigate()
-    const handleClick = (row)=>{
-        navigate(`./${row.id.toLowerCase()}`)
+    const [dailyLog, setDailyLog] = useState([])
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, planMaintInput, setPlanMaintInput} = ChatState()
+    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState({})
+
+
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        if(userInfo !== null){
+            setUser(userInfo)
+            if(!navigator.onLine){
+                setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
+            }else if (navigator.onLine){
+                fetchTableInfo()
+            }
+        }
+
+        if(!navigator.onLine){
+            setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
+            setInterval(fetchTableInfo, 3000)
+        }else if(navigator.onLine){
+            fetchUserInfo()
+        }
+        console.log(planMaintInput)
+    }, [planMaintInput])
+
+    const fetchTableInfo = async() =>{
+        try {
+                const start_date =""
+                const end_date = ""
+                const filter = ""
+                    const token = localStorage.getItem('token')
+                    if(token === null){
+                        navigate('/login')
+                    }
+                    const table = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/all-log", {start_date, end_date, filter}, {
+                        headers: {
+                            "Content-Type":  "Application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    setDailyLog(table.data.dailyLogs)
+                    setLoading(false)
+                    clearInterval(fetchTableInfo)
+                } catch (err) {
+                    if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                    setInterval(fetchTableInfo, 3000)
+                    }else{
+                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                        setLoading(false)
+                    }
+                }
     }
+
+    const fetchUserInfo = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const userInfo = await axios.post(
+                "https://futa-fleet-guard.onrender.com/api/user/find-user",
+                {},
+                {
+                    headers: {
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                    }
+                }
+                );
+
+                const user = userInfo.data.loggedInUser
+                const vehicle = user.vehicle
+                try {
+                    const token = localStorage.getItem('token')
+                    if(token === null){
+                        navigate('/login')
+                    }
+                    const table = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/all-logs", {vehicle}, {
+                        headers: {
+                            "Content-Type":  "Application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    console.log(table.data.dailyLogs)
+                    setDailyLog(table.data.dailyLogs)
+                    setLoading(false)
+                    clearInterval(fetchUserInfo)
+                } catch (err) {
+                    console.log(err)
+                    if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                    // setInterval(fetchUserInfo, 3000)
+                    }else{
+                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                        setLoading(false)
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+                if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                    // setInterval(fetchUserInfo, 3000)
+                }else{
+                    setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                }
+            }
+            };
+
+    const handleClick = (row)=>{
+        navigate(`./${row._id}`)
+    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+        };
+
     return (
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
-        <Table sx={{ minWidth: 900 }} aria-label="customized table">
-            <TableHead>
-            <TableRow>
-                <StyledTableCellVlog><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Location</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Location</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Mileage</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Mileage</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Route</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Fuel Level</Typography></StyledTableCellVlog>
-                <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Created By</Typography></StyledTableCellVlog>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            
-            {vLogRows.map((row, ind) => {
-                const {createdBy, date, startingLocation,startingMileage, endingLocation, endingMileage, route, fuelLevel,id } = row
-                return (
-                <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{startingLocation}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog><Typography variant='h5' fontWeight={'400'}>{endingLocation}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{startingMileage}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog><Typography variant='h5' fontWeight={'400'}>{endingMileage}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{route}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{fuelLevel}</Typography></StyledTableCellVlog>
-                    <StyledTableCellVlog ><Typography variant='h5' fontWeight={'400'}>{createdBy}</Typography></StyledTableCellVlog>
-                </StyledTableRowVlog>
-                )
-            })}
-            </TableBody>
-        </Table>
-        </TableContainer>
-    );
+    <>
+        
+
+        
+        {loading ?  
+            <Box sx={{height: '32.5rem', width:'100%',display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+                <Skeleton animation="wave" width={'100%'} height={"15.5rem" }   />
+                <Skeleton animation="wave" width={'100%'} height={"15.5rem" }  />
+                <AlertMessage />
+
+            </Box>
+            :
+            <>
+            {dailyLog.length ?
+
+            <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+                <Table sx={{ minWidth: 1100 }} aria-label="customized table">
+                    <TableHead>
+                    <TableRow>
+                        <StyledTableCellVlog><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCellVlog>
+
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Log Time</Typography></StyledTableCellVlog>
+                        
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Current Location</Typography></StyledTableCellVlog>
+
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Mileage</Typography></StyledTableCellVlog>
+
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Mileage</Typography></StyledTableCellVlog>
+
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Fuel Level</Typography></StyledTableCellVlog>
+
+                        <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Fuel Level</Typography></StyledTableCellVlog>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {dailyLog.map((row, ind)=>{
+                        const {_id, createdAt, logTime, addedBy, vehicle, currentLocation, startingMileage, endingMileage, startingFuelLevel, endingFuelLevel} = row
+                        return (
+                            <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{formatDate(createdAt)}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{logTime}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{currentLocation}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{startingMileage}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{endingMileage}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{startingFuelLevel}</Typography></StyledTableCell>
+
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{endingFuelLevel}</Typography></StyledTableCell>
+
+        
+                                
+                            </StyledTableRowVlog>
+
+                        )
+                    })}
+
+                    </TableBody>
+                    
+                </Table>
+                <AlertMessage />
+            </TableContainer>
+            :
+            <Box sx={{height: '32rem', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Typography variant='h3' fontWeight={'500'} >
+                    Click on the create log button to add the daily vehicle usage log.
+                </Typography>
+            </Box>
+
+            }
+            </>
+
+        }
+    
+    </>
+    )
 }
 
 
@@ -314,6 +620,7 @@ export function MaintLogTable() {
     const navigate = useNavigate()
     
     const handleClick = (row)=>{
+        console.log(row)
         setMaintData(row)
         setShowHis(true)
     }

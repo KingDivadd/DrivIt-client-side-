@@ -17,10 +17,12 @@ const Login = () => {
     const [inputError, setInputError] = useState(false)
     const [show, setShow] = useState(false)
     const [nam, setNam] = useState([])
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+
     const navigate  = useNavigate()
 
-    const {alertMsg, setAlertMsg, openAlert,setOpenAlert, alertSeverity, setAlertSeverity} = ChatState() //serverity: 'warning', msg: 'Field cannot be empty', openAlert: true
-        const [width, setWidth] = useState(window.innerWidth)
+    const { setAlertMsg, setOpenAlert,  setAlertSeverity, user, setUser} = ChatState() //serverity: 'warning', msg: 'Field cannot be empty', openAlert: true
+    const [width, setWidth] = useState(window.innerWidth)
     const theme = useTheme();
 
     const resize = ()=>{
@@ -42,57 +44,69 @@ const Login = () => {
         setCredentials({...credentials, [name]: value})
     }
 
-    function handleSubmit(){
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            // setNam([])
-        }, 3000);
-        if(openAlert){
-            setOpenAlert(false)
-        }if(!openAlert){
-            setOpenAlert(true)
-            setAlertMsg("Provide you username and password")
-            setAlertSeverity('success')
+    const checkConnectivity = () => {
+        setIsOnline(navigator.onLine);
+    };
+    setInterval(() => {
+        checkConnectivity()
+    }, 1000);
+
+    const fetchUserInfo = async()=>{
+        try {
+            const token = localStorage.getItem('token')
+            const user = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user", {}, {
+                headers: {
+                    "Content-type":"Application/json",
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+            sessionStorage.setItem('userInfo',JSON.stringify(user.data))
+            navigate('/dashboard')
+        } catch (err) {
+            console.log(err)
+            if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                }else{
+                    // setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                }
         }
-        console.log("OpenAlert :", openAlert, alertMsg, alertSeverity) // it worked
     }
 
-    // const handleSubmit = async(e)=>{
-    //     e.preventDefault()
-    //     console.log(alertMsg, openAlert, alertSeverity)
-    //     setOpenAlert(true); setAlertMsg("Please enter username and password!!!"); setAlertSeverity('warning')
-    //     console.log(alertMsg, openAlert, alertSeverity)
-    //     if(!credentials.password || !credentials.username){
-    //         // setOpenAlert(true); setAlertMsg("Fields cannot be empty!!!"); setAlertSeverity('warning')
-    //         // console.log(alertMsg, openAlert, alertSeverity)
-    //     }
 
-    //     // here, the loading wont work on setTimeout, but rather when the request has been received.
-    //     setLoading(true);
-    //     setTimeout(() => {
-    //         setLoading(false);
-    //         // setNam([])
-    //     }, 3000);
+    const handleSubmit = async(e)=>{
+        e.preventDefault()
+        if(!credentials.password || !credentials.username){
+            setAlertMsg("Fields cannot be empty!!!"); setAlertSeverity('warning'); setOpenAlert(true); 
+        }else{
+            const email_staffId = credentials.username
+            const password = credentials.password
+            setLoading(true);
+            try {
+            const auth = await axios.post("https://futa-fleet-guard.onrender.com/api/auth/login", {email_staffId, password}, {
+                headers: {
+                    "Content-type": "Application/json"
+                }
+            })
+            localStorage.setItem('token', auth.data.token)
+            setLoading(false)
+            setCredentials({password: "", username:""})
+            fetchUserInfo()
+            } catch (err) {
+                if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                }else{
+                    setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                    setCredentials({...credentials, password: ""})
+                }
+            }
+        }
+    }
 
 
-        
-    //     try {
-    //         const auth = await axios.post("http://localhost:5500/api/auth/login", {email, password}, {
-    //             headers: {
-    //                 "Content-type": "Application/json"
-    //             }
-    //         })
-    //         console.log(auth.data);
-    //         localStorage.setItem('token', auth.data.token)
-    //         setPersistData({...persistData, user: auth.data, isAuth: true}) 
-    //         setUser(auth.data)
-    //         sessionStorage.setItem("persistData", persistData)
-    //         navigate('/home')
-    //     } catch (err) {
-    //         // console.log("Incorrect credentials")
-    //     }
-    // }
     
     
     return (
@@ -105,8 +119,9 @@ const Login = () => {
             backgroundPosition: 'center',
             borderRadius: '1.5rem',
             p: '2.5rem',
-            display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between'
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between',
             }}
+
             >  
                 <Box>
                 <Typography variant={'h2'} fontWeight={'400'} color={'white'}>FleetPro</Typography>
@@ -135,22 +150,22 @@ const Login = () => {
             </Grid>
 
             <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, display: 'flex', flexDirection: 'column', alignItems: 'center'}}> 
-                <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 , maxWidth: '550px'}}>
+                <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 , maxWidth: '575px'}}>
                     <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Welcome Back</Typography>
                     <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}> <LockOutlinedIcon /> </Avatar>
                     <Typography component="h5" variant="h4"> Sign in </Typography>
                 </Box>
 
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 .5rem',width: '100%', maxWidth: '550px',  }}>
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, p:'0 .5rem',width: '100%', maxWidth: '575px',  }}>
                     <Box>
-                        <Typography  variant='h5' sx={{mb: '.5rem'}}>Username</Typography>
+                        <Typography  variant='h5' sx={{mb: '.5rem'}}>Email / Staff Id</Typography>
                         <input className={(inputError && nam.includes("username"))?'input-error input': 'input'} name = {"username"} value={credentials.username} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Password</Typography>
-                        <input className={(inputError && nam.includes("passsword"))?'input-error input': 'input'} name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
+                        <input className={(inputError && nam.includes("passsword"))?'input-error input': 'input'} name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="password" style={{width: '100%', height:'3rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
-                    <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={handleSubmit}  fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', position: 'relative'}}>
+                    <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  fullWidth  sx={{ mt: 4, height: '3rem', textTransform: 'none', position: 'relative'}}>
                         {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
                         {!loading ? <Typography variant='h5'>Login</Typography> : ''}
                     </Box>
@@ -158,7 +173,7 @@ const Login = () => {
 
                 </Box>
 
-                <Grid container sx={{p: '2rem .5rem', maxWidth: '550px', gap: '.75rem'}}>
+                <Grid container sx={{p: '2rem .5rem', maxWidth: '575px', gap: '.75rem'}}>
                     <Grid item xs>
                         <Box onClick={()=> navigate('/recover-password') } sx={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-start' , alignItems: 'center'}}>
                             <Typography variant='h7' color= 'cornflowerblue' sx={{textTransform: 'none'}}>Forgot password?</Typography> 

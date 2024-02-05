@@ -9,6 +9,9 @@ import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, FeedbackCard, StatusCard, WorkbayMaintCard } from 'components/role-card';
+import AdminSideBar from 'components/admin-component/side-bar';
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
+import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleDriverCard, VehicleMaintCard } from 'components/admin-component/card';
 import Table, { CustomizedTables, ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
@@ -16,9 +19,12 @@ import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
 import { MdOutlinePendingActions } from "react-icons/md";
 import SideBar from '../../components/side-bar'
 import MenuBar from 'components/menu-bar';
+import { AiOutlineRollback } from "react-icons/ai";
+import { FaSquareCheck } from "react-icons/fa6";
 
 
-const VehicleLogReport = ()=>{
+
+const VehicleReport = ()=>{
     const [page, setPage] = useState("")
     const [text, setText] = useState("")
     const [age, setAge] = useState("")
@@ -51,7 +57,7 @@ const VehicleLogReport = ()=>{
     }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            <AdminSideBar />
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}
@@ -61,24 +67,29 @@ const VehicleLogReport = ()=>{
                     <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                         <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
-                                <Typography variant='h3' sx={{fontWeight: '600'}}>FUTAWORK-0010</Typography>
-                                <Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.5rem', borderRadius: '.3rem', p: '0 .5rem' }}>
-                                    {/* <Typography variant='h5' sx={{fontWeight: '500'}}>Status</Typography> */}
-                                    <MdOutlinePendingActions size={'1.5rem'} color={'#1B61E4'} />
-                                    <Typography variant='h5' sx={{fontWeight: '500'}}>Pending...</Typography>
+                                <Typography variant='h3' sx={{fontWeight: '600'}}>TOYOTA COROLLA</Typography>
 
+                                <Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.5rem', borderRadius: '.3rem', p: '0 .5rem' }}>
+                                    <FaSquareCheck size={'1.5rem'} color={'#1B61E4'} />
+                                    <Typography variant='h5' sx={{fontWeight: '500'}}>Assigned</Typography>
                                 </Box>
+
+                                {/* <Box className={status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
+                                    <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '2.5rem', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
+                                    <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Not Assigned</Typography>
+                                </Box>  */}
+
                             </Box>
                             <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                    <Box className='btn-1 dormant' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '12rem', pl: 2, }} >
-                                        <FaArrowLeft />
+                                    <Box className='mid-btn back-btn' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '9rem'}} >
+                                        <AiOutlineRollback size={'1.5rem'} />
                                         <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                     </Box>
                                     
                                 </Box>
                                 <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Box className='hollow-btn' bgColor='primary.light' sx={{width: '8rem',  height: '2.5rem',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Box className='hollow-btn' bgColor='primary.light' sx={{width: '9rem',  height: '2.5rem',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         Export
                                     </Box>
                                 </Box>
@@ -90,13 +101,14 @@ const VehicleLogReport = ()=>{
                             <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
                                 {/* The left side */}
                                 <Box sx={{width: '100%'}}>
-                                    <WorkbayMaintCard />
-                                    <StatusCard value={'Pending...'} icon={<MdOutlinePendingActions size={'2rem'} />} suffix={""} />
-                                    
+                                    <VehicleInformationCard />
+                                    <VehicleStatusCard />
                                 </Box>
                                 {/* the right side */}
                                 <Box sx={{width: '100%'}}>
-                                    <FeedbackCard />
+                                    <VehicleAssigneeCard />
+                                    <VehicleDriverCard />
+                                    <VehicleMaintCard />
                                 </Box>
                             </Box> 
                         </Box>
@@ -107,4 +119,4 @@ const VehicleLogReport = ()=>{
     )
 }
 
-export default VehicleLogReport
+export default VehicleReport

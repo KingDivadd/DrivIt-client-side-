@@ -1,12 +1,81 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 import Popover from '@mui/material/Popover';
-import { Button, Box, Typography, useTheme, } from '@mui/material'
+import { Button, Box, Typography, useTheme, useStepContext, } from '@mui/material'
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Avatar } from '@mui/material';
 import ExpandableButton from './collapse-msg';
+import { ChatState } from 'context/chatContext';
+import axios from 'axios'
 
 export default function NotificationPopover() {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [notification, setNotification] = useState({})
+    const {setAlertMsg, setAlertSeverity, setOpenAlert} = ChatState()
+    const [show, setShow] = useState(false)
+    const [role, setRole] = useState("")
+
+    useEffect(() => {
+    fetchUserInfo()
+    }, [])
+
+    const fetchUserInfo = async()=>{
+        try {
+            const token = localStorage.getItem('token');
+            const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
+            {},{
+                headers: {
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${token}`
+                }
+            }
+            );
+            const role =  userInfo.data.loggedInUser.role
+            fetchNotification(role)
+
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            }
+        }
+    }
+
+    const fetchNotification = async(role)=>{
+
+        try {
+            const token = localStorage.getItem('token');
+            const fetchNotification = await axios.post("https://futa-fleet-guard.onrender.com/api/notification/filter-notifications",
+            {role},{
+                headers: {
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${token}`
+                }
+            }
+            );
+            setNotification(fetchNotification.data.Notifications)
+            setShow(true)
+            console.log(notification)
+
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            }
+        }
+    }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -20,6 +89,7 @@ export default function NotificationPopover() {
     const id = open ? 'simple-popover' : undefined;
 
     return (
+<>{show &&
         <div>
         <Avatar sx={{background: '#E8EFFC', height: '2.5rem', width: '2.5rem', cursor: 'pointer', mr: '.5rem'}} onClick={handleClick}><IoMdNotificationsOutline size={'1.75rem'} color='#1B61E4' /> </Avatar>
         <Popover
@@ -32,30 +102,15 @@ export default function NotificationPopover() {
             horizontal: 'left',
             }}
         >
-
-        
-            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', p: '.75rem', borderRadius: '.3rem', l: '2.5rem', t: '.5rem', height: '25rem', overFlowY: 'auto'}}>
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-                <ExpandableButton />
-
+            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', p: '.75rem', borderRadius: '.3rem', l: '2.5rem', t: '.5rem',height: 'auto', maxHeight: '25rem', width: '20rem' ,overFlowY: 'auto'}}>
                 
-
+                {notification.map((data, ind)=>{
+                    return (
+                        <ExpandableButton key={ind} data={data} />
+                    )
+                }) }
             </Box>
         </Popover>
-        </div>
-    );
+        </div> } </>
+    )
 }

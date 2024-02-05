@@ -9,7 +9,7 @@ import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
-import Table, { CustomizedTables,CustomizedTablesVlog ,ReactVirtualizedTable } from 'components/table';
+import Table, { CustomizedTables, DriverLogTable ,ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import InputLabel from '@mui/material/InputLabel';
@@ -100,7 +100,7 @@ const VehicleLog = ()=>{
                     <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         {/* the table */}
                         <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden'}}>
-                            <CustomizedTablesVlog />
+                            <DriverLogTable />
                         </Box> 
                     </Box>
                 </Grid>

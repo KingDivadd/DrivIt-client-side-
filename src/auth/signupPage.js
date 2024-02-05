@@ -1,10 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
+import { Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
@@ -14,12 +10,17 @@ import { MdOutlineNavigateNext } from "react-icons/md";
 import david from "../asset/david.jpg"
 import auth1 from '../asset/auth1.png'
 import auth2 from '../asset/auth2.png'
+import AlertMessage from '../components/snackbar'
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 const Signup = () => {
-    const [credentials, setCredentials] = useState({role: "", firstName: '', lastName: '', email: '', phone: '',password: ''})
+    const [credentials, setCredentials] = useState({role: "", firstName: '', lastName: '', email: '',staffId: '', phone: '',password: ''})
     const [level, setLevel] = useState(true)
-    const {userRole, setUserRole} = ChatState()
+    const [loading, setLoading] = useState(false);
+    const [isOnline, setIsOnline] = useState(navigator.onLine)
+    const {userRole, setUserRole, setAlertMsg, setOpenAlert,  setAlertSeverity, user, setUser} = ChatState()
     const navigate = useNavigate()
     
     const [width, setWidth] = useState(window.innerWidth)
@@ -34,39 +35,57 @@ const Signup = () => {
         // return()=>{
         //     window.removeEventListener('resize', resize)
         // }
-        setCredentials({...credentials, "role": userRole.value})
+        setCredentials({...credentials, role: userRole.value})
     }, [width, userRole])
+
     const isNonMobileScreens = useMediaQuery("(min-width: 925px)");
     const MobileScreens = useMediaQuery("(min-width: 780px)");
 
+    const checkConnectivity = () => {
+        setIsOnline(navigator.onLine);
+    };
+
+    setInterval(() => {
+        checkConnectivity()
+    }, 1000);
     
     const handleSubmit = async(e)=>{
         e.preventDefault()
-        console.log(credentials)
-        setCredentials({role: "", firstName: '', lastName: '', email: '', phone: '',password: ''})
-        setTimeout(() => {
-            navigate('/')
-        }, 1000);
-        // if (!email || !password) {
-        //     console.log('field cannot be empty')
-        // }
-        // console.log("email : ", email, "password: ", password)
-        // try {
-        //     const auth = await axios.post("http://localhost:5500/api/auth/login", {email, password}, {
-        //         headers: {
-        //             "Content-type": "Application/json"
-        //         }
-        //     })
-        //     console.log(auth.data);
-        //     localStorage.setItem('token', auth.data.token)
-        //     setPersistData({...persistData, user: auth.data, isAuth: true}) 
-        //     setUser(auth.data)
-        //     sessionStorage.setItem("persistData", persistData)
-        //     navigate('/home')
-        // } catch (err) {
-        //     console.log("Incorrect credentials")
-        // }
+        // first check if all filds are filled
+        if (!credentials.role || !credentials.lastName || !credentials.firstName || !credentials.email || !credentials.staffId || !credentials.phone || !credentials.password){
+            setAlertMsg("Please fill all fields"); setOpenAlert(true);  setAlertSeverity('warning')
+        }
+        setLoading(true)
+        try {
+            const {role, firstName, lastName, email, password, staffId, phone} = credentials
+            const auth = await axios.post("https://futa-fleet-guard.onrender.com/api/auth/signup", {role, firstName, lastName, email, phone, staffId, password}, {
+                headers: {
+                    "Content-type": "Application/json"
+                }
+            })
+            setUser(auth.data.userInfo)
+            localStorage.setItem('token', auth.data.token)
+            setAlertMsg(auth.data.msg); setAlertSeverity('success'); setOpenAlert(true);
+            setLoading(false)
+            setCredentials({role: "", firstName: '', lastName: '', email: '',staffId: '', phone: '',password: ''})
+            setCard(false)
+            setButt(false)
+            setCredentials({...credentials, code: auth.data.info.uniqueCode})
+            navigate('/dashboard')
+
+            } catch (err) {
+                // will check for internet
+                if(!navigator.onLine){
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
+                    setLoading(false)
+                }else{
+                setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
+                setLoading(false)
+                }
+            }
+
     }
+
     const handleChange = (e)=>{
         const value = e.target.value
         const name = e.target.name
@@ -77,7 +96,7 @@ const Signup = () => {
         <Grid container component="main"  sx={{ height: '100vh', p:'.5rem', overflowY: 'auto',}}>
         
             {userRole.boo ?
-            <Grid item xs={0} sm={5} md={4} sx={{backgroundImage: `url(${auth2})`,
+            <Grid item xs={0} sm={5} md={5} sx={{backgroundImage: `url(${auth2})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
@@ -128,7 +147,7 @@ const Signup = () => {
             }
             {userRole.boo 
             ?
-            <Grid item xs={12} sm={7} md={8} sx={{background: theme.palette.background.alt, display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+            <Grid item xs={12} sm={7} md={7} sx={{background: theme.palette.background.alt, display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
                 <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Typography component={"h2"} variant='h2' color={'cornflowerblue'} sx={{fontWeight: '500', mb: 1}}>What are you registering as?</Typography>
                     <Typography component="h5" variant="h4" color= {'black'}> In order to preceed, you need to select your role. </Typography> 
@@ -170,7 +189,7 @@ const Signup = () => {
                     </Box>
                     <Box sx={{width: '100%', maxWidth: '550px'}}>
                         <Typography variant='h5' sx={{mb: '.45rem', }}>Password</Typography>
-                        <input className='input  search-input' name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
+                        <input className='input  search-input' name = {"password"} value={credentials.password} onChange={(e)=> handleChange(e) } type="password" style={{width: '100%', height:'2.8rem', background: "white", color: 'black', border: '1px solid gray'}}/>
                     </Box>
                     
                     <Box sx={{mt: 4, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', width: '100%',maxWidth: '550px', gap: 4, pr: 0,}}>
@@ -178,15 +197,18 @@ const Signup = () => {
                         <Box className='mid-btn back-btn'  onClick={()=> setUserRole({...userRole, "boo":true})} sx={{height: '2.8rem',  textTransform: 'none',}}>
                             <AiOutlineRollback size={'1.5rem'} />
                             <Typography variant='h5' pl={'.5rem'} >Select Role</Typography>
-                        </Box>
-                        <Box className='mid-btn primary-btn' onClick={()=> navigate('/dashboard')} type="submit"  sx={{height: '2.8rem',  textTransform: 'none', color: 'white', background: 'cornflowerblue'}}>
-                            <Typography variant='h5' pr={'.5rem'} >Create Account</Typography>
-                            <MdOutlineNavigateNext size={'1.7rem'} />
-                        </Box>                        
+                        </Box>  
+
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleSubmit}  fullWidth  sx={{ height: '2.8rem', textTransform: 'none', position: 'relative'}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ?<><Typography variant='h5'>Create Account</Typography>
+                            <MdOutlineNavigateNext size={'1.7rem'} /> </> : ''}
+                        </Box>                     
                     </Box>
                 </Box>
             </Grid>
             }
+            <AlertMessage />
         </Grid>
     );
 }

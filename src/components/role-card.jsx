@@ -1,9 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { MdOutlinePendingActions } from "react-icons/md";
@@ -17,6 +15,10 @@ import david from "../asset/david.jpg"
 import { FeedBackModal, MaintFeedBackModal } from './modal';
 import { FaCar } from "react-icons/fa6";
 import { SelectMaintStatusModal } from './modal';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import AlertMessage from "./snackbar";
+import { GoChecklist } from "react-icons/go";
 
 
 
@@ -74,7 +76,7 @@ export const Assigee = ()=>{
     }
 
     return (
-    <Card onClick={()=> handleRole("vehicle_assignee")} sx={{ minWidth: '22rem', height: '10rem', cursor: 'pointer' }}>
+    <Card onClick={()=> handleRole("vehicle_assignee")} sx={{ minWidth: '13rem', height: '10rem', cursor: 'pointer' }}>
         <CardContent>
         <Typography variant="h5" gutterBottom>
             Vehicle Assignee
@@ -192,7 +194,7 @@ export const ActiveAssigneeCard = ({})=>{
         </Card>
     )
 }
-export const ActiveDriverCard = ({})=>{
+export const ActiveDriverCard = ({info})=>{
     
     return (
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
@@ -200,17 +202,17 @@ export const ActiveDriverCard = ({})=>{
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
                     Assigned Driver
                 </Typography>
-                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
+                <Box sx={{backgroundImage: `url(${info.pic})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
                 {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
-                        { "Iroegbu David"}
+                        { info.lastName} {info.firstName}
                     </Typography>
                     <Typography variant="h5" sx={{mb: '1rem'}} gutterBottom>
-                        {"FUTA/12/2022"}
+                        {info.staffId}
                     </Typography>
                     <Typography variant="h5" gutterBottom>
-                        {"09026030392"}
+                        {info.phone}
                     </Typography>
                 </Typography>
             
@@ -220,73 +222,119 @@ export const ActiveDriverCard = ({})=>{
     )
 }
 
-export const WorkbayMaintCard = ({})=>{
-    
+export const WorkbayMaintCard = ({data})=>{
+    const navigate = useNavigate()
     const services = ['Oil Change', 'Battery Check', 'Suspension Check', 'Tire Check']
+    const [vehicle, setVehicle] = useState({})
+    const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
     
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
     };
+
+    useEffect(() => {
+        fetchVehicle()
+    }, [data])
+
+    const fetchVehicle = async()=>{
+        try {
+
+            const token = localStorage.getItem('token');
+                const fetchedVehicle = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/user-vehicle",
+                {},{
+                    headers: {
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                    }
+                }
+                );
+                setVehicle(fetchedVehicle.data.userVehicle)
+
+            } catch (err) {
+                console.log(err)
+                if (!navigator.onLine) {
+                    setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                } else if (err.response) {
+                    // Handle server errors
+                    setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                } else {
+                    // Handle network errors
+                    setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+            }
+        }
+    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options);
+    };
     
     return (
+        
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer' }}>
             <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.25rem'} fontWeight={'500'}>Services</Typography>
-                    <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', justifyContent: 'start', gap: '.75rem'}} mb={'1.25rem'}>
+                    <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))', justifyContent: 'start', gap: '.75rem'}} mb={'1.25rem'}>
 
-                        {services.map((data, ind)=>{
+                        {data.services.map((data, ind)=>{
                             return(
-                                <Box key={ind} className='small-rounded-btn' sx={{height: '2rem', p: '0 .5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '.3rem', border: '1px solid gray'}}>
-                                    <Typography variant='h7' fontWeight={'500'}>{data}</Typography>
+                                <Box key={ind} className='small-rounded-btn' sx={{height: '2.3rem', p: '0 .5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '.3rem', border: '1px solid gray', width: '15rem'}}>
+                                    <Typography variant='h6' fontWeight={'500'}>{data}</Typography>
                                 </Box>
                             )
                         })}
 
                     </Box>
-                    <Typography variant='h5' mt={'.2rem'} mb={'.75rem'} fontWeight={'400'}>Concerns</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>
-                        The Battery keeps running down when parked for long, and the brake pressure when applied is lower then normal
+                    <Typography variant='h5' mt={'.2rem'} mb={'.75rem'} fontWeight={'500'}>Concerns</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>
+                        {data.concerns}
                     </Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Current Mileage</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>120,000km</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Maintenance Date</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>30 January, 2024</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Supervisor</Typography>
-                    <Typography variant='h6' fontWeight={'500'}>Engr Oladimaji</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Current Mileage</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>{vehicle.current_mileage}km</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Planned Date</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>{formatDate(data.proposedDate)}</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Maintenance Personnel</Typography>
+                    <Typography variant='h5' fontWeight={'400'}>Engr Oladimaji</Typography>
             </CardContent>
-        
+            <AlertMessage />
         </Card>
     )
 }
 
 
 
-export const StatusCard = ()=>{
-    
+export const StatusCard = ({data})=>{
+
 
     const [status, setStatus] = useState('completed')
     return (
         <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
             <CardContent sx={{ }}>
-                <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Maintenance Statuss</Typography>
+                <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Maintenance Status</Typography>
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start',gap: '1.5rem', width: '100%'}}>
                     
-                    <Box className={status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
+                    <Box className={data.status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
                     </Box>                    
+                    
+                    <Box className={data.status === "accepted" ? "accepted-stat stat":"stat"} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><GoChecklist size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Accepted</Typography>
+                    </Box>                    
 
-                    <Box className={status === "in-shop"?"in-shop-stat stat":"stat"} sx={{}}>
+                    <Box className={data.status === "in-shop"?"in-shop-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GiHomeGarage size={'1.5rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Shop</Typography>
                     </Box>                    
 
-                    <Box className={status === "in-progress"?"in-progress-stat stat":"stat"} sx={{}}>
+                    <Box className={data.status === "in-progress"?"in-progress-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GrInProgress size={'1.3rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Progress</Typography>
                     </Box>                    
 
-                    <Box className={status === "completed"?"completed-stat stat":"stat"} sx={{}}>
+                    <Box className={data.status === "completed"?"completed-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Completed</Typography>
                     </Box> 
@@ -312,15 +360,15 @@ export const FeedbackCard = ({})=>{
             <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Personnel Feedback</Typography>
                     
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Vehicle Type</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>Car</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair Done</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No report available.</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair done</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No reports available</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
-                    <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>31 January, 2024</Typography>
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Vehicle Type</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>Car</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Repair Done</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>No report available.</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Repair done</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>No reports available</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Completion Date</Typography>
+                    <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>31 January, 2024</Typography>
+                    <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Image Report</Typography>
                     <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
                     <FeedBackModal />
             </CardContent>
@@ -558,7 +606,7 @@ export const MaintStatusCard = ()=>{
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
                     </Box>                    
 
-                    <SelectMaintStatusModal id={'accepted'} classname={'accepted-stat stat'} name={'accepted'} title={"Vehicle Status: Accepted"} icon={<GiHomeGarage size={'1.5rem'} />} />
+                    <GoChecklist id={'accepted'} classname={'accepted-stat stat'} name={'accepted'} title={"Vehicle Status: Accepted"} icon={<GiHomeGarage size={'1.5rem'} />} />
 
                     <SelectMaintStatusModal id={'in-shop'} classname={'in-shop-stat stat'} name={'In Shop'} title={"Vehicle Status: In Shop"} icon={<GiHomeGarage size={'1.5rem'} />} />
 

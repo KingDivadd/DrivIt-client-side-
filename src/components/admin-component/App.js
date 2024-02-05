@@ -23,22 +23,11 @@ import LandingPage from 'pages/landing-page'
 import VehicleService from "pages/maint/vehicle-service";
 import VehicleServiceReport from "pages/maint/vehilce-service-report";
 import ServiceHistory from "pages/maint/service-history"
-import Vehicles from "pages/admin/vehicle";
-import VehicleReport from 'pages/admin/vehicle-report'
-import Drivers from "pages/admin/driver";
-import axios from 'axios';
-import AlertMessage from "components/snackbar";
-import Dash from "pages/dashboard";
-
 
 function App() {
   const {isAuth, setIsAuth, mode, persistData} = ChatState()
   const theme = useMemo(() => createTheme(themeSettings(persistData.mode)), [persistData.mode]);
   // const isAuth = Boolean(useSelector((state) => state.token));
-
-  useEffect(() => {
-  // here we will fetch userinfo and replace user
-  }, [])
 
   return (
     <div className="app">
@@ -50,7 +39,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/recover-password" element={<RecoverPassword />} />
-              <Route path="/dashboard" element={<Dash />} />
+              <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/workbay" element={<Workbay />} />
               <Route path="/workbay/:id" element={<WorkbayReport />} />
               <Route path="/vehicle-log" element={<VehicleLog />} />
@@ -60,16 +49,11 @@ function App() {
               <Route path="/vehicle-service" element={<VehicleService />} />
               <Route path="/vehicle-service/:id" element={<VehicleServiceReport />} />
               <Route path="/maint-history" element={<ServiceHistory />} />
-              <Route path="/vehicles" element={<Vehicles />} />
-              <Route path="/vehicles/:id" element={<VehicleReport />} />
-              <Route path="/drivers" element={<Drivers />} />
-              <Route path="/drivers/:id" element={<Drivers />} />
 
               {/* <Route
                 path="/home"
                 element={persistData.isAuth ? <HomePage /> : <Navigate to="/" />}
               /> */}
-              {/* <AlertMessage /> */}
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

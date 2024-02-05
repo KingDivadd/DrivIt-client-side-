@@ -14,9 +14,12 @@ import { FaCar, FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
+import { IoMdPerson } from "react-icons/io";
+import { BsPerson } from "react-icons/bs";
+import { FaCarAlt } from "react-icons/fa";
 
 
-const SideBar = ()=>{
+const AdminSideBar = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
 
@@ -28,6 +31,7 @@ const SideBar = ()=>{
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
         }
+        navigate(`/${lastPart}`)
         setPage(lastPart)
     }, [page])
 
@@ -43,7 +47,7 @@ const SideBar = ()=>{
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end',pl: '.5rem', mt: '1rem'}}>
                     <Typography component={"h2"} variant='h3' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-4rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <FaHouse size={'1.4rem'} />
@@ -57,7 +61,7 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Workbay</Typography> 
                     </Box>
-
+                    
                     <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <CgNotes size={'1.3rem'} />
@@ -71,13 +75,40 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
-                    
+
+                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaCarAlt size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicles</Typography> 
+                    </Box>
+
+                    <Box className={page === "drivers" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("drivers")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <BsPerson size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Drivers</Typography> 
+                    </Box>
+
                     <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
                         <Box className="icon">
                             <MdNoteAlt size={'1.5rem'} />
                         </Box>
                         <Typography variant='h5'>Reports</Typography> 
                     </Box>
+
+                    <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
+                        <Box className="icon">
+                            <IoMdPerson size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle Assignees</Typography> 
+                    </Box>
+                    {/* <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
+                        <Box className="icon">
+                            <MdNoteAlt size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle Assignees</Typography> 
+                    </Box> */}
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
                     <Box className='btn-1' sx={{width: '100%', }} >
@@ -106,4 +137,4 @@ const SideBar = ()=>{
     )
 }
 
-export default SideBar
+export default AdminSideBar

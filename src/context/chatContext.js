@@ -4,8 +4,8 @@ const ChatContext = createContext()
 
 export const ChatProvider = ({children})=>{
     const [mode, setMode] = useState("dark")
-    const [user, setUser] = useState(null)
     const [isAuth, setIsAuth] = useState(false)
+    const [userInfo, setUserInfo] = useState({})
     const [userRole, setUserRole] = useState({boo: true, value: ""})
     const [persistData, setPersistData] = useState({mode: 'light', user: null, isAuth: false, chat: null,})
     const [menu, setMenu] = useState(false)
@@ -14,7 +14,9 @@ export const ChatProvider = ({children})=>{
     const [openAlert, setOpenAlert] = useState(false)
     const [alertSeverity, setAlertSeverity] = useState('warning')
     const [showHis, setShowHis] = useState(false)
-    const [maintData, setMaintData] = useState()
+    const [maintData, setMaintData] = useState({})
+    const [planMaintInput, setPlanMaintInput] = useState("")
+    const [newPlannedMaint, setNewPlannedMaint] = useState(false)
 
     useEffect(() => {
     const fetched_status = localStorage.getItem('status')
@@ -23,7 +25,7 @@ export const ChatProvider = ({children})=>{
 
 
     return <ChatContext.Provider 
-            value={{mode, setMode, user, setUser, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData }}
+            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint  }}
             >
             {children}
         </ChatContext.Provider>

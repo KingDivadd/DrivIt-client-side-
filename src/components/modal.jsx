@@ -8,17 +8,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../index.css"
 import AlertMessage from '../components/snackbar'
-import four from '../asset/one.jpg';
 import { FaCaretDown } from "react-icons/fa"
 import { FaCaretUp } from "react-icons/fa"
-import { IoSquareOutline } from "react-icons/io5"
-import { FaRegSquareCheck } from "react-icons/fa6";
-import { FormGroup } from '@mui/material';
-import { RiCloseCircleLine } from "react-icons/ri";
 import { GoStarFill, GoStar } from "react-icons/go";
 import MenuItem from '@mui/material/MenuItem';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { FaLessThanEqual } from 'react-icons/fa6';
 
 
 const style = {
@@ -71,104 +69,301 @@ const styleVlog = {
     borderRadius: '.3rem'
 };
 
-export default function WorkModal() {
-    const [planMaint, setPlanMaint] = useState({conserns: '', services: '', date: ''})
-    const [age, setAge] = useState("")
+// export default function WorkModal() {
+//     const [planMaint, setPlanMaint] = useState({conserns: '', services: '', date: ''})
+//     const [age, setAge] = useState("")
+//     const [open, setOpen] = React.useState(false);
+//     const [statusIcon, setStatusIcon] = useState(true)
+//     const [activeService, setActiveService] = useState(true)
+//     const handleOpen = () => setOpen(true);
+//     const handleClose = () => setOpen(false);
+
+//     const handleChange = (e)=>{
+//         setAge(e.target.value)
+        
+//     }
+//     const handleSubmit = ()=>{
+//     }
+//     const handleService = ()=>{
+//         if (statusIcon){
+//             setStatusIcon(false)
+//         }
+//         if(!statusIcon){
+//             setStatusIcon(true)
+//         }
+//     }
+//     const handleActiveService = (den)=>{
+//         if (activeService) {
+//             setActiveService(false)
+//         }
+//         if (!activeService){
+//             setActiveService(true)
+//         }
+//     }
+//     return (
+//         <div style={{borderColor: '#FFFFF'}}>
+//             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '12rem' }} >
+//                 <Typography variant='h5'>Plan Maintenance</Typography> 
+//             </Box>
+//             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+//                 <Box sx={planMaintStyle}>
+//                     <Box >
+//                         <Typography variant="h4" fontWeight={'500'}>Plan Maintenance</Typography>
+//                     </Box>
+//                     <Box sx={{width: '100%', mt: 4 }}>
+//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
+//                         <Box sx={{borderRadius: '.3rem', border: '1px solid red', width: '100%', height: '7rem',   mb: '.75rem', height: '7rem', overFlowY: 'hidden'}}>
+
+//                             <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', gap: '.5rem',padding: '.25rem', background: 'orange', overflowY:'auto'}}>                                
+//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+//                                 </Box>
+//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+//                                 </Box>
+//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
+//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
+//                                 </Box>
+//                             </Box>    
+//                         </Box>
+
+//                         <Box onClick={handleService } sx={{cursor: 'pointer',width: '100%', height: '2.5rem',display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid gray', borderRadius: '.3rem', p: '0 .5rem'}}>
+//                             <Typography variant='h5' fontWeight={'500'}>{"Select ..."}</Typography>
+//                             <Box sx={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{statusIcon ?<FaCaretDown /> : <FaCaretUp />} </Box>
+//                         </Box>
+//                         {statusIcon && 
+//                         <Box sx={{ positon: 'absolute', top: '0', left: '0', background: 'red', mt: '.5rem', height: 'auto', }}>
+//                             <Box onClick={()=>handleActiveService("Check Oil")} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '.5rem', p: '0 .5rem', height: '2.5rem', borderRadius: '.3rem', background: 'cyan'}}>
+//                                 <Box sx={{display: 'flex', alignItems: 'center', height: '100%'}}>{activeService ? <IoSquareOutline size={'1.5rem'} /> : <FaRegSquareCheck size={'1.5rem'} />} </Box>
+//                                 <Typography variant={'h5'} fontWeight={'500'}>Check Oil</Typography>
+//                             </Box>
+//                         </Box>
+//                         }
+//                     </Box>
+//                     <Box sx={{mt: 3}}>
+//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
+//                         <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+//                     </Box>
+//                     <Box sx={{mt: 3}}>
+//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Date</Typography>
+//                         <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+//                     </Box>
+//                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+//                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+//                             <Typography variant='h5'>Back</Typography>
+//                         </Box>
+//                         <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+//                             <Typography variant='h5'>Create Log</Typography>
+//                         </Box>
+//                     </Box>
+//                 </Box>
+//             </Modal>
+//         </div>
+//     );
+// }
+
+
+export default function PlanMaintenance() {
     const [open, setOpen] = React.useState(false);
-    const [statusIcon, setStatusIcon] = useState(true)
-    const [activeService, setActiveService] = useState(true)
+    const [maintLog, setMaintLog] = useState({vehicle:'', concerns: '', services: [], date: ''})
+    const [submit, setSubmit] = useState(false)
+    const [openServices, setOpenServices]= useState(false)
+    const {setAlertMsg, setOpenAlert, setAlertSeverity, setNewPlannedMaint} = ChatState()
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
+    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+
     const handleChange = (e)=>{
-        setAge(e.target.value)
+        const name = e.target.name
+        const value = e.target.value
+        setMaintLog({...maintLog, [name]: value})
+    }
+
+    const handleSubmit = async()=>{
+        // console.log('creating', maintLog)
+        setLoading(true)
+            if (!navigator.onLine){
+                setAlertMsg("Network Error !!!"); setAlertSeverity("warning"); setOpenAlert(true);
+            }else if(navigator.onLine){
+                const token = localStorage.getItem('token')
+                if(token === null){
+                    navigate('/login')
+                }
+                try {
+                    const user = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user", {}, {
+                        headers: {
+                            "Content-Type":  "Application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    const vehicle_id = user.data.loggedInUser.vehicle
+                    setMaintLog({...maintLog, vehicle: vehicle_id})
+                    clearInterval(handleSubmit)
+
+                    try {
+                        const vehicle = vehicle_id
+                        const concerns = maintLog.concerns
+                        const services = maintLog.services
+                        const proposedDate = maintLog.date
+
+                        const maint = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/plan-maint", {vehicle, concerns, services, proposedDate}, {
+                        headers: {
+                            "Content-Type":  "Application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                        console.log(maint.data)
+                        setNewPlannedMaint(true)
+                        setMaintLog({vehicle:'', concerns: '', services: [], date: ''})
+                        handleClose()
+                        clearInterval(handleSubmit)
+                        setLoading(false)
+                    } catch (err) {
+                        if (!navigator.onLine) {
+                            setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                            // setInterval(handleSubmit, 3000)
+                            setLoading(false)
+                        } else if (err.response) {
+                            // Handle server errors
+                            setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                            setLoading(false)
+                        } else {
+                            // Handle network errors
+                            setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                            setLoading(false)
+                        }
+                    }
+
+                } catch (err) {
+                    if (!navigator.onLine) {
+                        setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                        // setInterval(handleSubmit, 3000)
+                    } else if (err.response) {
+                        // Handle server errors
+                        setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                    } else {
+                        // Handle network errors
+                        setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                    }
+                }
+            }
         
     }
-    const handleSubmit = ()=>{
+    
+    const handleServices = ()=>{
+        if(openServices){setOpenServices(false)}
+        if(!openServices){setOpenServices(true)}
     }
-    const handleService = ()=>{
-        if (statusIcon){
-            setStatusIcon(false)
-        }
-        if(!statusIcon){
-            setStatusIcon(true)
-        }
-    }
-    const handleActiveService = (den)=>{
-        if (activeService) {
-            setActiveService(false)
-        }
-        if (!activeService){
-            setActiveService(true)
+    const handleServiceSelect =(data)=>{
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
+        // console.log(maintLog.services)
         }
     }
+
+    const handleRemoveService = (data)=>{
+        const newServices = maintLog.services.filter((res)=> res !== data)
+        setMaintLog({...maintLog, services: newServices})
+    }
+
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '12rem' }} >
+            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '11rem' }} >
                 <Typography variant='h5'>Plan Maintenance</Typography> 
             </Box>
+
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={planMaintStyle}>
                     <Box >
-                        <Typography variant="h4" fontWeight={'500'}>Plan Maintenance</Typography>
+                        <Typography variant="h4" fontWeight={'500'}>Plan new Maintenance</Typography>
                     </Box>
-                    <Box sx={{width: '100%', mt: 4 }}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
-                        <Box sx={{borderRadius: '.3rem', border: '1px solid red', width: '100%', height: '7rem',   mb: '.75rem', height: '7rem', overFlowY: 'hidden'}}>
 
-                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', gap: '.5rem',padding: '.25rem', background: 'orange', overflowY:'auto'}}>                                
-                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-                                </Box>
-                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-                                </Box>
-                                <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-                                    <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-                                </Box>
-                            </Box>    
-                        </Box>
+                    <Box sx={{mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Concerns</Typography>
+                        <textarea cols={'30'} rows={'10'} className='input' name = {"concerns"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
+                    </Box>
 
-                        <Box onClick={handleService } sx={{cursor: 'pointer',width: '100%', height: '2.5rem',display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid gray', borderRadius: '.3rem', p: '0 .5rem'}}>
-                            <Typography variant='h5' fontWeight={'500'}>{"Select ..."}</Typography>
-                            <Box sx={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{statusIcon ?<FaCaretDown /> : <FaCaretUp />} </Box>
-                        </Box>
-                        {statusIcon && 
-                        <Box sx={{ positon: 'absolute', top: '0', left: '0', background: 'red', mt: '.5rem', height: 'auto', }}>
-                            <Box onClick={()=>handleActiveService("Check Oil")} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '.5rem', p: '0 .5rem', height: '2.5rem', borderRadius: '.3rem', background: 'cyan'}}>
-                                <Box sx={{display: 'flex', alignItems: 'center', height: '100%'}}>{activeService ? <IoSquareOutline size={'1.5rem'} /> : <FaRegSquareCheck size={'1.5rem'} />} </Box>
-                                <Typography variant={'h5'} fontWeight={'500'}>Check Oil</Typography>
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
+                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                            {maintLog.services.map((data, ind)=>{
+                                return(
+                                        <Box key={ind} className={'small-rounded-btn'}>
+                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                            <Typography variant='h6'>{data}</Typography> 
+                                        </Box>
+
+                                )
+                            })}
+                        </Box>}
+
+                        <Box  sx={{ position: 'relative', background: 'cyan' }}>
+
+                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem', background: 'coral' }}>
+
+                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
+                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
                             </Box>
+
+                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto', zIndex: '2'}}>
+                                {services.map((data,ind)=>{
+                                    return (
+                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
+                                            <Typography variant='h6'>{data}</Typography>
+                                        </Box>
+                                    )
+                                })}
+                            </Box>}
                         </Box>
-                        }
                     </Box>
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
-                        <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+
+                    <Box sx={{mt: 3, zIndex: '2'}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Date</Typography>
+                        <input className='input' name = {"date"} value={maintLog.date} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Date</Typography>
-                        <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                    </Box>
-                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
-                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+
+                    <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'flex-end',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '9rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Create Log</Typography>
+
+                        <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  fullWidth  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Plan Maint</Typography> : ''}
                         </Box>
+
+                        {/* <Box className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+                            <Typography variant='h5'>Plan maint</Typography>
+                        </Box> */}
                     </Box>
                 </Box>
             </Modal>
+            <AlertMessage />
         </div>
     );
 }
 
+
 export function CreateLogModal() {
-    const [createLog, setCreateLog] = useState({startLocation: '', endLocation: '', startMileage: '', endMileage: '', route: '', fuelLevel: '' })
+    const [createLog, setCreateLog] = useState({logTime: 'Morning', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
+    const [logTime, setLogTime] = useState(false)
+    const [startingFuel, setStartingFuel] = useState(false)
+    const [endingFuel, setEndingFuel] = useState(false)
+    const [openServices, setOpenServices]= useState(false)
+    const [loading, setLoading] = useState(false)
+
 
     const [age, setAge] = useState("")
     const [open, setOpen] = React.useState(false);
@@ -176,15 +371,64 @@ export function CreateLogModal() {
     const handleClose = () => setOpen(false);
 
     const handleChange = (e)=>{
-        setAge(e.target.value)
         const name = e.target.name
         const value = e.target.value
         setCreateLog({...createLog, [name]: value})
+        
     }
 
     const handleCreateLog = (e)=>{
         // e.preventDefault()
+        setLoading(true)
+        setTimeout(() => {
+            setLoading(false)
+            console.log(createLog)
+        }, 3000);
     }
+
+    const handleServiceSelect =(data)=>{
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
+        console.log(maintLog.services)
+        }
+    }
+
+    function handleLogTime(){
+        if (logTime){setLogTime(false)}
+        if (!logTime){setLogTime(true)}
+    }
+
+    function handleStartingFuel(){
+        if(startingFuel){setStartingFuel(false)}
+        if (!startingFuel){setStartingFuel(true)}
+    }
+
+    function handleEndingFuel(){
+        if(endingFuel){setEndingFuel(false)}
+        if (!endingFuel){setEndingFuel(true)}
+    }
+
+    function handleLogTimeSelect(data){
+        setCreateLog({...createLog, logTime: data})
+        setLogTime(false)
+        console.log(data)
+    }
+
+    function handleStartingFuelSelect(data) {
+        setCreateLog({...createLog, startingFuelLevel: data})
+        setStartingFuel(false)
+    }
+
+    function handleEndingFuelSelect(data) {
+        setCreateLog({...createLog, endingFuelLevel: data})
+        setStartingFuel(false)
+    }
+
     return (
         <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
@@ -195,27 +439,78 @@ export function CreateLogModal() {
                     <Box >
                         <Typography variant="h4" fontWeight={'500'}>New Vehicle Log</Typography>
                     </Box>
-                    <Box sx={{mt: 4}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Starting Location</Typography>
-                        <input className='input' name = {"startLocation"} value={createLog.startLocation} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+
+                    <Box  sx={{ position: 'relative', mt: 4 }}>
+                        <Typography variant='h5' fontWeight='500' mb='.75rem' > Log Time</Typography>
+                        <Box onClick={handleLogTime} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
+                            <Typography variant='h5' fontWeight={'400'} >{createLog.logTime !== "" ? createLog.logTime : "Select log time" }</Typography>
+                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                        </Box>
+
+                        {logTime && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                            {['Morning', 'Evening'].map((data,ind)=>{
+                                return (
+                                    <Box key={ind} onClick={()=>handleLogTimeSelect(data)} className={'service-list'}>
+                                        <Typography variant='h5'>{data}</Typography>
+                                    </Box>
+                                )
+                            })}
+                        </Box>}
                     </Box>
+
                     <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Ending Location</Typography>
-                        <input className='input' name = {"endLocation"} value={createLog.endLocation} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Current Location</Typography>
+                        <input className='input' name = {"currentLocation"} value={createLog.currentLocation} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Starting Mileage</Typography>
-                        <input className='input' name = {"startMileage"} value={createLog.startMileage} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                    </Box>
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Ending Mileage</Typography>
-                        <input className='input' name = {"endMileage"} value={createLog.endMileage} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                    </Box>
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Route</Typography>
-                        <input className='input' name = {"route"} value={createLog.route} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                    </Box>
-                    <Box sx={{width: '100%', mt: 4 }}>
+
+                    {createLog.logTime === 'Morning' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.5rem'}}>Starting Odometer</Typography>
+                        <input className='input' name = {"startingMileage"} value={createLog.startingMileage } onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>}
+
+                    {createLog.logTime === 'Evening' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.5rem'}}>Ending Odometer</Typography>
+                        <input className='input' name = {"endingMileage"} value={createLog.endingMileage} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>}
+
+                    {createLog.logTime === 'Morning' && <Box  sx={{ position: 'relative', mt: 4 }}>
+                        <Typography variant='h5' fontWeight={'500'} mb='.75rem' >Starting Fuel Level</Typography>
+                        <Box onClick={handleStartingFuel} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
+                            <Typography variant='h5' fontWeight={'400'} >{createLog.startingFuelLevel !== "" ? createLog.startingFuelLevel : "Starting Fuel Level" }</Typography>
+                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                        </Box>
+
+                        {startingFuel && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                            {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data,ind)=>{
+                                return (
+                                    <Box key={ind} onClick={()=>handleStartingFuelSelect(data)} className={'service-list'}>
+                                        <Typography variant='h5'>{data}</Typography>
+                                    </Box>
+                                )
+                            })}
+                        </Box>}
+                    </Box>}
+
+                    {createLog.logTime === 'Evening' && <Box  sx={{ position: 'relative', mt: 4 }}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem' >Evening Fuel Level</Typography>
+                        <Box onClick={handleEndingFuel} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
+
+                            <Typography variant='h5' fontWeight={'500'} >{createLog.endingFuelLevel !== "" ? createLog.endingFuelLevel : "Evening Fuel Level" }</Typography>
+                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                        </Box>
+
+                        {endingFuel && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
+                        {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data,ind)=>{
+                            return (
+                                <Box key={ind} onClick={()=>handleEndingFuelSelect(data)} className={'service-list'}>
+                                    <Typography variant='h6'>{data}</Typography>
+                                </Box>
+                            )
+                            })}
+                        </Box>}
+                    </Box>}
+                    
+                    {/* <Box sx={{width: '100%', mt: 4 }}>
                         <Typography variant='h5' sx={{mb: '.5rem'}}>Current Fuel Level</Typography>
                         <FormControl sx={{ width: '100%'}} size="small">
                             <Select labelId="demo-select-small-label"  id="demo-select-small" value={createLog.fuelLevel} label="Age" onChange={handleChange} >
@@ -226,13 +521,17 @@ export function CreateLogModal() {
                                     <MenuItem name={'fuelLevel'} value={"Reserve"}><Typography variant="h6">Reserve</Typography> </MenuItem>
                             </Select>
                         </FormControl>
-                    </Box> 
-                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                    </Box>  */}
+
+                    <Box sx={{display: 'flex', alignItems: 'flex-end' ,justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Create Log</Typography>
+                        
+
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', positoin: 'relative' }}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Create Log</Typography> : ''}
                         </Box>
                     </Box>
                 </Box>
@@ -240,6 +539,7 @@ export function CreateLogModal() {
         </div>
     );
 }
+
 export function ReportModal() {
     const [createLog, setCreateLog] = useState({startLocation: '', endLocation: '', startMileage: '', endMileage: '', route: '', fuelLevel: '' })
     const [report, setReport] = useState({location: '', description: '', image: 'Clicks Here to upload image'})
@@ -611,7 +911,7 @@ export function CreateMaintLogModal() {
 
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Cost</Typography>
-                        <input className='input' name = {"cost"} value={maintLog.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                        <input className='input' name = {"cost"} value={maintLog.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', zIndex: '5'}}/>
                     </Box>
 
                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
@@ -634,6 +934,7 @@ export function MaintHisModal() {
     const [maintLog, setMaintLog] = useState({concerns: '', services: [], cost: ''})
     const [openServices, setOpenServices]= useState(false)
     const [loading, setLoading] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false)
     const {alertMsg, setAlertMsg, openAlert,setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData,} = ChatState()
 
     const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
@@ -663,7 +964,7 @@ export function MaintHisModal() {
         
     }
 
-  
+
     const handleServices = ()=>{
         if(openServices){setOpenServices(false)}
         if(!openServices){setOpenServices(true)}
@@ -703,9 +1004,10 @@ export function MaintHisModal() {
             </Box> */}
 
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+
                 <Box sx={planMaintStyle}>
                     <Box >
-                        <Typography variant="h4" fontWeight={'500'}>Create Maintenance Log</Typography>
+                        <Typography variant="h4" fontWeight={'500'}>Update Maintenance Log</Typography>
                         <Typography variant="h5" mt={'1.2rem'} fontWeight={'500'}>{maintData.maint_id}</Typography>
                     </Box>
 
@@ -717,13 +1019,12 @@ export function MaintHisModal() {
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
                         {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
-                            {maintData.services.map((data, ind)=>{
+                            {maintLog.services.map((data, ind)=>{
                                 return(
                                         <Box key={ind} className={'small-rounded-btn'}>
                                             <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
                                             <Typography variant='h6'>{data}</Typography> 
                                         </Box>
-
                                 )
                             })}
                         </Box>}
@@ -753,17 +1054,21 @@ export function MaintHisModal() {
                         <input className='input' name = {"cost"} value={maintData.cost} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
 
-                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                    <Box sx={{display: 'flex',justifyContent: 'space-between', alignItems: 'center',gap: '1rem', mt: 4, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Close</Typography>
                         </Box>
 
-                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleEdit}  sx={{ height: '2.5rem',width: '8rem', textTransform: 'none', position: 'relative'}}>
+                        
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleEdit}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', positoin: 'relative' }}>
                             {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
                             {!loading ? <Typography variant='h5'>Update Log</Typography> : ''}
                         </Box>
+
                     </Box>
                 </Box>
+
+                
             </Modal>
             <AlertMessage />
         </div>

@@ -2,8 +2,6 @@ import React, {useState, useEffect} from 'react'
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined, LensBlurRounded } from '@mui/icons-material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
@@ -12,17 +10,17 @@ import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, Serv
 import Table, { CustomizedTables,CustomizedTablesVlog ,ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import {CreateLogModal} from 'components/modal';
+import AddVehicleModal from "../../components/admin-component/modal"
 import SideBar from 'components/side-bar';
+import AdminSideBar from 'components/admin-component/side-bar';
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import MenuBar from 'components/menu-bar';
+import VehicleTables from 'components/admin-component/table';
 
 
-const VehicleLog = ()=>{
+const Vehicles = ()=>{
     const [page, setPage] = useState("")
     const [text, setText] = useState("")
     const [age, setAge] = useState("")
@@ -40,16 +38,6 @@ const VehicleLog = ()=>{
         navigate(`/${value}`)
     }
 
-    const handlePlanMaint = ()=>{
-        console.log("plan maintenance")
-        if(modal){
-            setModal(false)
-        }
-        if (!modal){
-            setModal(true)
-        }
-    }
-
     const handleWorkbay = (e)=>{
         setText(e.target.value)
     }
@@ -64,7 +52,7 @@ const VehicleLog = ()=>{
     }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            <AdminSideBar />
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}
@@ -75,7 +63,7 @@ const VehicleLog = ()=>{
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
                             <Typography variant='h2' sx={{fontWeight: '600'}}>Vehicle Log</Typography>
-                            <CreateLogModal />
+                            <AddVehicleModal />
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '1rem'}}>
@@ -100,7 +88,7 @@ const VehicleLog = ()=>{
                     <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         {/* the table */}
                         <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden'}}>
-                            <CustomizedTablesVlog />
+                            <VehicleTables />
                         </Box> 
                     </Box>
                 </Grid>
@@ -110,4 +98,4 @@ const VehicleLog = ()=>{
     )
 }
 
-export default VehicleLog
+export default Vehicles

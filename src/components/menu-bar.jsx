@@ -21,7 +21,7 @@ import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import david from '../asset/david.jpg'
 import NotificationPopover from './notification';
 
-const MenuBar = ()=>{
+const MenuBar = ({img})=>{
     const [currentTime, setCurrentTime] = useState(new Date())
     const [menuIcon, setMenuIcon] = useState(false)
     const [width, setWidth] = useState(window.innerWidth)
@@ -81,13 +81,12 @@ const MenuBar = ()=>{
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <NotificationPopover />
-                    <Box sx={{
-                        backgroundImage: `url(${david})`,
-                        backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
-                        height: '2.5rem', width: '2.5rem', borderRadius: '50%',
-                    }}>
-                        
-                    </Box>
+                        <Box sx={{
+                            backgroundImage: `url(${img})`,
+                            backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
+                            height: '2.5rem', width: '2.5rem', borderRadius: '50%',p: '.2rem', background: '#E5E5FF'
+                        }}>
+                        </Box>
                 </Box>
             </Box>
     )
