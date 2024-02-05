@@ -17,11 +17,15 @@ const Dash = ()=>{
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
         if(userInfo !== null){
             setLoggedInUser(userInfo.loggedInUser)
             setLoading(false)
-        }else{
+        }
+       
+        
+        else{
             fetchUserInfo()
         }
     }, [])
@@ -29,7 +33,9 @@ const Dash = ()=>{
     const fetchUserInfo = async()=>{
 
     try {
-        const token = localStorage.getItem('token')
+        const token = sessionStorage.getItem('token')
+        if (token=== null){
+        navigate('login')}
         const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user", {}, {
                     headers: {
                         "Content-type": "Application/json",

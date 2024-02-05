@@ -23,22 +23,14 @@ import MenuBar from 'components/menu-bar';
 
 
 const VehicleLog = ()=>{
-    const [page, setPage] = useState("")
     const [text, setText] = useState("")
-    const [age, setAge] = useState("")
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState(true)
     const navigate = useNavigate()
 
     useEffect(() => {
-        const getPage = localStorage.getItem("page")
-        setPage(getPage)
+        
     }, [])
-    const handlePage = (value)=>{
-        console.log(value)
-        localStorage.setItem("page", value)
-        navigate(`/${value}`)
-    }
 
     const handlePlanMaint = ()=>{
         console.log("plan maintenance")

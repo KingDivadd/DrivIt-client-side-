@@ -64,7 +64,7 @@ const Signup = () => {
                 }
             })
             setUser(auth.data.userInfo)
-            localStorage.setItem('token', auth.data.token)
+            sessionStorage.setItem('token', auth.data.token)
             setAlertMsg(auth.data.msg); setAlertSeverity('success'); setOpenAlert(true);
             setLoading(false)
             setCredentials({role: "", firstName: '', lastName: '', email: '',staffId: '', phone: '',password: ''})

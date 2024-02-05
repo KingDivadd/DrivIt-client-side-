@@ -192,7 +192,7 @@ export default function PlanMaintenance() {
             if (!navigator.onLine){
                 setAlertMsg("Network Error !!!"); setAlertSeverity("warning"); setOpenAlert(true);
             }else if(navigator.onLine){
-                const token = localStorage.getItem('token')
+                const token = sessionStorage.getItem('token')
                 if(token === null){
                     navigate('/login')
                 }
@@ -363,6 +363,7 @@ export function CreateLogModal() {
     const [endingFuel, setEndingFuel] = useState(false)
     const [openServices, setOpenServices]= useState(false)
     const [loading, setLoading] = useState(false)
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, setNewDailyLog} = ChatState()
 
 
     const [age, setAge] = useState("")
@@ -377,26 +378,19 @@ export function CreateLogModal() {
         
     }
 
-    const handleCreateLog = (e)=>{
+    const handleSubmit = async(e)=>{
         // e.preventDefault()
+        console.log(createLog)
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-            console.log(createLog)
-        }, 3000);
-    }
-
-    const handleServiceSelect =(data)=>{
-        const services = maintLog.services
-        if(services.includes(data)){
-            const newServices = services.filter((res)=> res !== data)
-            setMaintLog({...maintLog, services: newServices})
-        }else{
-        services.push(data)
-        setMaintLog({...maintLog, services: services})
-        console.log(maintLog.services)
+        if (!navigator.onLine){ 
+            setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true) 
+        }
+        else if (navigator.onLline){
+            console.log('still here')
+           
         }
     }
+
 
     function handleLogTime(){
         if (logTime){setLogTime(false)}
@@ -510,32 +504,20 @@ export function CreateLogModal() {
                         </Box>}
                     </Box>}
                     
-                    {/* <Box sx={{width: '100%', mt: 4 }}>
-                        <Typography variant='h5' sx={{mb: '.5rem'}}>Current Fuel Level</Typography>
-                        <FormControl sx={{ width: '100%'}} size="small">
-                            <Select labelId="demo-select-small-label"  id="demo-select-small" value={createLog.fuelLevel} label="Age" onChange={handleChange} >
-                                    <MenuItem name={'fuelLevel'} value={"Full"}><Typography variant="h6">Full</Typography> </MenuItem>
-                                    <MenuItem name={'fuelLevel'} value={"Quarter Full"}><Typography variant="h6">Quarter Full</Typography> </MenuItem>
-                                    <MenuItem name={'fuelLevel'} value={"Mid"}><Typography variant="h6">Mid</Typography> </MenuItem>
-                                    <MenuItem name={'fuelLevel'} value={"Quarter Empty"}><Typography variant="h6">Quarter Empty</Typography> </MenuItem>
-                                    <MenuItem name={'fuelLevel'} value={"Reserve"}><Typography variant="h6">Reserve</Typography> </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>  */}
-
                     <Box sx={{display: 'flex', alignItems: 'flex-end' ,justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
                         
-
-                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', positoin: 'relative' }}>
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
                             {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
                             {!loading ? <Typography variant='h5'>Create Log</Typography> : ''}
                         </Box>
+
                     </Box>
                 </Box>
             </Modal>
+            <AlertMessage />
         </div>
     );
 }
@@ -626,8 +608,8 @@ export function FeedBackModal() {
         if(feedback){
 
         console.log('feedback not missing.')
-        localStorage.setItem('count', count)
-        localStorage.setItem('feedback', feedback)
+        sessionStorage.setItem('count', count)
+        sessionStorage.setItem('feedback', feedback)
         setOpen(false)
         }
     }
@@ -716,7 +698,7 @@ export function SelectMaintStatusModal({id, classname, name,title,icon }) {
     const handleProceed = (id)=>{
         // run a request to patch the planMaint and change it to accepted
         setStatus(id)
-        localStorage.setItem("status", id)
+        sessionStorage.setItem("status", id)
         setOpen(false)
 
     }
@@ -754,8 +736,8 @@ export function MaintFeedBackModal() {
     const [count, setCount] = useState(0)
 
     useEffect(() => {
-        const rateCount = localStorage.getItem('count')
-        const feedback = localStorage.getItem('feedback')
+        const rateCount = sessionStorage.getItem('count')
+        const feedback = sessionStorage.getItem('feedback')
         setFeedback(feedback)
         setCount(rateCount)
     }, [])

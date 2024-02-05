@@ -54,7 +54,8 @@ const Dashboard = ()=>{
 
         const fetchUserInfo = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
+                if (token === null){ navigate('/login')}
                 const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
                 {},{
                     headers: {
@@ -75,11 +76,11 @@ const Dashboard = ()=>{
                 // Handle server errors
                 setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
                 navigate('/')
-            } else {
-                // Handle network errors
-                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                navigate('/')
-                }
+                } else {
+                    // Handle network errors
+                    setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                    navigate('/')
+                    }
             }
             };
 

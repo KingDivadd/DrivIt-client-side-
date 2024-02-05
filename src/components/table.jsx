@@ -127,7 +127,7 @@ export function PlannedMaintTables() {
     const fetchTableInfo = async() =>{
         try {
         const vehicle = user.loggedInUser.vehicle
-            const token = localStorage.getItem('token')
+            const token = sessionStorage.getItem('token')
             if(token === null){
                 navigate('/login')
             }
@@ -145,7 +145,6 @@ export function PlannedMaintTables() {
             console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                setInterval(fetchTableInfo, 3000)
             } else if (err.response) {
                 // Handle server errors
                 setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
@@ -158,7 +157,8 @@ export function PlannedMaintTables() {
 
     const fetchUserInfo = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
+                if (token === null){ navigate('/login')}
                 const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
                 {},
                 {
@@ -172,7 +172,7 @@ export function PlannedMaintTables() {
                 const vehicle = user.vehicle
                 clearInterval(fetchUserInfo)
                 try {
-                    const token = localStorage.getItem('token')
+                    const token = sessionStorage.getItem('token')
                     if(token === null){
                         navigate('/login')
                     }
@@ -190,7 +190,6 @@ export function PlannedMaintTables() {
                     console.log(err)
                     if (!navigator.onLine) {
                         setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                        setInterval(fetchUserInfo, 3000)
                         setLoading(false)
                     } else if (err.response) {
                         // Handle server errors
@@ -206,7 +205,6 @@ export function PlannedMaintTables() {
                 console.log(err)
                 if (!navigator.onLine) {
                     setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                    setInterval(handleSubmit, 3000)
                     setLoading(false)
                 } else if (err.response) {
                     // Handle server errors
@@ -322,7 +320,7 @@ const vLogRows = [
 export function DriverLogTable() {
     const navigate = useNavigate()
     const [dailyLog, setDailyLog] = useState([])
-    const {setOpenAlert, setAlertMsg, setAlertSeverity, planMaintInput, setPlanMaintInput} = ChatState()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, planMaintInput, newDailyLog} = ChatState()
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState({})
 
@@ -340,19 +338,18 @@ export function DriverLogTable() {
 
         if(!navigator.onLine){
             setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
-            setInterval(fetchTableInfo, 3000)
         }else if(navigator.onLine){
             fetchUserInfo()
         }
         console.log(planMaintInput)
-    }, [planMaintInput])
+    }, [planMaintInput, newDailyLog])
 
     const fetchTableInfo = async() =>{
         try {
                 const start_date =""
                 const end_date = ""
                 const filter = ""
-                    const token = localStorage.getItem('token')
+                    const token = sessionStorage.getItem('token')
                     if(token === null){
                         navigate('/login')
                     }
@@ -370,7 +367,6 @@ export function DriverLogTable() {
                     if(!navigator.onLine){
                     setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
                     setLoading(false)
-                    setInterval(fetchTableInfo, 3000)
                     }else{
                         setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
                         setLoading(false)
@@ -381,6 +377,9 @@ export function DriverLogTable() {
     const fetchUserInfo = async () => {
             try {
                 const token = localStorage.getItem('token');
+                if (token ===  null){
+                    navigate('/login')
+                }
                 const userInfo = await axios.post(
                 "https://futa-fleet-guard.onrender.com/api/user/find-user",
                 {},
@@ -395,7 +394,7 @@ export function DriverLogTable() {
                 const user = userInfo.data.loggedInUser
                 const vehicle = user.vehicle
                 try {
-                    const token = localStorage.getItem('token')
+                    const token = sessionStorage.getItem('token')
                     if(token === null){
                         navigate('/login')
                     }
@@ -414,7 +413,6 @@ export function DriverLogTable() {
                     if(!navigator.onLine){
                     setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
                     setLoading(false)
-                    // setInterval(fetchUserInfo, 3000)
                     }else{
                         setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
                         setLoading(false)
@@ -425,7 +423,6 @@ export function DriverLogTable() {
                 if(!navigator.onLine){
                     setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
                     setLoading(false)
-                    // setInterval(fetchUserInfo, 3000)
                 }else{
                     setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
                     setLoading(false)
