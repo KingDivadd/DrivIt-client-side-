@@ -19,8 +19,10 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 const SideBar = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
+    const [role, setRole] = useState("")
 
     useEffect(() => {
+        fetchUserInfo()
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         let lastPart = parts[parts.length - 1];
@@ -29,10 +31,20 @@ const SideBar = ()=>{
             lastPart = parts[parts.length - 2]
         }
         setPage(lastPart)
+        navigate(`/${lastPart}`)
     }, [page])
 
     const handlePage = (value)=>{
+        console.log(value)
         navigate(`/${value}`)
+    }
+
+    const fetchUserInfo = ()=>{
+        const user = JSON.parse(sessionStorage.getItem('userInfo'))
+        if (user === null){
+            navigate('/')
+        }
+        setRole(user.loggedInUser.role)
     }
 
 
@@ -71,7 +83,29 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
+
+                    {role === 'vehicle_coordinator' && <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaCarAlt size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicles</Typography> 
+                    </Box>}
+
+                    {role === 'vehicle_coordinator' && <Box className={page === "drivers" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("drivers")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <BsPerson size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Drivers</Typography> 
+                    </Box>}
                     
+                    {role === 'vehicle_coordinator' && <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
+                        <Box className="icon">
+                            <IoMdPerson size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle Assignees</Typography> 
+                    </Box>}
+
+                    {/* The lower part */}
                     <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
                         <Box className="icon">
                             <MdNoteAlt size={'1.5rem'} />
@@ -92,7 +126,7 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Help Center</Typography> 
                     </Box>
-                    <Box className='btn-1 warning-btn-1' onClick={()=> navigate('/')} sx={{width: '100%', }} >
+                    <Box className='btn-1 warning-btn-1' onClick={()=> {sessionStorage.clear(); navigate('/')}} sx={{width: '100%', }} >
                         <Box className="icon">
                             <RiLogoutBoxFill size={'1.5rem'} />
                         </Box>

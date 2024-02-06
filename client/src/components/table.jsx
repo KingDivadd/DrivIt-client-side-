@@ -2,8 +2,6 @@ import  {useState, useEffect} from 'react'
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined, LensBlurRounded } from '@mui/icons-material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
@@ -17,11 +15,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { EditLogModal } from './modal';
 import {MaintHisModal } from './modal'
-import CircularAnimation, {SkeletonAnimations} from './skeleton';
 import Skeleton from '@mui/material/Skeleton';
 import AlertMessage from './snackbar';
+
 
 
 export default function Tables(){
@@ -102,8 +99,10 @@ export function PlannedMaintTables() {
     const navigate = useNavigate()
     const {planMaintInput, setPlanMaintInput, setOpenAlert, setAlertMsg, setAlertSeverity, newPlannedMaint, setNewPlannedMaint} = ChatState()
     const [planMaintTable, setPlanMaintTable] = useState([])
-    const [loading, setLoading] = useState(true)
     const [user, setUser] = useState({})
+    const [loading, setLoading] = useState(true)
+    const [show, setShow] = useState(false)
+    const [vehicle_id, setVehicle_id] = useState("")
 
     useEffect(() => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
@@ -112,16 +111,37 @@ export function PlannedMaintTables() {
         }else{
             setUser(userInfo.loggedInUser)
             if(!navigator.onLine){
-                setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
+                setAlertMsg("Network Error!!!"); setAlertSeverity("warning"); setOpenAlert(true)
             }else if (navigator.onLine){
-                fetchTableInfo() 
+                const user = JSON.parse(sessionStorage.getItem('userInfo'))
+                let vehicle;
+                if (user.loggedInUser.role !== 'driver'){
+                    vehicle = user.loggedInUser.vehicle
+                    if (vehicle === null || vehicle === undefined){
+                        setOpenAlert(true); setAlertMsg("No vehicle is assiged to you yet"); setAlertSeverity('warning')
+                    }else{
+                        setVehicle_id(vehicle)
+                        fetchTableInfo(vehicle)
+                    }
+                }
+                else if (user.loggedInUser.role === 'driver'){
+                    let owner = user.vehicle_assignee
+                    vehicle = owner.vehicle
+                    if (vehicle === null || vehicle === undefined){
+                        setOpenAlert(true); setAlertMsg("No vehicle is assiged to you yet"); setAlertSeverity('warning')
+                    }else{
+                        setVehicle_id(vehicle)
+                        fetchTableInfo(vehicle)
+                    }
+
+                }
             }
         }
     }, [planMaintInput, newPlannedMaint])
 
-    const fetchTableInfo = async() =>{
+    const fetchTableInfo = async(vehicle) =>{
         try {
-        const vehicle = JSON.parse(sessionStorage.getItem('userInfo')).loggedInUser.vehicle
+            console.log(vehicle)
             const token = sessionStorage.getItem('token')
             if(token === null){
                 navigate('/login')
@@ -135,17 +155,18 @@ export function PlannedMaintTables() {
             setUser(table.data.allPlannedMaint)
             setPlanMaintTable(table.data.allPlannedMaint)
             setLoading(false)
+            setShow(true)
             clearInterval(fetchTableInfo)
         } catch (err) {
             console.log(err)
             if (!navigator.onLine) {
-                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
             } else if (err.response) {
                 // Handle server errors
-                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
             } else {
                 // Handle network errors
-                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
             }
         }
     }
@@ -180,35 +201,30 @@ export function PlannedMaintTables() {
 
                     setPlanMaintTable(table.data.allPlannedMaint)
                     setLoading(false)
+                    setShow(true)
                     clearInterval(fetchUserInfo)
                 } catch (err) {
                     console.log(err)
                     if (!navigator.onLine) {
-                        setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                        setLoading(false)
+                        setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                     } else if (err.response) {
                         // Handle server errors
-                        setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                        setLoading(false)
+                        setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                     } else {
                         // Handle network errors
-                        setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                        setLoading(false)
+                        setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                     }
                 }
             } catch (err) {
                 console.log(err)
                 if (!navigator.onLine) {
-                    setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                 } else if (err.response) {
                     // Handle server errors
-                    setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                 } else {
                     // Handle network errors
-                    setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                 }
             }
             };
@@ -219,47 +235,69 @@ export function PlannedMaintTables() {
     }
     return (
         <>
-            {loading ?  
-                <Box sx={{height: '32.5rem', width:'100%',display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <Skeleton animation="wave" width={'100%'} height={"15.5rem" }   />
-                    <Skeleton animation="wave" width={'100%'} height={"15.5rem" }  />
-                    <AlertMessage />
+            {!show ?  
+                <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
+                    <Table sx={{ minWidth: 900 }} aria-label="customized table">
+                        <TableHead>
+                        <TableRow>
+                            <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maixntenance Id</Typography> </StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Personnel In Charge</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                        </TableRow>
+                        </TableHead>
 
-                </Box>
+                        <TableBody>
+                        
+                        {[1,2,3,4,5,6,7].map((row, ind) => {
+                            return (
+                            <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                            </StyledTableRow>
+                            )
+                        })}
+
+                        </TableBody>
+                    </Table>
+                    </TableContainer>
             :
             <>
                 {planMaintTable.length ? 
-            
-            <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
-            <Table sx={{ minWidth: 900 }} aria-label="customized table">
-                <TableHead>
-                <TableRow>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Personnel In Charge</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
-                </TableRow>
-                </TableHead>
+                    <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
+                    <Table sx={{ minWidth: 900 }} aria-label="customized table">
+                        <TableHead>
+                        <TableRow>
+                            <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Personnel In Charge</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
+                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                        </TableRow>
+                        </TableHead>
 
-                <TableBody>
-                
-                {planMaintTable.map((row, ind) => {
-                    const {proposedDate, services, personnel, status, maint_id} = row
-                    return (
-                    <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{services[0]}</Typography></StyledTableCell>
-                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{"Oladimeji"}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{proposedDate}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
-                    </StyledTableRow>
-                    )
-                })}
+                        <TableBody>
+                        
+                        {planMaintTable.map((row, ind) => {
+                            const {proposedDate, services, personnel, status, maint_id} = row
+                            return (
+                            <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{services[0]}</Typography></StyledTableCell>
+                                <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{"Oladimeji"}</Typography></StyledTableCell>
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{proposedDate}</Typography></StyledTableCell>
+                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
+                            </StyledTableRow>
+                            )
+                        })}
 
-                </TableBody>
-            </Table>
-            </TableContainer>
+                        </TableBody>
+                    </Table>
+                    </TableContainer>
             :
             <Box sx={{height: '31.5rem', display: 'flex', jusitifyContent: 'center', alignItems: 'center'}}>
                 <Typography variant='h3' fontWeight={'500'} >
@@ -316,27 +354,22 @@ export function DriverLogTable() {
     const navigate = useNavigate()
     const [dailyLog, setDailyLog] = useState([])
     const {setOpenAlert, setAlertMsg, setAlertSeverity, planMaintInput, newDailyLog} = ChatState()
-    const [loading, setLoading] = useState(true)
+    const [show, setShow] = useState(false)
     const [user, setUser] = useState({})
 
 
     useEffect(() => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-        if(userInfo !== null){
+        if(userInfo === null){
+            navigate('/login')
+        }else{
             setUser(userInfo)
             if(!navigator.onLine){
-                setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
-            }else if (navigator.onLine){
+                setAlertMsg("Network Error"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            }else{
                 fetchTableInfo()
             }
         }
-
-        if(!navigator.onLine){
-            setAlertMsg("Network Error!!!"); setAlertSeverity("error"); setOpenAlert(true)
-        }else if(navigator.onLine){
-            fetchUserInfo()
-        }
-        console.log(planMaintInput)
     }, [planMaintInput, newDailyLog])
 
     const fetchTableInfo = async() =>{
@@ -356,16 +389,14 @@ export function DriverLogTable() {
                     });
 
                     setDailyLog(table.data.dailyLogs)
-                    setLoading(false)
+                    setShow(true)
                     clearInterval(fetchTableInfo)
                 } catch (err) {
                     console.log(err)
                     if(!navigator.onLine){
-                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
                     }else{
-                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
-                        setLoading(false)
+                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
                     }
                 }
     }
@@ -402,26 +433,22 @@ export function DriverLogTable() {
                     });
                     console.log(table.data.dailyLogs)
                     setDailyLog(table.data.dailyLogs)
-                    setLoading(false)
+                    setShow(false)
                     clearInterval(fetchUserInfo)
                 } catch (err) {
                     console.log(err)
                     if(!navigator.onLine){
-                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true); setShow(true)
                     }else{
-                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
-                        setLoading(false)
+                        setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true); setShow(true)
                     }
                 }
             } catch (err) {
                 console.log(err)
                 if(!navigator.onLine){
-                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true); setShow(true)
                 }else{
-                    setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true);
-                    setLoading(false)
+                    setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true); setShow(true)
                 }
             }
             };
@@ -438,20 +465,8 @@ export function DriverLogTable() {
 
     return (
     <>
-        
-
-        
-        {loading ?  
-            <Box sx={{height: '32.5rem', width:'100%',display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Skeleton animation="wave" width={'100%'} height={"15.5rem" }   />
-                <Skeleton animation="wave" width={'100%'} height={"15.5rem" }  />
-                <AlertMessage />
-
-            </Box>
-            :
-            <>
+            {show ? <>
             {dailyLog.length ?
-
             <TableContainer component={Paper} sx={{height: '32.5rem'}}>
                 <Table sx={{ minWidth: 1100 }} aria-label="customized table">
                     <TableHead>
@@ -510,11 +525,51 @@ export function DriverLogTable() {
             </Box>
 
             }
-            <AlertMessage />
             </>
+                :
+            <>
+                <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+                    <Table sx={{ minWidth: 1100 }} aria-label="customized table">
+                        <TableHead>
+                        <TableRow>
+                            <StyledTableCellVlog><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCellVlog>
 
-        }
-    
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Log Time</Typography></StyledTableCellVlog>
+                            
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Current Location</Typography></StyledTableCellVlog>
+
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Mileage</Typography></StyledTableCellVlog>
+
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Mileage</Typography></StyledTableCellVlog>
+
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Fuel Level</Typography></StyledTableCellVlog>
+
+                            <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Fuel Level</Typography></StyledTableCellVlog>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {[1,2,3,4,5,6,7].map((row, ind)=>{
+                            return (
+                                <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                </StyledTableRowVlog>
+
+                            )
+                        })}
+
+                        </TableBody>
+                        
+                    </Table>
+                    <AlertMessage />
+                </TableContainer>
+            </>}
+            <AlertMessage />
     </>
     )
 }

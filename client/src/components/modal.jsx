@@ -555,34 +555,64 @@ export function CreateLogModal() {
 }
 
 export function ReportModal() {
-    const [createLog, setCreateLog] = useState({startLocation: '', endLocation: '', startMileage: '', endMileage: '', route: '', fuelLevel: '' })
     const [report, setReport] = useState({location: '', description: '', image: 'Clicks Here to upload image'})
-
-    const [age, setAge] = useState("")
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, newIncedentReport, setNewIncedentReport} = ChatState()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (e)=>{
-        setAge(e.target.value)
         const name = e.target.name
         const value = e.target.value
         setReport({...createLog, [name]: value})
+        console.log(report)
     }
 
-    const handleCreateLog = (e)=>{
-        e.preventDefaults()
+    const handleCreateReport = async()=>{
+        console.log(report)
+        setLoading(true)
+        if (!navigator.onLine){
+            setOpenAlert(true); setAlertMsg('Network Error!!!'); setAlertSeverity('warning')
+        }else{
+            try {
+                const vehicle_id = ""; const location = report.location; const description = report.description; const image = report.image 
+
+                const token = sessonStorage.getItem('token')
+                if (token === null){navigate('/login')}
+                const newReport = await axios.post("https://futa-fleet-guard.onrender.com/api/incedents/new-incedent", {vehicle_id, location, description, image },{
+                    headers: {
+                        "Content-type": "Application/json",
+                        "Authorization": `Bearer ${token}`          
+                    }
+                })
+                console.log(newReport.data.report)
+                setLoading(false)
+                setOpenAlert(true); setAlertMsg('Report created successfully.'); setAlertSeverity('success')
+                if (newIncedentReport){setNewIncedentReport(false)}
+                if (!newIncedentReport){setNewIncedentReport(true)}
+
+            } catch (err) {
+                if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);setLoading(false);
+                } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+                } else {
+                    setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+                }
+            }
+        }
     }
+    
     return (
         <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
-                <Typography variant='h5'>Create Log</Typography> 
+                <Typography variant='h5'>Create Report</Typography> 
             </Box>
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
                     <Box >
-                        <Typography variant="h4" fontWeight={'500'}>Create 
-                        Report</Typography>
+                        <Typography variant="h4" fontWeight={'500'}>Incedent Report</Typography>
                     </Box>
 
                     <Box sx={{mt: 4}}>
@@ -604,15 +634,19 @@ export function ReportModal() {
                     </Box>
                     
                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
-                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '9rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleCreateLog}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Create Log</Typography>
+
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleCreateReport}  sx={{ textTransform: 'none', width: '9rem', display: 'flex', positoin: 'relative' }}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Create Report</Typography> : ''}
                         </Box>
+
                     </Box>
                 </Box>
             </Modal>
+            <AlertMessage />
         </div>
     );
 }

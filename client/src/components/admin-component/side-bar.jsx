@@ -89,6 +89,13 @@ const AdminSideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Drivers</Typography> 
                     </Box>
+                    
+                    <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
+                        <Box className="icon">
+                            <IoMdPerson size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle Assignees</Typography> 
+                    </Box>
 
                     <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
                         <Box className="icon">
@@ -97,12 +104,6 @@ const AdminSideBar = ()=>{
                         <Typography variant='h5'>Reports</Typography> 
                     </Box>
 
-                    <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
-                        <Box className="icon">
-                            <IoMdPerson size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Vehicle Assignees</Typography> 
-                    </Box>
                     {/* <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >
                         <Box className="icon">
                             <MdNoteAlt size={'1.5rem'} />

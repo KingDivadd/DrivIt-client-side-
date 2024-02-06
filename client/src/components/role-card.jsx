@@ -19,6 +19,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AlertMessage from "./snackbar";
 import { GoChecklist } from "react-icons/go";
+import Skeleton from '@mui/material/Skeleton';
+
 
 
 
@@ -377,12 +379,30 @@ export const FeedbackCard = ({})=>{
     )
 }
 
-export const ReportCard = ({image, location, description})=>{
+export const ReportCardSkeleton = ()=>{
 
     return (
         <Card  sx={{ minWidth: '15rem', cursor: 'pointer', p: '0' }}>
             <CardContent sx={{p: '0 .5rem'}}>
-                <Box sx={{backgroundImage: `url(${image})`,
+                <Box sx={{mb: '1rem',mt: '.5rem',height: '8rem',}}><Skeleton animation="wave" width={'100%'} height={'100%'} /> </Box>
+
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'flex-start', mb: '-.85rem', gap: '.75rem'}}>
+                        <Skeleton animation="wave" width={'100%'} height={'1.5rem'}  />
+                        <Skeleton animation="wave" width={'100%'} height={'1.5rem'}  />
+
+                </Box>
+            </CardContent>
+        
+        </Card>
+    )
+}
+
+export const ReportCard = ({data})=>{
+
+    return (
+        <Card  sx={{ minWidth: '15rem', cursor: 'pointer', p: '0' }}>
+            <CardContent sx={{p: '0 .5rem'}}>
+                <Box sx={{backgroundImage: `url(${data.image})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                     backgroundSize: 'cover',
@@ -396,10 +416,10 @@ export const ReportCard = ({image, location, description})=>{
 
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'flex-start', mb: '-.85rem'}}>
                     <Typography variant={'h6'} fontWeight={'400'} mb={'.5rem'} >Incident Location</Typography>
-                    <Typography variant={'h6'} fontWeight={'500'} mb={'.5rem'} >{location}</Typography>
+                    <Typography variant={'h6'} fontWeight={'500'} mb={'.5rem'} >{data.location}</Typography>
 
                     <Typography variant={'h6'} fontWeight={'400'} mb={'.5rem'} >Description</Typography>
-                    <Typography variant={'h6'} fontWeight={'500'}  >{description}</Typography>
+                    <Typography variant={'h6'} fontWeight={'500'}  >{data.description}</Typography>
                 </Box>
             </CardContent>
         

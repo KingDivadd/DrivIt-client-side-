@@ -106,7 +106,7 @@ const Dashboard = ()=>{
                             <Typography component="h5" variant="h4">Everything you need to know about your vehicle.</Typography>
                         </Box>
                         <Box sx={{mt: '2rem',display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: '.75rem',}}>
-                            <DashCard title={'Planned Maintenance'} value={user.dashboard.major_maint_job} icon={ <TfiLayoutAccordionList size={'2rem'} color='#1B61E4' />} suffix={""} />
+                            <DashCard title={'Major Maintenance Services'} value={user.dashboard.major_maint_job} icon={ <TfiLayoutAccordionList size={'2rem'} color='#1B61E4' />} suffix={""} />
                             <DashCard title={"Current Location"} value={user.dashboard.current_location} icon={<FaLocationDot size={'2rem'} color='orangered' />} suffix={""} />
                             <DashCard title={"Total Mileage Covered"} value={user.dashboard.total_mileage} icon={<GiPathDistance  size={'2rem'} color='orangered'/>} suffix={"Km"} />
                             <DashCard title={"Last Recored Mileage"} value={"200"} icon={<BsCalendarEventFill  size={'2rem'} color='green'/>} suffix={"Km"} />

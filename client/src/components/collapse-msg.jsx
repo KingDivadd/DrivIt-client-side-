@@ -14,7 +14,7 @@ const ExpandableButton = ({data}) => {
     return (
         <div>
         <Box className={'notification'} sx={{height: '2rem', mb: '.5rem', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', }} onClick={handleClick} variant="contained" color="primary">
-                <Typography variant={'h5'} fontWeight={'500'} sx={{textOverflow: 'ellipsis', width: '18.5rem' }} >{data.message}</Typography>
+                <Typography variant={'h5'} fontWeight={'500'} sx={{textOverflow: 'ellipsis', width: '18.5rem' }} >{data.title}</Typography>
             {/* <Box sx={{ textOverflow: 'ellipsis', background: 'coral' }}>
             </Box> */}
         </Box>
