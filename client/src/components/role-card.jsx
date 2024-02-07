@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import AlertMessage from "./snackbar";
 import { GoChecklist } from "react-icons/go";
 import Skeleton from '@mui/material/Skeleton';
+import { useMediaQuery } from '@mui/material';
+
 
 
 
@@ -430,19 +432,31 @@ export const ReportCard = ({data})=>{
 
 export const LandingPageCard = ({title, note})=>{
 
-
-
+        const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+        const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+        const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+        const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
     <Card sx={{ width: '100%', cursor: 'pointer' }}>
-        <CardContent>
-            <Typography variant="h3" fontWeignt={'800'} gutterBottom>
+        {!isSM && <CardContent>
+            <Typography variant="h3" fontWeight={'600'} gutterBottom>
                 {title}
             </Typography>
             <Typography variant="h5" fontWeight={'500'} mt={'.75rem'} lineHeight={'1.65rem'} component="div">
                 {note}
             </Typography>
         
-        </CardContent>
+        </CardContent>}
+        
+        {isSM && <CardContent>
+            <Typography variant="h4" fontWeight={'500'} gutterBottom>
+                {title}
+            </Typography>
+            <Typography variant="h6" fontWeight={'400'} mt={'.75rem'} lineHeight={'1.65rem'} component="div">
+                {note}
+            </Typography>
+        
+        </CardContent>}
         
     </Card>
     );

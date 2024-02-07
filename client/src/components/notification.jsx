@@ -35,7 +35,6 @@ export default function NotificationPopover() {
             fetchNotification(role)
 
         } catch (err) {
-            console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
             } else if (err.response) {
@@ -62,10 +61,8 @@ export default function NotificationPopover() {
             );
             setNotification(fetchNotification.data.Notifications)
             setShow(true)
-            console.log(notification)
 
         } catch (err) {
-            console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
             } else if (err.response) {

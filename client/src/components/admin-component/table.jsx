@@ -4,7 +4,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import { PersonOutlineOutlined, NotificationsActiveOutlined, LensBlurRounded } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
+import { Button, Box, Typography, useTheme, useMediaQuery, Skeleton } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
@@ -17,6 +17,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import AlertMessage from 'components/snackbar';
 
 
 
@@ -46,62 +47,125 @@ function createData(maint, concern, mileage, supervisor, cost, status) {
     return { maint, concern, mileage, supervisor, cost, status };
 }
 
-const rows = [
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0002', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0003', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0004', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0005', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0006', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0007', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0008', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0009', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    createData('FUTAWORK/0001', "Service required", '1,200km', "Engr Osasona", "12,000", 'In Shop'),
-    
-    ];
 
 export default function VehicleTables() {
     const navigate = useNavigate()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, newVehicle} = ChatState()
+    const [allVehicles, setAllVehicles] = useState([])
+    const [show, setShow] = useState(false)
 
-    const handleClick = (row)=>{
-        navigate(`./${row.maint.replace(/\//g, '-').toLowerCase()}`)
-        console.log(row)
+    useEffect(() => {
+        if (!navigator.onLine){
+            setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
+        }else{
+            fetchVehicle()
+            console.log('fetching vehicles...')
+        }
+    }, [])
+
+    const fetchVehicle = async()=>{
+        const token = sessionStorage.getItem('token')
+        if (token === null){navigate('/login')}
+        try {
+            const registeredVehicles = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/all-vehicles/", {}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setAllVehicles(registeredVehicles.data.availVehicles)
+            setShow(true)
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            }
+        }
+    }
+
+    const handleClick = (data)=>{
+        navigate(`./${data._id}`)
     }
     return (
+        <>
+        {show ?
+        <> 
+            {allVehicles.length ? <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+            <Table sx={{ minWidth: 900 }} aria-label="customized table">
+                <TableHead>
+                <TableRow>
+                    <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Brand</Typography> </StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Name</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Body Color</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Plate No.</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Engine No.</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Chasis No.</Typography></StyledTableCell>
+                </TableRow>
+                </TableHead>
+                <TableBody>
+                
+                {allVehicles.map((data, ind) => {
+                    const {brand, vehicle_name, vehicle_color, plate_no, engine_no, chasis_no, _id } = data
+                    return (
+                    <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(data)} >
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{brand}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{vehicle_name}</Typography></StyledTableCell>
+                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{vehicle_color}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{plate_no}</Typography></StyledTableCell>
+                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{engine_no}</Typography></StyledTableCell>
+                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{chasis_no}</Typography></StyledTableCell>
+                    </StyledTableRow>
+                    )
+                })}
+                </TableBody>
+            </Table>
+            </TableContainer>
+            :
+            <Box sx={{height: '31.5rem', display: 'flex', jusitifyContent: 'center', alignItems: 'center'}}>
+                <Typography variant='h3' fontWeight={'500'} >
+                    Click the plan maintenance button to plan a maintenance
+                </Typography>
+            </Box>}
+        </>
+            :
         <TableContainer component={Paper} sx={{height: '32.5rem'}}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
             <TableHead>
             <TableRow>
-                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Mileage</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Supervisor</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Cost</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Vehicle Brand</Typography> </StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Vehicle Name</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Body Color</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Plate No.</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Engine No.</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Chasis No.</Typography></StyledTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
-            
-            {rows.map((row, ind) => {
-                const {maint, concern, cost,mileage, status, supervisor } = row
-                return (
-                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{concern}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{mileage}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{supervisor}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{cost}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
-                </StyledTableRow>
-                )
-            })}
+                {[1,2,3,4,5,6,7].map((row, ind) => {
+                    return (
+                    <StyledTableRow key={ind} sx={{cursor: 'pointer'}} >
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                    </StyledTableRow>
+                    )
+                })}
             </TableBody>
         </Table>
-        </TableContainer>
+        </TableContainer>}
+        <AlertMessage />
+        </>
     );
+
 }
 
 
@@ -125,7 +189,7 @@ export function DriversTable() {
     const navigate = useNavigate()
 
     const handleClick = (row)=>{
-        navigate(`./${row.staffId.replace(/\//g, '-').toLowerCase()}`)
+        navigate(`./123`)
         console.log(row)
     }
     return (

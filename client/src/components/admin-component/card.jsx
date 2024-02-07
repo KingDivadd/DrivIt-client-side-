@@ -8,14 +8,15 @@ import { MdOutlinePendingActions } from "react-icons/md";
 import { FaSquareCheck } from "react-icons/fa6";
 import Avatar from '@mui/material/Avatar';
 import { FaCar } from "react-icons/fa6";
-
-
-
+import { Skeleton } from "@mui/material";
+import { ChatState } from "context/chatContext";
+import AlertMessage from "components/snackbar";
+import axios from 'axios';
 
 export default function ActiveAdminCard ({}){
     
     return (
-        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem', mb: '.5rem'}}>
             <CardContent>
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
                     Admin Personnel
@@ -40,65 +41,102 @@ export default function ActiveAdminCard ({}){
     )
 }
 
-export const VehicleInformationCard = ({})=>{
-    
+export const VehicleInformationCard = ({vehicle})=>{
+    const [show, setShow] = useState(false)
     const services = ['Oil Change', 'Battery Check', 'Suspension Check', 'Tire Check']
     
-    const handleDelete = () => {
-        console.info('You clicked the delete icon.');
-    };
+    useEffect(() => {
+        console.log('vehicle info card', vehicle)
+        setShow(true)
+    }, [])
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+        };
     
     return (
+        <>
+        {show && 
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer' }}>
             <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.25rem'} fontWeight={'500'}>Vehicle Information</Typography>
 
-
                     <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Brand:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>Toyota</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.brand}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Name:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>Corolla</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_name}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Engine No:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>KTU-09EL</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.engine_no}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Chasis No:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>ABDEIH09</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.chasis_no}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Fuel Type:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>PMS</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.fuel_type}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Vehicle Color:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>Blue</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_color}</Typography>
                     </Box>
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>20,000M</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
                     </Box>
+
+                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Manufacture Year:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.manufacture_year}</Typography>
+                    </Box>
+
+                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Transmission type:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.transmission}</Typography>
+                    </Box>
+
+                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Added on:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{formatDate(vehicle.createdAt)}</Typography>
+                    </Box>
+
+                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
+                    </Box>
+
 
                     <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar>
 
             </CardContent>
         
-        </Card>
+        </Card>}
+        </>
+
     )
 }
 
-export const VehicleStatusCard = ()=>{
-    const [status, setStatus] = useState('completed')
+export const VehicleStatusCard = ({vehicle})=>{
+    const [status, setStatus] = useState(true)
+
+    useEffect(() => {
+    console.log('VehicleStatus card', vehicle)
+        if (vehicle.assigned_to.length){setStatus(false)}
+        if (!vehicle.assigned_to.length){setStatus(true)}
+    }, [])
 
     return (
         <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
@@ -106,13 +144,13 @@ export const VehicleStatusCard = ()=>{
                 <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Assignment Status</Typography>
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start',gap: '1.5rem', width: '100%'}}>
                     
-                    <Box className={status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
+                    <Box className={status? "pending-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Not Assigned</Typography>
                     </Box>                    
 
 
-                    <Box className={status === "completed"?"completed-stat stat":"stat"} sx={{}}>
+                    <Box className={!status?"completed-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Assigned</Typography>
                     </Box> 
@@ -127,8 +165,45 @@ export const VehicleStatusCard = ()=>{
 }
 
 
-export const VehicleAssigneeCard = ({})=>{
-        
+export const VehicleAssigneeCard = ({data})=>{
+        const [show, setShow] = useState(false)
+        const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+        const [Driver, setDriver] = useState("")
+        const [user, setUser] = useState({})
+
+        useEffect(() => {
+            console.log('user data', data)
+            if(!navigator.onLine){
+                setOpenAlert(true); setAlertMsg("Network Error!!!"); setAlertSeverity("warning"); setShow(false);
+            }else{
+                fetchUsers()
+            }
+        }, [])
+
+        const fetchUsers = async()=>{
+
+            try {
+                const getUser = await axios.post("https://futa-fleet-guard.onrender.com/api/user/one-user", {data}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                }
+            });
+            console.log(getUser.data.user)
+            setUser(getUser.data.user); setShow(true)
+            } catch (err) {
+                console.log(err)
+                if (!navigator.onLine) {
+                    setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+                } else if (err.response) {
+                    // Handle server errors
+                    setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+                } else {
+                    // Handle network errors
+                    setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+                }
+            }
+        }
+
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
     };
@@ -137,29 +212,62 @@ export const VehicleAssigneeCard = ({})=>{
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', }}>
             <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Vehicle Assignee</Typography>
-                    
-                    <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <Typography variant='h5' fontWeight={'400'}>Last Name:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>Oyenuga</Typography>
-                    </Box>
-                    
-                    <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <Typography variant='h5' fontWeight={'400'}>First Name:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>Emmanuel</Typography>
-                    </Box>
-                    
-                    <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <Typography variant='h5' fontWeight={'400'}>Email:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>oyenuga.dgit@gmail.com</Typography>
-                    </Box>
-                    
-                    <Box mt={'.2rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <Typography variant='h5' fontWeight={'400'}>Phone:</Typography>
-                        <Typography variant='h5' fontWeight={'500'}>0902600392</Typography>
-                    </Box>
+                    {show ?
+                    <>
+                        
+                        {assignee ?<>
+                            <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'400'}>Last Name:</Typography>
+                                <Typography variant='h5' fontWeight={'500'}>{user.lastName}</Typography>
+                            </Box>
+                            
+                            <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'400'}>First Name:</Typography>
+                                <Typography variant='h5' fontWeight={'500'}>{user.firstName}</Typography>
+                            </Box>
+                            
+                            <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'400'}>Email:</Typography>
+                                <Typography variant='h5' fontWeight={'500'}>{user.email}</Typography>
+                            </Box>
+                            
+                            <Box mt={'.2rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'400'}>Phone:</Typography>
+                                <Typography variant='h5' fontWeight={'500'}>{user.phone}</Typography>
+                            </Box>
+                        </>
+                        :
+                        <>
+                            <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'500'}>No user is assigned to this vehicle.</Typography>
+                            </Box>
+                            
+                            
+                        </>}
+                        
+                    </>
+                        :
+                    <>
+                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                        </Box>
+                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                        </Box>
+                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                        </Box>
+                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                            <Skeleton width={'100%'} height={'1.5rem'} />
+                        </Box>
+                    </>}
 
             </CardContent>
-        
+            <AlertMessage />
         </Card>
     )
 }
@@ -201,7 +309,7 @@ export const VehicleDriverCard = ({})=>{
     )
 }
 
-export const VehicleMaintCard = ({})=>{
+export const VehicleMaintCard = ({vehicle})=>{
         
     const handleDelete = () => {
         console.info('You clicked the delete icon.');

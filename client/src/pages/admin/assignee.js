@@ -11,17 +11,17 @@ import Table, { CustomizedTables,CustomizedTablesVlog ,ReactVirtualizedTable } f
 import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import {CreateLogModal} from 'components/modal';
-import AddVehicleModal from "../../components/admin-component/modal"
+import AddVehicleModal, {AddDriverModal} from "../../components/admin-component/modal"
 import SideBar from 'components/side-bar';
 import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import MenuBar from 'components/menu-bar';
-import VehicleTables from 'components/admin-component/table';
-import AlertMessage from 'components/snackbar'
+import VehicleTables, {DriversTable} from 'components/admin-component/table';
 
 
-const Vehicles = ()=>{
+
+const Assignee = ()=>{
     const [page, setPage] = useState("")
     const [text, setText] = useState("")
     const [age, setAge] = useState("")
@@ -63,8 +63,8 @@ const Vehicles = ()=>{
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
-                            <Typography variant='h2' sx={{fontWeight: '600'}}>Registered Vehicles</Typography>
-                            <AddVehicleModal />
+                            <Typography variant='h2' sx={{fontWeight: '600'}}>Vehicle Assignees</Typography>
+                            {/* <AddVehicleModal /> */}
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '1rem'}}>
@@ -89,15 +89,14 @@ const Vehicles = ()=>{
                     <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                         {/* the table */}
                         <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden'}}>
-                            <VehicleTables />
+                            <DriversTable />
                         </Box> 
                     </Box>
                 </Grid>
                 </Box>
             </Grid> 
-            <AlertMessage />
         </Grid>
     )
 }
 
-export default Vehicles
+export default Assignee

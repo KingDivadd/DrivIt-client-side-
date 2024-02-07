@@ -14,6 +14,8 @@ import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import {CreateLogModal} from 'components/modal';
 import SideBar from 'components/side-bar';
+import AdminSideBar from 'components/admin-component/side-bar';
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import MenuBar from 'components/menu-bar';
 import AlertMessage from 'components/snackbar';
@@ -25,15 +27,15 @@ const VehicleLog = ()=>{
     const [filter, setFilter] = useState(true)
     const [vehiclePresent, setVehiclePresent] = useState(true)
     const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+    const [role, setRole] = useState("")
     const navigate = useNavigate()
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('userInfo'))
-        console.log(1)
         if(user === null){
             navigate('/login')
         }else{
-            console.log(2)
+            setRole(user.loggedInUser.role)
             let vehicle;
             if (user.loggedInUser.role !== 'driver'){
                 vehicle = user.loggedInUser.vehicle
@@ -75,7 +77,10 @@ const VehicleLog = ()=>{
     }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}

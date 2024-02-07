@@ -30,11 +30,16 @@ const MaintSideBarMobile = ()=>{
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         let lastPart = parts[parts.length - 1];
+        if(parts.length === 2){
+            lastPart = parts[parts.length - 1]
+            setPage(lastPart)
+            navigate(`/${lastPart}`)
+        }
 
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
+            setPage(lastPart)
         }
-        setPage(lastPart)
     }, [page])
 
     const handlePage = (value)=>{

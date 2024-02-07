@@ -34,26 +34,7 @@ const WorkbayReport = ()=>{
         }
 
     }, [])
-    const handlePage = (value)=>{
-        console.log(value)
-        navigate(`/${value}`)
-    }
     
-    const handlePlanMaint = ()=>{
-        console.log("plan maintenance")
-    }
-    
-    const handleWorkbay = (e)=>{
-        setText(e.target.value)
-    }
-    
-    const handleChange = (e)=>{
-        setAge(e.target.value)
-    }
-    const handleBack = ()=>{
-        console.log('going back')
-        navigate(-1)
-    }
     return (
         <>
         {rowInfo !== null && <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
@@ -97,7 +78,7 @@ const WorkbayReport = ()=>{
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                <Box className='mid-btn back-btn' onClick={()=> navigate(-1)} sx={{width: '8rem'}} >
+                                <Box className='mid-btn back-btn' onClick={()=> navigate(-1)}  sx={{width: '8rem'}} >
                                     <AiOutlineRollback  size={'1.5rem'} />
                                     <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                 </Box>

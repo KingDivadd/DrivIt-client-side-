@@ -45,10 +45,7 @@ const VehicleLogReport = ()=>{
     const handleChange = (e)=>{
         setAge(e.target.value)
     }
-    const handleBack = ()=>{
-        console.log('going back')
-        navigate(-1)
-    }
+   
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             <SideBar />

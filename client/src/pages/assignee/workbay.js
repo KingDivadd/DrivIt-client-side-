@@ -9,6 +9,10 @@ import  { PlannedMaintTables, ReactVirtualizedTable } from 'components/table';
 import { IoSearch } from "react-icons/io5";
 import PlanMaintenance from 'components/modal';
 import SideBar from 'components/side-bar';
+import MaintSideBar from 'components/maint-side-bar'
+import MaintSideBarMobile from 'components/maint-side-bar-mobile'
+import AdminSideBar from 'components/admin-component/side-bar'
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile'
 import MenuBar from 'components/menu-bar';
 import AlertMessage from 'components/snackbar';
 
@@ -19,6 +23,7 @@ const Workbay = ()=>{
     const [vehiclePresent, setVehiclePresent] = useState(true)
     const navigate = useNavigate()
     const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+    const [role, setRole] = useState("")
 
 
     useEffect(() => {
@@ -26,6 +31,7 @@ const Workbay = ()=>{
         if(user === null){
             navigate('/login')
         }else{
+            setRole(user.loggedInUser.role)
             let vehicle;
             if (user.loggedInUser.role !== 'driver'){
                 vehicle = user.loggedInUser.vehicle
@@ -57,7 +63,9 @@ const Workbay = ()=>{
     }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {(role === "vehicle_assignee" || role === "driver") && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
+            {role === "maintenance_personnel" && <MaintSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
                 <Box sx={{width: '100%', height: 'auto'}}>

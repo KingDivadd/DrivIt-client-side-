@@ -5,6 +5,8 @@ import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import SideBar from 'components/side-bar';
+import AdminSideBar from 'components/admin-component/side-bar';
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import one from '../../asset/one.jpg'
 import two from '../../asset/two.jpg'
 import three from '../../asset/three.jpg'
@@ -20,6 +22,7 @@ const VehiclePage = ()=>{
     const {setOpenAlert, setAlertSeverity, setAlertMsg} = ChatState()
     const [show, setShow] = useState(false)
     const [vehiclePresent, setVehiclePresent] = useState(true)
+    const [role, setRole]= useState("")
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('userInfo'))
@@ -27,6 +30,7 @@ const VehiclePage = ()=>{
         if(user === null){
             navigate('/login')
         }else{
+            setRole(user.loggedInUser.role)
             let vehicle;
             if (user.loggedInUser.role !== 'driver'){
                 vehicle = user.loggedInUser.vehicle
@@ -56,6 +60,7 @@ const VehiclePage = ()=>{
     const fetchUserVehicle = async()=>{
         
         try {
+            setRole(JSON.parse(sessionStorage.getItem('userInfo').loggedInUser.role))
             const token = sessionStorage.getItem('token')
             const userVehicle = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/user-vehicle",{},{
                 headers: {
@@ -85,7 +90,10 @@ const VehiclePage = ()=>{
                 <>
             {show ?
             <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}
@@ -187,7 +195,10 @@ const VehiclePage = ()=>{
             </Grid>
             :
             <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}
@@ -252,7 +263,10 @@ const VehiclePage = ()=>{
             :
 
             <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh'}} >
                 {/* right top section */}

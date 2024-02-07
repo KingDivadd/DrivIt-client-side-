@@ -27,12 +27,16 @@ const AdminSideBar = ()=>{
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         let lastPart = parts[parts.length - 1];
+        if(parts.length === 2){
+            lastPart = parts[parts.length - 1]
+            setPage(lastPart)
+            navigate(`/${lastPart}`)
+        }
 
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
+            setPage(lastPart)
         }
-        navigate(`/${lastPart}`)
-        setPage(lastPart)
     }, [page])
 
     const handlePage = (value)=>{
@@ -90,7 +94,7 @@ const AdminSideBar = ()=>{
                         <Typography variant='h5'>Drivers</Typography> 
                     </Box>
                     
-                    <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
+                    <Box className={page === "ssignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
                         <Box className="icon">
                             <IoMdPerson size={'1.5rem'} />
                         </Box>

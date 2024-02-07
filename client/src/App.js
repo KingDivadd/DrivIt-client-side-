@@ -7,11 +7,6 @@ import { ChatState } from "context/chatContext";
 import Login from "auth/loginPage";
 import RecoverPassword from "auth/recover-password";
 import SignUp from "auth/signupPage";
-import SignInSign from "auth/signIn.js"
-import Dashboard from "pages/assignee/dashboard";
-import DriverDashboard from "pages/driver/dashboard";
-import MaintDashboard from "pages/maint/dashboard";
-import AdminDashboard from "pages/admin/dashboard";
 import "./index.css";
 import Workbay from "pages/assignee/workbay";
 import WorkbayReport from "pages/assignee/workbay-report";
@@ -26,9 +21,8 @@ import ServiceHistory from "pages/maint/service-history"
 import Vehicles from "pages/admin/vehicle";
 import VehicleReport from 'pages/admin/vehicle-report'
 import Drivers from "pages/admin/driver";
-import axios from 'axios';
-import AlertMessage from "components/snackbar";
 import Dash from "pages/dashboard";
+import Assignee from "pages/admin/assignee";
 
 
 function App() {
@@ -64,6 +58,7 @@ function App() {
               <Route path="/vehicles/:id" element={<VehicleReport />} />
               <Route path="/drivers" element={<Drivers />} />
               <Route path="/drivers/:id" element={<Drivers />} />
+              <Route path="/assignee" element={<Assignee />} />
 
               {/* <Route
                 path="/home"

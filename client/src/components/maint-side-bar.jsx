@@ -14,6 +14,8 @@ import { FaCar, FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
+import { FaCarAlt } from "react-icons/fa";
+
 
 
 const MaintSideBar = ()=>{
@@ -24,11 +26,16 @@ const MaintSideBar = ()=>{
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         let lastPart = parts[parts.length - 1];
+        if(parts.length === 2){
+            lastPart = parts[parts.length - 1]
+            setPage(lastPart)
+            navigate(`/${lastPart}`)
+        }
 
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
+            setPage(lastPart)
         }
-        setPage(lastPart)
     }, [page])
 
     const handlePage = (value)=>{
@@ -43,12 +50,40 @@ const MaintSideBar = ()=>{
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start',pl: '.5rem'}}>
                     <Typography component={"h2"} variant='h3' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-4rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <FaHouse size={'1.4rem'} />
                         </Box>
                         <Typography variant='h5' >Dashboard</Typography> 
+                    </Box>
+
+                    <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaTools size={'1.2rem'} />
+                        </Box>
+                        <Typography variant='h5'>Workbay</Typography> 
+                    </Box>
+                    
+                    <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <CgNotes size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle log</Typography> 
+                    </Box>
+
+                    <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
+                        <Box className="icon">
+                            <FaCar size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Assigned Vehicle</Typography> 
+                    </Box>
+
+                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaCarAlt size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicles</Typography> 
                     </Box>
 
                     <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>

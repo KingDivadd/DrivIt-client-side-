@@ -19,6 +19,7 @@ export const ChatProvider = ({children})=>{
     const [newPlannedMaint, setNewPlannedMaint] = useState(false)
     const [newDailyLog, setNewDailyLog] = useState(false)
     const [newIncedentReport, setNewIncedentReport] = useState(false)
+    const [newVehicle, setNewVehicle] = useState(false)
 
     useEffect(() => {
     const fetched_status = localStorage.getItem('status')
@@ -27,7 +28,7 @@ export const ChatProvider = ({children})=>{
 
 
     return <ChatContext.Provider 
-            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport  }}
+            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport, newVehicle, setNewVehicle }}
             >
             {children}
         </ChatContext.Provider>

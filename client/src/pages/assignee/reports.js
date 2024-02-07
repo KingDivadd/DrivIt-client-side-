@@ -18,6 +18,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import {CreateLogModal, ReportModal} from 'components/modal';
 import SideBar from 'components/side-bar';
+import AdminSideBar from 'components/admin-component/side-bar';
+import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import one from '../../asset/one.jpg'
 import two from '../../asset/two.jpg'
@@ -33,16 +35,16 @@ const Report = ()=>{
     const {setOpenAlert, setAlertMsg, setAlertSeverity, newIncedentReport} = ChatState()
     const [show, setShow] = useState(false)
     const [vehiclePresent, setVehiclePresent] = useState(true)
+    const [role, setRole] = useState("")
 
     const navigate = useNavigate()
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('userInfo'))
-        console.log(1)
         if(user === null){
             navigate('/login')
         }else{
-            console.log(2)
+            setRole(user.loggedInUser.role)
             let vehicle;
             if (user.loggedInUser.role !== 'driver'){
                 vehicle = user.loggedInUser.vehicle
@@ -113,7 +115,10 @@ const Report = ()=>{
         <>
         {show ?
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}
@@ -162,7 +167,10 @@ const Report = ()=>{
         </Grid>
             :
             <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}
@@ -201,7 +209,10 @@ const Report = ()=>{
         </>
         :
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            <SideBar />
+            {role === "vehicle_assignee" && <SideBar />}
+            {role === "driver" && <SideBar />}
+            {role === "maintenance_personnel" && <SideBar />}
+            {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}

@@ -17,14 +17,11 @@ const Dash = ()=>{
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
         if(userInfo !== null){
             setLoggedInUser(userInfo.loggedInUser)
             setLoading(false)
-        }
-       
-        
+        }        
         else{
             fetchUserInfo()
         }

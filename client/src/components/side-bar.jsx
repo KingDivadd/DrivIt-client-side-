@@ -1,37 +1,36 @@
 import React, {useState, useEffect} from 'react'
-import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined } from '@mui/icons-material';
-import { Button, Box, Typography, useTheme, useMediaQuery, Hidden } from '@mui/material'
+import { Box, Typography, useTheme, useMediaQuery, Hidden } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
 // import '../index.css'
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
-import { FaHouse } from "react-icons/fa6";
 import { FaCar, FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
-
+import { FaHouse } from "react-icons/fa6";
 
 const SideBar = ()=>{
     const [page, setPage] = useState("")
     const navigate = useNavigate()
-    const [role, setRole] = useState("")
 
     useEffect(() => {
         fetchUserInfo()
         const pathname = window.location.pathname;
         const parts = pathname.split('/');
         let lastPart = parts[parts.length - 1];
+        if(parts.length === 2){
+            lastPart = parts[parts.length - 1]
+            setPage(lastPart)
+            navigate(`/${lastPart}`)
+        }
 
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
+            setPage(lastPart)
         }
-        setPage(lastPart)
-        navigate(`/${lastPart}`)
     }, [page])
 
     const handlePage = (value)=>{
@@ -44,8 +43,12 @@ const SideBar = ()=>{
         if (user === null){
             navigate('/')
         }
-        setRole(user.loggedInUser.role)
     }
+
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
 
     return (
@@ -55,6 +58,7 @@ const SideBar = ()=>{
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end',pl: '.5rem', mt: '1rem'}}>
                     <Typography component={"h2"} variant='h3' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
                 </Box>
+                
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-14rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
@@ -83,27 +87,6 @@ const SideBar = ()=>{
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
-
-                    {role === 'vehicle_coordinator' && <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
-                        <Box className="icon">
-                            <FaCarAlt size={'1.3rem'} />
-                        </Box>
-                        <Typography variant='h5'>Vehicles</Typography> 
-                    </Box>}
-
-                    {role === 'vehicle_coordinator' && <Box className={page === "drivers" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("drivers")} sx={{width: '100%', }} >
-                        <Box className="icon">
-                            <BsPerson size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Drivers</Typography> 
-                    </Box>}
-                    
-                    {role === 'vehicle_coordinator' && <Box className={page === "vehicle-assignee"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignee")} sx={{width: '100%'}}>
-                        <Box className="icon">
-                            <IoMdPerson size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Vehicle Assignees</Typography> 
-                    </Box>}
 
                     {/* The lower part */}
                     <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%'}} >

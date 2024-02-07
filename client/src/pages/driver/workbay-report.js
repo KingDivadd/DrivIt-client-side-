@@ -1,17 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined, LensBlurRounded } from '@mui/icons-material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, FeedbackCard, StatusCard, WorkbayMaintCard } from 'components/role-card';
-import Table, { CustomizedTables, ReactVirtualizedTable } from 'components/table';
-import { IoSearch } from "react-icons/io5";
-import { IoFilterOutline } from "react-icons/io5";
+import { FeedbackCard, StatusCard, WorkbayMaintCard } from 'components/role-card';
 import { FaArrowLeft, FaCheckSquare } from "react-icons/fa"
 import { MdOutlinePendingActions } from "react-icons/md";
 import SideBar from '../../components/side-bar'
@@ -28,27 +21,8 @@ const WorkbayReport = ()=>{
         const getPage = localStorage.getItem("page")
         setPage(getPage)
     }, [])
-    const handlePage = (value)=>{
-        console.log(value)
-        localStorage.setItem("page", value)
-        navigate(`/${value}`)
-    }
+
     
-    const handlePlanMaint = ()=>{
-        console.log("plan maintenance")
-    }
-    
-    const handleWorkbay = (e)=>{
-        setText(e.target.value)
-    }
-    
-    const handleChange = (e)=>{
-        setAge(e.target.value)
-    }
-    const handleBack = ()=>{
-        console.log('going back')
-        navigate(-1)
-    }
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             <SideBar />
@@ -71,7 +45,7 @@ const WorkbayReport = ()=>{
                         </Box>
                         <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
-                                <Box className='btn-1 dormant' bgcolor={'warning.main'} onClick={()=> navigate(-1)} sx={{width: '12rem', pl: 2, }} >
+                                <Box className='btn-1 dormant' onClick={()=> navigate(-1)} bgcolor={'warning.main'} sx={{width: '12rem', pl: 2, }} >
                                     <FaArrowLeft />
                                     <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
                                 </Box>
