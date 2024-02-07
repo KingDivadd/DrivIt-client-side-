@@ -89,9 +89,9 @@ const LandingPage = ()=>{
 
             <Box sx={{minHeight: '90vh',height: 'auto', hackground: 'cyan',}}>
                 {/* the first part */}
-                <Grid container component={'main'}  sx={{height: '100%', overflowY: 'hidden'}}>
+                <Grid container component={'main'}  sx={{height: '100%', overflowY: 'hidden'}} spacing={'1rem'} >
                     {!isSM && <>{!isMD && <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', pl: '5rem', height: '80vh'}} >
-                        <Box sx={{width: '80%', }}>
+                        <Box sx={{width: '100%', }}>
                             <Typography variant='h1' fontWeight={'700'} lineHeight={'3.5rem'}>Efficient Vehicle Management Made Easy</Typography>
                             <Typography variant='h4' fontWeight={'500'} mt={'1.75rem'} lineHeight={'2rem'}>From preventive maintenance scheduling to repair tracking, this system is designed to simplified and allow you experience seamless management and enhanced productivity. </Typography>
                             <Box className="mid-btn  primary-btn" onClick={()=> navigate('/signup')} sx={{height: '2.75rem', width: '10rem', mt: '2.25rem' }}>
@@ -124,7 +124,7 @@ const LandingPage = ()=>{
 
                     {!isSM && <>{!isMD && <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderRadius: '.3rem',p: '3rem 0', pr: '5rem',  }} >
                             {/* in the future wer are to add slider here */}
-                            <Box sx={{width: '90%',height: '80vh',
+                            <Box sx={{width: '100%',height: '80vh',
                             backgroundImage: `url(${five})`,
                             backgroundRepeat: 'no-repeat',
                             backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -181,7 +181,7 @@ const LandingPage = ()=>{
                     </Box>}
 
 
-                    {!isSM && <>{!isMD && <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(25rem, 1fr))', justifyContent: 'space-between', gap: '1rem', m: '0 5rem'}}>
+                    {!isSM && <>{!isMD && <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(30rem, 1fr))', justifyContent: 'space-between', gap: '1rem', m: '0 5rem'}}>
                             <LandingPageCard title={'Hassle-Free Maintenance Scheduling'}  note={'Our user-friendly interface allows you to easily schedule vehicle maintenance, track service history, and receive reminders for upcoming maintenance tasks. Say goodbye to missed appointments and unexpected breakdowns. '} />
                             <LandingPageCard title={'Cost and Time Savings'}  note={`Our advanced analytics and proactive maintenance approach help optimize your fleet's performance, ultimately saving you both time and money. Minimize downtime, reduce unexpected repairs, and maximize the lifespan of your vehicles.`} />
                             <LandingPageCard title={'Simplified Inventory Management '}  note={'With our inventory management feature, you can efficiently track and manage spare parts and supplies. Avoid unnecessary purchases, keep inventory levels optimized, and ensure you always have the right parts on-hand when needed. '} />
@@ -202,7 +202,7 @@ const LandingPage = ()=>{
                         <LandingPageCard title={'Enhanced Safety and Compliance'}  note={'Stay on top of safety regulations and ensure your vehicles are in compliance with our built-in safety checks and maintenance logs. Maintain a safe working environment for your drivers and ensure your fleet meets all industry standards.'} />
                     </Box>}
 
-                    {!isSM && <>{!isMD && <Box sx={{width: '100%', p: '0 5rem'}}>
+                    {!isSM && <>{!isMD && <Box sx={{width: '100%', p: '0 12rem'}}>
                         <Box sx={{width: '100%' }}>
                             <LandingPageCard title={'Comprehensive Reporting and Analysis '}  note={`Gain valuable insights into your fleet's maintenance activities with our robust reporting tools. Monitor key performance indicators, identify trends, and make data-driven decisions to improve the overall efficiency of your fleet. `}/>
                         </Box>
@@ -234,15 +234,35 @@ const LandingPage = ()=>{
                     <Typography variant='h2' textAlign={'center'} mb={'.75rem'} fontWeight={'600'} >Get Access To Diverse Services</Typography>
                     <Typography variant='h5' textAlign={'center'} fontWeight={'500'} >We show you loads of service options you get to when you use this application</Typography>
                 </Box>}
-                <Box sx={{
-                    height: '60vh', width: 'fit-content' ,
+                {!isSM && <> {!isMD && <Box sx={{mt: '2rem',
+                    height: '60vh', width: '100%' , transform: 'scale(0.9, 1)',
                     backgroundImage: `url(${eight})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         borderRadius: '.3rem',
-                }}></Box>
+                }}></Box>}
+
+                {isMD && <Box sx={{mt: '2rem',
+                    height: '60vh', width: '100%' , transform: 'scale(0.65, 0.7)',
+                    backgroundImage: `url(${eight})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '.3rem',
+                }}></Box> }
+                </>}
+                {isSM && <Box sx={{mt: '2rem',
+                    height: '60vh', width: '100%' , 
+                    backgroundImage: `url(${eight})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '.3rem',
+                }}></Box>}
             </Box>
 
             {/* footer */}
