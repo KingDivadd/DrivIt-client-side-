@@ -18,7 +18,7 @@ import { AssignVehicle } from 'components/admin-component/modal';
 
 
 
-const VehicleReport = ()=>{
+const ServiceHistoryReport = ()=>{
     const navigate = useNavigate()
     const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
     const [vehicle, setVehicle] = useState([])
@@ -27,6 +27,10 @@ const VehicleReport = ()=>{
     const [width, setWidth] = useState(window.innerWidth)
     const [menuIcon, setMenuIcon] = useState(false)
     const [role, setRole] = useState("")
+    const [planMaint, setPlanMaint] = useState([])
+    const [presentPlanMaint, setPresentPlanMaint] = useState(false)
+    const [unPlannedMaint, setUnPlannedMaint] = useState([])
+    const [presentUnPlannedMaint, setPresentUnPlannedMaint] = useState(false)
 
 
     const resize = ()=>{
@@ -43,6 +47,8 @@ const VehicleReport = ()=>{
             setOpenAlert(true); setAlertMsg("Network Error!!!"); setAlertSeverity('warning')
         }else{
             fetchVehicleInfo()
+            fetchPlannedMaint()
+            fetchUnPlannedMaint()
         }
         
 
@@ -57,6 +63,85 @@ const VehicleReport = ()=>{
             window.removeEventListener('resize', resize)
         }
     }, [width])
+
+
+
+    const fetchPlannedMaint = async()=>{
+        const pathname = window.location.pathname;
+        const parts = pathname.split('/');
+        let vehicle_id = parts[parts.length - 1];
+        
+
+        const token = sessionStorage.getItem('token')
+        if (token === null){navigate('/login')}
+        try {
+            const plannedMaint = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/all-planned-maint", {vehicle: vehicle_id}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setPlanMaint(plannedMaint.data.allPlannedMaint)
+            console.log('Planned Maint',plannedMaint.data.allPlannedMaint, planMaint)
+            if (plannedMaint.data.allPlannedMaint.length){
+                setPresentPlanMaint(true)
+            }
+            if (!plannedMaint.data.allPlannedMaint.length){
+                setPresentPlanMaint(false)
+            }
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true);
+            }
+        }
+    }
+
+    const fetchUnPlannedMaint = async()=>{
+        const pathname = window.location.pathname;
+        const parts = pathname.split('/');
+        let vehicle_id = parts[parts.length - 1];
+        console.log('vehicle id', vehicle_id)
+        
+
+        const token = sessionStorage.getItem('token')
+        if (token === null){navigate('/login')}
+        try {
+            const start_date = "" // this and the two below are for filtering, will handle that later
+            const end_date = ""
+            const filter = ""
+            const maintLogs = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/all-vehicle-maint-log", {vehicle_id}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                }
+            });
+            setUnPlannedMaint(maintLogs.data.allVehicleMaintLog)
+            console.log('UnPlanned maint', maintLogs.data)
+            if (maintLogs.data.allVehicleMaintLog.length){
+                setPresentUnPlannedMaint(true)
+            }
+            if (!maintLogs.data.allVehicleMaintLog.length){
+                setPresentUnPlannedMaint(false)
+            }
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true);
+            }
+        }
+    }
 
     const fetchVehicleInfo = async()=>{
         const pathname = window.location.pathname;
@@ -115,15 +200,14 @@ const VehicleReport = ()=>{
             {role === "maintenance_personnel" && <MaintSideBar />}
             {(role === "maintenance_personnel" && menuIcon) && <MaintSideBarMobile />}
 
-
-
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
-                {/* right top section */}
                 <Box sx={{width: '100%', height: 'auto'}}>
+                    {/* right top section */}
                     <MenuBar />
                     {/* right bottom section */}
                     <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
+                        {/* Right bottom top section */}
                         <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', mb: '2rem' }} >
 
@@ -192,24 +276,46 @@ const VehicleReport = ()=>{
                                 }
                             </Box>
                         </Box>
-
-                        <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.5rem'}}>
+                        {/* Right bottom body section */}
+                        <Box sx={{width: '100%',  mt: '.5rem', borderRadius: '.3rem',}}>
                             {/* the table */}
-                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
+                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 1fr))',justifyContent: 'space-between', gap: '.5rem', borderRadius: '.3rem'}}>
                                 {/* The left side */}
                                 <Box sx={{width: '100%'}}>
-                                    <VehicleInformationCard vehicle={vehicle} />
-                                    <VehicleStatusCard  vehicle={vehicle}/>
-                                </Box>
-                                {/* the right side */}
-                                <Box sx={{width: '100%'}}>
+                                    <VehicleInformationCard vehicle={vehicle} style={{mb: '.75rem'}} />
                                     {vehicle.assigned_to.map((data, ind)=>{
-
                                         return (
                                             <VehicleAssigneeCard key={ind} data={data} />
                                         )
                                     })}
-                                    <VehicleMaintCard  vehicle={vehicle} />
+                                </Box>
+                                {/* the middle */}
+                                <Box sx={{width: '100%', p: '.75rem' , background: 'white', borderRadius: '.3rem', background: 'whitesmoke'}}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >Planned Maintenance Logs</Typography>
+                                    <>{presentPlanMaint ? 
+                                        <>
+                                        {planMaint.map((data, ind)=>{
+                                            <VehicleMaintCard key={ind} data={data}  vehicle={vehicle} />
+                                        })}
+                                        </>
+                                        :
+                                            <VehicleMaintCard  vehicle={vehicle} />
+                                    }
+                                    </>
+                                </Box>
+                                {/* the right side */}
+                                <Box sx={{width: '100%', p: '.75rem', background: 'white', borderRadius: '.3rem', background: 'whitesmoke' }}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >UnPlanned Maintenance Logs</Typography>
+                                    <>{presentUnPlannedMaint ? 
+                                        <>
+                                        {unPlannedMaint.map((data, ind)=>{
+                                            <VehicleMaintCard  data={data} key={ind} vehicle={vehicle} />
+                                        })}
+                                        </>
+                                        :
+                                            <VehicleMaintCard  vehicle={vehicle} />
+                                    }
+                                    </>
                                 </Box>
                             </Box> 
                         </Box>
@@ -234,8 +340,8 @@ const VehicleReport = ()=>{
                 <Box sx={{width: '100%', height: 'auto'}}>
                     <MenuBar />
                     {/* right bottom section */}
-                    <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
-                        <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
+                    <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden",}}  >
+                        <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem',}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
                                     <Skeleton animation="wave" width={'100%'} height={'5rem'} sx={{mt: '-1rem', mb:'-1rem'}} />
                             </Box>
@@ -303,4 +409,4 @@ const VehicleReport = ()=>{
     )
 }
 
-export default VehicleReport
+export default ServiceHistoryReport;

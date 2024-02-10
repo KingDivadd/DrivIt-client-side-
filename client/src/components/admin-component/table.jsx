@@ -90,7 +90,6 @@ export default function VehicleTables() {
 
     const handleClick = (data)=>{
         navigate(`./${data._id}`)
-        console.log(data)
     }
     return (
         <>

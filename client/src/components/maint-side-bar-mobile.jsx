@@ -34,7 +34,7 @@ const MaintSideBarMobile = ()=>{
             lastPart = parts[parts.length - 2]
             setPage(lastPart)
         }
-    }, [page])
+    }, [])
 
     const handlePage = (value)=>{
         navigate(`/${value}`)
@@ -88,12 +88,12 @@ const MaintSideBarMobile = ()=>{
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
 
-                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                    {/* <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
                         <Box className="icon">
                             <FaCarAlt size={'1.3rem'} />
                         </Box>
                         <Typography variant='h5'>Vehicles</Typography> 
-                    </Box>
+                    </Box> */}
 
                     <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>
                         <Box className="icon">
@@ -102,7 +102,7 @@ const MaintSideBarMobile = ()=>{
                         <Typography variant='h5'>Vehicle Service</Typography> 
                     </Box>
 
-                    <Box className={page === "maint-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("maint-history")} sx={{width: '100%', }} >
+                    <Box className={page === "service-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("service-history")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <CgNotes size={'1.3rem'} />
                         </Box>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import Box from '@mui/material/Box';
+import {Box, useMediaQuery} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -60,67 +60,114 @@ export const VehicleInformationCard = ({vehicle})=>{
         return date.toLocaleDateString('en-US', options);
         };
     
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
     return (
         <>
         {show ?
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer' }}>
-            <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
+            <CardContent sx={{ p: '.75rem', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.25rem'} fontWeight={'500'}>Vehicle Information</Typography>
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center',justifyContent: 'flex-start' ,gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Brand:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.brand}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center',justifyContent: 'space-between' ,gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Brand:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.brand}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Name:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_name}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Name:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_name}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Engine No:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.engine_no}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Engine No:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.engine_no}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Chasis No:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.chasis_no}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Chasis No:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.chasis_no}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Fuel Type:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.fuel_type}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Fuel Type:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.fuel_type}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Vehicle Color:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_color}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Vehicle Color:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.vehicle_color}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Manufacture Year:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.manufacture_year}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Manufacture Year:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.manufacture_year}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Transmission type:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.transmission}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Transmission type:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.transmission}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Added on:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{formatDate(vehicle.createdAt)}</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Added on:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{formatDate(vehicle.createdAt)}</Typography>
+                    </Box>}
 
-                    <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                    {!isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '4rem'}}>
                         <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
                         <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
-                    </Box>
+                    </Box>}
+                    {isLG && <Box mt={'.2rem'} mb={'1rem'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Current Mileage:</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{vehicle.current_mileage}M</Typography>
+                    </Box>}
 
 
                     <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar>
@@ -153,7 +200,6 @@ export const VehicleStatusCard = ({vehicle})=>{
     useEffect(() => {
         if (vehicle._id){
             setShow(true)
-            console.log(vehicle, vehicle.assigned_to.length)
             if(vehicle.assigned_to.length){
                 setStatus(false)
             }
@@ -227,6 +273,7 @@ export const VehicleAssigneeCard = ({data})=>{
             });
             setUser(getUser.data.user); setShow(true)
             } catch (err) {
+                console.log(err)
                 if (!navigator.onLine) {
                     setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                 } else if (err.response) {

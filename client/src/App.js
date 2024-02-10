@@ -18,6 +18,7 @@ import LandingPage from 'pages/landing-page'
 import VehicleService from "pages/maint/vehicle-service";
 import VehicleServiceReport from "pages/maint/vehilce-service-report";
 import ServiceHistory from "pages/maint/service-history"
+import ServiceHistoryReport from "pages/maint/service-history-report";
 import Vehicles from "pages/admin/vehicle";
 import VehicleReport from 'pages/admin/vehicle-report'
 import Drivers from "pages/admin/driver";
@@ -38,6 +39,8 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Routes>
+            {/* Will make a better not found page later */}
+              <Route path="*" element={<LandingPage />} />
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
@@ -51,7 +54,8 @@ function App() {
               <Route path="/reports" element={<Report />} />
               <Route path="/vehicle-service" element={<VehicleService />} />
               <Route path="/vehicle-service/:id" element={<VehicleServiceReport />} />
-              <Route path="/maint-history" element={<ServiceHistory />} />
+              <Route path="/service-history" element={<ServiceHistory />} />
+              <Route path="/service-history/:id" element={<ServiceHistoryReport />} />
               <Route path="/vehicles" element={<Vehicles />} />
               <Route path="/vehicles/:id" element={<VehicleReport />} />
               <Route path="/drivers" element={<Drivers />} />
