@@ -8,15 +8,13 @@ import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import MaintSideBar from 'components/maint-side-bar';
 import MaintSideBarMobile from 'components/maint-side-bar-mobile';
-import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleDriverCard, VehicleMaintCard } from 'components/admin-component/card';
+import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleMaintCard, VehiclePlannedMaintCard } from 'components/admin-component/card';
 import MenuBar from 'components/menu-bar';
 import { AiOutlineRollback } from "react-icons/ai";
 import { FaSquareCheck } from "react-icons/fa6";
 import AlertMessage from 'components/snackbar';
 import { MdOutlinePendingActions } from "react-icons/md";
 import { AssignVehicle } from 'components/admin-component/modal';
-
-
 
 const ServiceHistoryReport = ()=>{
     const navigate = useNavigate()
@@ -279,7 +277,7 @@ const ServiceHistoryReport = ()=>{
                         {/* Right bottom body section */}
                         <Box sx={{width: '100%',  mt: '.5rem', borderRadius: '.3rem',}}>
                             {/* the table */}
-                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 1fr))',justifyContent: 'space-between', gap: '.5rem', borderRadius: '.3rem'}}>
+                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.5rem', borderRadius: '.3rem'}}>
                                 {/* The left side */}
                                 <Box sx={{width: '100%'}}>
                                     <VehicleInformationCard vehicle={vehicle} style={{mb: '.75rem'}} />
@@ -290,12 +288,14 @@ const ServiceHistoryReport = ()=>{
                                     })}
                                 </Box>
                                 {/* the middle */}
-                                <Box sx={{width: '100%', p: '.75rem' , background: 'white', borderRadius: '.3rem', background: 'whitesmoke'}}>
+                                <Box sx={{width: '100%', p: '.5rem 0' , background: 'white', borderRadius: '.3rem', background: 'whitesmoke'}}>
                                     <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >Planned Maintenance Logs</Typography>
                                     <>{presentPlanMaint ? 
                                         <>
                                         {planMaint.map((data, ind)=>{
-                                            <VehicleMaintCard key={ind} data={data}  vehicle={vehicle} />
+                                            return (
+                                                <VehiclePlannedMaintCard key={ind} data={data}  vehicle={vehicle} />
+                                            )
                                         })}
                                         </>
                                         :
@@ -304,12 +304,14 @@ const ServiceHistoryReport = ()=>{
                                     </>
                                 </Box>
                                 {/* the right side */}
-                                <Box sx={{width: '100%', p: '.75rem', background: 'white', borderRadius: '.3rem', background: 'whitesmoke' }}>
+                                <Box sx={{width: '100%', p: '.5rem 0', background: 'white', borderRadius: '.3rem', background: 'whitesmoke' }}>
                                     <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >UnPlanned Maintenance Logs</Typography>
                                     <>{presentUnPlannedMaint ? 
                                         <>
                                         {unPlannedMaint.map((data, ind)=>{
-                                            <VehicleMaintCard  data={data} key={ind} vehicle={vehicle} />
+                                            return(
+                                                <VehicleMaintCard  data={data} key={ind} vehicle={vehicle} />
+                                            )
                                         })}
                                         </>
                                         :

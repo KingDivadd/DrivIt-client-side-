@@ -13,6 +13,10 @@ import { ChatState } from "context/chatContext";
 import AlertMessage from "components/snackbar";
 import axios from 'axios';
 import { FaCarAlt } from "react-icons/fa";
+import { GiHomeGarage } from 'react-icons/gi';
+import { TbProgress } from "react-icons/tb";
+import { PersonnelFeedBackModal } from "./modal";
+
 
 export default function ActiveAdminCard ({}){
     
@@ -264,7 +268,7 @@ export const VehicleAssigneeCard = ({data})=>{
         }, [navigator.onLine])
 
         const fetchUsers = async(data)=>{
-
+            console.log('User Id', data)
             try {
                 const getUser = await axios.post("https://futa-fleet-guard.onrender.com/api/user/one-user", {user_id: data}, {
                 headers: {
@@ -291,7 +295,7 @@ export const VehicleAssigneeCard = ({data})=>{
     };
     
     return (
-        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', mb: '.75rem', }}>
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', mb: '.75rem', mt: '.75rem' }}>
             <CardContent sx={{ p: '.75rem', borderRadius: '.5rem' }}>
                     {show ?
                     <>
@@ -421,6 +425,79 @@ export const VehicleMaintCard = ({vehicle})=>{
                         <Typography variant='h5' fontWeight={'400'}>Personnel In Charge</Typography>
                         <Typography variant='h5' fontWeight={'500'}>Eng Oladimeji</Typography>
                     </Box>
+
+            </CardContent>
+        
+        </Card>
+    )
+}
+
+export const VehiclePlannedMaintCard = ({data})=>{
+        
+    const handleDelete = () => {
+        console.info('You clicked the delete icon.');
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+        };
+    
+    const {concerns, createdAt, maint_id, personnelFeeback, plannedBy, proposedDate, services, status, vehicle, plannersFeedback} = data
+    return (
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', mt: '.75rem'}}>
+            <CardContent sx={{ p: '0 .75rem', pb: '0', pt: '1.25rem', borderRadius: '.5rem' }}>
+
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: '1.25rem'}}>
+                        <Typography variant='h5' fontWeight={'600'}>{maint_id}</Typography>
+
+                    
+                        {status === 'pending' && <Box className={ "stat"} sx={{width: '8.5rem',height: '2rem', justifyContent: 'center'}}>
+                            <MdOutlinePendingActions size={'1.35rem'} color={'#FF571A'} />
+                            <Typography variant="h5" fontWeight={'500'}  component="div">Pending</Typography>
+                        </Box>}
+
+                        {status === 'accepted' && <Box className={ "stat"} sx={{width: '9rem',height: '2rem', justifyContent: 'center'}}>
+                                <MdOutlinePendingActions size={'1.35rem'} color={'orange'} /> 
+                                <Typography variant="h5" fontWeight={'500'}  component="div">Accepted</Typography>
+                            </Box>}
+
+                        {status === 'in-shop' && <Box className={'stat'} sx={{width: '9rem', height: '2rem',p: '0 .5rem', justifyContent: 'center' }}>
+                            <GiHomeGarage size={'1.3rem'} color={'#1B61E4'} />
+                            <Typography variant="h5" fontWeight={'500'} component="div">In Shop</Typography>
+                        </Box>}
+
+                        {status === 'in-progress' && <Box className={'stat'} sx={{width: '10rem', height: '2rem',p: '0 .5rem', justifyContent: 'center' }}>
+                            <TbProgress size={'1.3rem'} color={'orange'} />
+                            <Typography variant="h5" fontWeight={'500'} component="div">In Progress</Typography>
+                        </Box>}
+                        {status === 'completed' && <Box className={"stat"} sx={{width: '9rem', height: '2rem',}}>
+                        <FaSquareCheck size={'1.2rem'} color={'gree'} />
+                        <Typography variant="h5" fontWeight={'500'}  component="div">Completed</Typography>
+                            </Box>}
+                    </Box>
+                    <Box mt={'.2rem'} mb={'1rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Proposed Date</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{formatDate(proposedDate)}</Typography>
+                    </Box>
+                    
+                    <Box mt={'.2rem'} mb={'.85rem'}  sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '.7rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Concerns</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{concerns}</Typography>
+                    </Box>
+                    
+                    <Box mt={'.2rem'} mb={'.85rem'}  sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '.7rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Services</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>{services}</Typography>
+                    </Box>
+                    
+                    <Box mt={'.2rem'} mb={'.85rem'}  sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '.7rem'}}>
+                        <Typography variant='h5' fontWeight={'400'}>Supervised By</Typography>
+                        <Typography variant='h5' fontWeight={'500'}>Adebisi Oladimeji</Typography>
+                    </Box>
+                    
+                    <PersonnelFeedBackModal />
 
             </CardContent>
         

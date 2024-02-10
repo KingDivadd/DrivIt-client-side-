@@ -22,6 +22,9 @@ import MaintSideBar from 'components/maint-side-bar';
 import MaintSideBarMobile from 'components/maint-side-bar-mobile';
 import MenuBar from 'components/menu-bar';
 import { AiOutlineRollback } from "react-icons/ai";
+import { GiHomeGarage } from 'react-icons/gi';
+import { GrInProgress } from 'react-icons/gr';
+import { FaSquareCheck } from 'react-icons/fa6';
 
 
 const WorkbayReport = ()=>{
