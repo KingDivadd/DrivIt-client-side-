@@ -24,6 +24,8 @@ import MenuBar from 'components/menu-bar';
 
 const DriverDashboard = ()=>{
     const [page, setPage] = useState("")
+    const [user, setUser] = useState({})
+    const [show, setShow] = useState(false)
     const navigate = useNavigate()
     const [menuIcon, setMenuIcon] = useState(false)
     const [width, setWidth] = useState(window.innerWidth)
@@ -33,8 +35,15 @@ const DriverDashboard = ()=>{
     }
 
     useEffect(() => { 
-        const getPage = localStorage.getItem("page")
-        setPage(getPage)
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        if(userInfo !== null){
+            setUser(userInfo)
+            setShow(true)
+        }
+        if (userInfo === null){
+            fetchUserInfo()
+        }
+
         window.addEventListener('resize', resize)
         if (width <= 599 ){
             setMenuIcon(true)
@@ -54,8 +63,13 @@ const DriverDashboard = ()=>{
         navigate(`/${value}`)
     }
 
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
     return (
-        <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden', background: '#FAFAFA'}}>
+            <>
+        {show && <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden', background: '#FAFAFA'}}>
             {menuIcon && <SideBarMobile />}
             <SideBar />
             {/* right side */}
@@ -64,12 +78,17 @@ const DriverDashboard = ()=>{
                 {/* right top secction */}
                 <MenuBar />
                 {/* right bottom section */}
-                <Grid container sx={{ mt: '.75rem'}}  >
-                    <Grid  item xs={12} sm={12} md={7.5} lg={8.5}  sx={{background: '#FAFAFA', borderRadius: '.3rem', overflowY:'auto', p: '.75rem', pr:'0'}}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: 1 }}>
-                            <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Welcome {"David"}</Typography>
+                <Grid container sx={{ mt: '.75rem',p:'.35rem'}}  >
+                    <Grid  item xs={12} sm={12} md={7.5} lg={8.5}  sx={{background: '#FAFAFA',p: '.5rem .35rem', borderRadius: '.3rem', overflowY:'auto', }}>
+                        {!isSM && <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: 1 }}>
+                            <Typography component={"h2"} variant='h2' color={'black'} sx={{fontWeight: '600'}}>Welcome {user.loggedInUser.firstName}</Typography>
                             <Typography component="h5" variant="h4">Everything you need to know about you vehicle.</Typography>
-                        </Box>
+                        </Box>}
+                        {isSM && <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: 1 }}>
+                            <Typography component={"h2"} variant='h3' color={'black'} sx={{fontWeight: '600'}}>Welcome {user.loggedInUser.firstName}</Typography>
+                            <Typography component="h5" variant="h5">Everything you need to know about you vehicle.</Typography>
+                        </Box>}
+
                         <Box sx={{mt: '2rem',display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: '.75rem',}}>
                             <DashCard title={'Planned Maintenance'} value={0} icon={ <TfiLayoutAccordionList size={'2rem'} color='#1B61E4' />} suffix={""} />
                             <DashCard title={"Current Location"} value={"Akure, Obanla"} icon={<FaLocationDot size={'2rem'} color='orangered' />} suffix={""} />
@@ -83,17 +102,38 @@ const DriverDashboard = ()=>{
                             <MaintAnalyticsCard />
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={4.5} lg={3.5} sx={{ overflowY:'auto', p: '0 .5rem', pl:'.75rem'}}>
+
+                    {!isSM && <>
+                    {!isMD && <Grid item xs={12} sm={12} md={4.5} lg={3.5} sx={{ overflowY:'auto', p: '.5rem .35rem', pr: '.7rem',}}>
                         <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: '.75rem' }}>
                             <ActiveAssigneeCard />
                             <ServiceChartCard />
                         </Box>
 
-                    </Grid>
+                    </Grid>}
+                    {isMD && <Grid item xs={12} sm={12} md={4.5} lg={3.5} sx={{ overflowY:'auto', p: '.5rem .35rem',}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: '.75rem' }}>
+                            <ActiveAssigneeCard />
+                            <ServiceChartCard />
+                        </Box>
+
+                    </Grid>}</>
+                    
+                    }
+
+                    {isSM && <Grid item xs={12} sm={12} md={4.5} lg={3.5} sx={{ overflowY:'auto', p: '.5rem .35rem'}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'flex-start', gap: '.75rem' }}>
+                            <ActiveAssigneeCard />
+                            <ServiceChartCard />
+                        </Box>
+
+                    </Grid>}
                 </Grid>
+
                 </Box>
             </Grid> 
-        </Grid>
+        </Grid>}
+            </>
     )
 }
 

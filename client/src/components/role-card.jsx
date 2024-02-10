@@ -32,18 +32,30 @@ export default function MaintPersonnel() {
     const handleRole = (den)=>{
         setUserRole({boo: false, value: den})
     }
+    
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
-    <Card onClick={()=> handleRole("maintenance_personnel")} sx={{ minWidth: '13rem', height: '10rem', cursor: 'pointer' }}>
-        <CardContent>
-        <Typography variant="h5" gutterBottom>
-            Maintenance Personnel
-        </Typography>
-        <Typography variant="h6" component="div">
-            An individual who is trained and skilled in repairing and maintaining vehicles.
-        </Typography>
-        <DoughnutChart />
+    <Card onClick={()=> handleRole("maintenance_personnel")} sx={{ minWidth: '13rem', cursor: 'pointer' }}>
+        {!isSM && <CardContent sx={{height: '8rem'}}>
+            <Typography variant="h5" fontWeight={'500'}>
+                Maintenance Personnel
+            </Typography>
+            <Typography variant="h6" mt={'.75rem'} fontWeight={'400'} >
+                An individual who is trained and skilled in repairing and maintaining vehicles.
+            </Typography>            
+        </CardContent>}
         
-        </CardContent>
+        {isSM && <CardContent sx={{height: 'auto', p: '1.5rem .75rem'}}>
+            <Typography variant="h5" fontWeight={'500'} >
+                Maintenance Personnel
+            </Typography>
+            <Typography variant="h6" mt='.5rem' fontWeight={'400'}>
+                An individual who is trained and skilled in repairing and maintaining vehicles.
+            </Typography>            
+        </CardContent>}
         
     </Card>
     );
@@ -56,17 +68,31 @@ export const DriverCard = ()=>{
         setUserRole({boo: false, value: den})
         }
 
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
-    <Card onClick={()=> handleRole("driver")} sx={{ minWidth: '13rem', height: '10rem', cursor: 'pointer' }}>
-        <CardContent>
-        <Typography variant="h5" gutterBottom>
+    <Card onClick={()=> handleRole("driver")} sx={{ minWidth: '13rem', cursor: 'pointer' }}>
+        {!isSM && <CardContent  sx={{height: '8rem'}}>
+        <Typography variant="h5" fontWeight={'500'}>
             Vehicle Driver
         </Typography>
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" mt={'.75rem'} fontWeight={'400'}>
             An individual who operates a vehicle for transportation purpose.
         </Typography>
         
-        </CardContent>
+        </CardContent>}
+
+        {isSM && <CardContent sx={{height: 'auto', p: '1.5rem .75rem'}}>
+        <Typography variant="h5" fontWeight={'500'} >
+            Vehicle Driver
+        </Typography>
+        <Typography variant="h6" mt={'.5rem'} fontWeight={'400'}>
+            An individual who operates a vehicle for transportation purpose.
+        </Typography>
+        
+        </CardContent>}
         
     </Card>
     );
@@ -79,17 +105,31 @@ export const Assigee = ()=>{
     setUserRole({boo: false, value: den})
     }
 
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
-    <Card onClick={()=> handleRole("vehicle_assignee")} sx={{ minWidth: '13rem', height: '10rem', cursor: 'pointer' }}>
-        <CardContent>
-        <Typography variant="h5" gutterBottom>
+    <Card onClick={()=> handleRole("vehicle_assignee")} sx={{ minWidth: '13rem', cursor: 'pointer' }}>
+        {!isSM && <CardContent  sx={{height: '8rem'}}>
+        <Typography variant="h5" fontWeight={'500'}>
             Vehicle Assignee
         </Typography>
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" mt={'.75rem'}  fontWeight={'400'}>
             An individual that legally posseses and has ownership rights over a particular vehicle.
         </Typography>
         
-        </CardContent>
+        </CardContent>}
+        
+        {isSM && <CardContent  sx={{height: 'auto', p: '1.5rem .75rem'}}>
+        <Typography variant="h5" fontWeight={'500'}>
+            Vehicle Assignee
+        </Typography>
+        <Typography variant="h6" mt={'.5rem'} fontWeight={'400'} >
+            An individual that legally posseses and has ownership rights over a particular vehicle.
+        </Typography>
+        
+        </CardContent>}
         
     </Card>
     );
@@ -97,16 +137,22 @@ export const Assigee = ()=>{
 
 export const DashCard = ({title, value, icon, suffix})=>{
 
-    
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
-        <Card  sx={{ minWidth: '18rem', height: '6.5rem', cursor: 'pointer' }}>
+        <>
+
+        
+        {!isSM && <Card  sx={{ minWidth: '18rem', height: '6.5rem', cursor: 'pointer' }}>
             <CardContent sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',gap: 1.5,  }}>
-                <Avatar sx={{ background: '#E8EFFC', color: '#1B61E4', height: '4.5rem', width: '4.5rem', borderRadius: '.3rem', }}> {icon} </Avatar>
-                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start',}}>
-                    <Typography variant="h5" component="div" sx={{height: '2.75rem', fontWeight: '500'}}>
+                <Avatar sx={{ background: '#E8EFFC', color: '#1B61E4', height: '4.5rem', width: '4.5rem', borderRadius: '.3rem'}}> {icon} </Avatar>
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start'}}>
+                    <Typography variant="h5" fontWeight={'400'} sx={{height: '2.75rem'}}>
                         {title}
                     </Typography>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h5" fontWeight={'400'}>
                         {value}{suffix}
                     </Typography>
 
@@ -114,7 +160,26 @@ export const DashCard = ({title, value, icon, suffix})=>{
             
             </CardContent>
         
-        </Card>
+        </Card>}
+        {isSM && <Card  sx={{ minWidth: '18rem', height: '5.5rem', cursor: 'pointer' }}>
+            <CardContent sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',gap: 1.5,}}>
+                <Avatar sx={{ background: '#E8EFFC', color: '#1B61E4', height: '3.75rem', width: '3.5rem', borderRadius: '.3rem',mt: '-.2rem' }}> {icon} </Avatar>
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignContent: 'flex-start',mt: '-.2rem' }}>
+                    <Typography variant="h5" fontWeight={'500'} sx={{height: '2.5rem', fontWeight: '500'}}>
+                        {title}
+                    </Typography>
+                    <Typography variant="h6" fontWeight={'400'} >
+                        {value}{suffix}
+                    </Typography>
+
+                </Box>
+            
+            </CardContent>
+        
+        </Card>}
+
+        </>
+
     )
 }
 
@@ -143,13 +208,12 @@ export const MaintAnalyticsCard = ({})=>{
     }, [width]);
     
     return (
-        <Card  sx={{ background: '#FFFFF', cursor: 'pointer' }}>
+        <Card  sx={{ background: '#FFFFF', cursor: 'pointer',}}>
             <CardContent>
-                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} gutterBottom>
+                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} >
                     Maintenance Jobs Analytics
                 </Typography>
                 <BarChart />
-            
             </CardContent>
         
         </Card>
@@ -160,12 +224,12 @@ export const ServiceChartCard = ({})=>{
 
     
     return (
-        <Card  sx={{ background: 'white' , width: '100%', height: '25rem', cursor: 'pointer' }}>
+        <Card  sx={{ background: '#FFFFF', cursor: 'pointer', mb: '.75rem' }}>
             <CardContent>
-                <Typography variant="h4" fontWeignt={'500'} gutterBottom>
-                    Maintenacne Job Analytics
+                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} >
+                    Maintenance Services Analytics
                 </Typography>
-                <BarChart />                
+                <BarChart />
             </CardContent>
         
         </Card>
@@ -176,7 +240,7 @@ export const ActiveAssigneeCard = ({})=>{
     return (
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
             <CardContent>
-                <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
+                <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'500'}} gutterBottom>
                     Vehicle Owner
                 </Typography>
                 <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
@@ -199,16 +263,23 @@ export const ActiveAssigneeCard = ({})=>{
     )
 }
 export const ActiveDriverCard = ({info})=>{
+    const [show, setShow] = useState(false)
     
+    useEffect(() => {
+            setShow(true)
+    }, [])
+
     return (
-        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
+        <>
+        {show && <Card  sx={{ background: '#FFFFF', cursor: 'pointer', width: '100%' }}>
             <CardContent>
-                <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
+                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} sx={{ display: 'flex', justifyContent: 'center'}} gutterBottom>
                     Assigned Driver
                 </Typography>
-                <Box sx={{backgroundImage: `url(${info.pic})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
-                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
-                <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
+                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '13rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}>
+                </Box>
+
+                <Box  sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
                         { info.lastName} {info.firstName}
                     </Typography>
@@ -218,11 +289,11 @@ export const ActiveDriverCard = ({info})=>{
                     <Typography variant="h5" gutterBottom>
                         {info.phone}
                     </Typography>
-                </Typography>
-            
+                </Box>
+
             </CardContent>
         
-        </Card>
+        </Card>}</>
     )
 }
 
@@ -309,39 +380,66 @@ export const WorkbayMaintCard = ({data})=>{
 
 
 export const StatusCard = ({data})=>{
-
-
     const [status, setStatus] = useState('completed')
+
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
     return (
         <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
             <CardContent sx={{ }}>
                 <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Maintenance Status</Typography>
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start',gap: '1.5rem', width: '100%'}}>
                     
-                    <Box className={data.status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
+                    {!isSM && <Box className={data.status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
-                    </Box>                    
+                    </Box>}                    
                     
-                    <Box className={data.status === "accepted" ? "accepted-stat stat":"stat"} sx={{}}>
+                    {isSM && <Box className={data.status === "pending" ? "pending-stat stat":"stat"} sx={{height: '2.25rem'}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '1.75rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.35rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
+                    </Box>}                    
+                    
+                    {!isSM && <Box className={data.status === "accepted" ? "accepted-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><GoChecklist size={'1.6rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Accepted</Typography>
-                    </Box>                    
+                    </Box>}                    
 
-                    <Box className={data.status === "in-shop"?"in-shop-stat stat":"stat"} sx={{}}>
+                    {isSM && <Box className={data.status === "accepted" ? "accepted-stat stat":"stat"} sx={{height: '2.25rem'}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '1.75rem', borderRadius: '.3rem' }}><GoChecklist size={'1.35rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Accepted</Typography>
+                    </Box>}                    
+
+                    {!isSM && <Box className={data.status === "in-shop"?"in-shop-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GiHomeGarage size={'1.5rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Shop</Typography>
-                    </Box>                    
+                    </Box> }                   
 
-                    <Box className={data.status === "in-progress"?"in-progress-stat stat":"stat"} sx={{}}>
+                    {isSM && <Box className={data.status === "in-shop"?"in-shop-stat stat":"stat"} sx={{height: '2.25rem'}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '1.75rem', borderRadius: '.3rem' }}> <GiHomeGarage size={'1.4rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Shop</Typography>
+                    </Box> }                   
+
+                    {!isSM && <Box className={data.status === "in-progress"?"in-progress-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <GrInProgress size={'1.3rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Progress</Typography>
-                    </Box>                    
+                    </Box>}                    
 
-                    <Box className={data.status === "completed"?"completed-stat stat":"stat"} sx={{}}>
+                    {isSM && <Box className={data.status === "in-progress"?"in-progress-stat stat":"stat"} sx={{height: '2.25rem'}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '1.75rem', borderRadius: '.3rem' }}> <GrInProgress size={'1.2rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Progress</Typography>
+                    </Box>}                    
+
+                    {!isSM && <Box className={data.status === "completed"?"completed-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Completed</Typography>
-                    </Box> 
+                    </Box> }
+                
+                    {isSM && <Box className={data.status === "completed"?"completed-stat stat":"stat"} sx={{height: '2.25rem'}}>
+                        <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '1.75rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.37rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Completed</Typography>
+                    </Box>} 
                 
 
                 </Box>
@@ -487,31 +585,38 @@ export const MaintDashCard = ({title, value, icon, suffix})=>{
 }
 
 
-export const MaintPersonnelCard = ({})=>{
+export const MaintPersonnelCard = ({info})=>{
+    const [show, setShow] = useState(false)
+
+    useEffect(()=>{
+        setShow(true)
+    },[])
     
     return (
-        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
+
+        <>
+        {show && <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', pb: '-.85rem'}}>
             <CardContent>
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'500',}} gutterBottom>
                     Maintenance Personnel
                 </Typography>
                 <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
-                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
-                        { "Adeniran Oladimeji"}
+                        {info.lastName} {info.firstName}
                     </Typography>
                     <Typography variant="h5" sx={{mb: '1rem'}} gutterBottom>
-                        {"FUTA/14/2023"}
+                        {info.staffId}
                     </Typography>
                     <Typography variant="h5" gutterBottom>
-                        {"08034567982"}
+                        {info.phone}
                     </Typography>
                 </Typography>
             
             </CardContent>
         
-        </Card>
+        </Card>}
+        </>
     )
 }
 

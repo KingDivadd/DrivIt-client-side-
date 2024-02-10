@@ -12,6 +12,7 @@ import { Skeleton } from "@mui/material";
 import { ChatState } from "context/chatContext";
 import AlertMessage from "components/snackbar";
 import axios from 'axios';
+import { FaCarAlt } from "react-icons/fa";
 
 export default function ActiveAdminCard ({}){
     
@@ -46,9 +47,12 @@ export const VehicleInformationCard = ({vehicle})=>{
     const services = ['Oil Change', 'Battery Check', 'Suspension Check', 'Tire Check']
     
     useEffect(() => {
-        console.log('vehicle info card', vehicle)
-        setShow(true)
-    }, [])
+        if (navigator.onLine && vehicle.brand){
+            setShow(true)
+        }else{
+            setShow(false)
+        }
+    }, [navigator.onLine])
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -58,7 +62,7 @@ export const VehicleInformationCard = ({vehicle})=>{
     
     return (
         <>
-        {show && 
+        {show ?
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer' }}>
             <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
                     <Typography variant='h4' mb={'1.25rem'} fontWeight={'500'}>Vehicle Information</Typography>
@@ -123,7 +127,20 @@ export const VehicleInformationCard = ({vehicle})=>{
 
             </CardContent>
         
-        </Card>}
+        </Card>
+        :
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer' }}>
+            <CardContent sx={{ p: '.5rem', borderRadius: '.5rem' }}>
+                <Typography variant='h4'fontWeight={'500'}>Vehicle Information</Typography>
+
+                <Skeleton animation="wave" width={'100%'} height={'17.5rem'} sx={{mt: '-1.5rem', mb:'-1.5rem'}} />
+
+                <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCarAlt /> </Avatar>
+
+            </CardContent>
+        
+        </Card>
+        }
         </>
 
     )
@@ -131,14 +148,24 @@ export const VehicleInformationCard = ({vehicle})=>{
 
 export const VehicleStatusCard = ({vehicle})=>{
     const [status, setStatus] = useState(true)
+    const [show, setShow] = useState(false)
 
     useEffect(() => {
-    console.log('VehicleStatus card', vehicle)
-        if (vehicle.assigned_to.length){setStatus(false)}
-        if (!vehicle.assigned_to.length){setStatus(true)}
+        if (vehicle._id){
+            setShow(true)
+            console.log(vehicle, vehicle.assigned_to.length)
+            if(vehicle.assigned_to.length){
+                setStatus(false)
+            }
+            if(!vehicle.assigned_to.length){
+                setStatus(true)
+            }
+        }
     }, [])
 
     return (
+        <>
+        {show ?
         <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
             <CardContent sx={{ }}>
                 <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Assignment Status</Typography>
@@ -161,6 +188,16 @@ export const VehicleStatusCard = ({vehicle})=>{
             </CardContent>
         
         </Card>
+        :
+        <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
+            <CardContent sx={{ }}>
+                <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Assignment Status</Typography>
+                <Skeleton width={'100%'} height={'12rem'} sx={{mt: '-1.5rem', mb: '-1.5rem'}} />
+            </CardContent>
+        
+        </Card>
+        
+        }</>
     )
 }
 
@@ -170,28 +207,26 @@ export const VehicleAssigneeCard = ({data})=>{
         const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
         const [Driver, setDriver] = useState("")
         const [user, setUser] = useState({})
+        const [assignee, setAssignee] = useState(true)
 
         useEffect(() => {
-            console.log('user data', data)
             if(!navigator.onLine){
-                setOpenAlert(true); setAlertMsg("Network Error!!!"); setAlertSeverity("warning"); setShow(false);
+                setOpenAlert(true); setAlertMsg("Network Error."); setAlertSeverity("warning"); setShow(false);
             }else{
-                fetchUsers()
+                fetchUsers(data)
             }
-        }, [])
+        }, [navigator.onLine])
 
-        const fetchUsers = async()=>{
+        const fetchUsers = async(data)=>{
 
             try {
-                const getUser = await axios.post("https://futa-fleet-guard.onrender.com/api/user/one-user", {data}, {
+                const getUser = await axios.post("https://futa-fleet-guard.onrender.com/api/user/one-user", {user_id: data}, {
                 headers: {
                     "Content-Type":  "Application/json",
                 }
             });
-            console.log(getUser.data.user)
             setUser(getUser.data.user); setShow(true)
             } catch (err) {
-                console.log(err)
                 if (!navigator.onLine) {
                     setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
                 } else if (err.response) {
@@ -209,12 +244,13 @@ export const VehicleAssigneeCard = ({data})=>{
     };
     
     return (
-        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', }}>
-            <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
-                    <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Vehicle Assignee</Typography>
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', mb: '.75rem', }}>
+            <CardContent sx={{ p: '.75rem', borderRadius: '.5rem' }}>
                     {show ?
                     <>
-                        
+                        {user.role !== "driver" && <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Vehicle Assignee</Typography>}
+                        {user.role === "driver" && <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Vehicle Driver</Typography>}
+                        {/* so basically i want to */}
                         {assignee ?<>
                             <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
                                 <Typography variant='h5' fontWeight={'400'}>Last Name:</Typography>
@@ -231,9 +267,17 @@ export const VehicleAssigneeCard = ({data})=>{
                                 <Typography variant='h5' fontWeight={'500'}>{user.email}</Typography>
                             </Box>
                             
-                            <Box mt={'.2rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                            <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
                                 <Typography variant='h5' fontWeight={'400'}>Phone:</Typography>
                                 <Typography variant='h5' fontWeight={'500'}>{user.phone}</Typography>
+                            </Box>
+                            
+                            <Box mt={'.2rem'} mb={'.5rem'} sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <Typography variant='h5' fontWeight={'400'}>Role:</Typography>
+                                {user.role === "driver" && <Typography variant='h5' fontWeight={'500'}>Vehicle Driver</Typography>}
+                                {user.role === "vehicle_assignee" && <Typography variant='h5' fontWeight={'500'}>Vehicle Assignee</Typography>}
+                                {user.role === "maintenance_personnel" && <Typography variant='h5' fontWeight={'500'}>Maintenance Personnel</Typography>}
+                                {user.role === "vehicle_coordinator" && <Typography variant='h5' fontWeight={'500'}>Admin Personnel</Typography>}
                             </Box>
                         </>
                         :
@@ -248,22 +292,8 @@ export const VehicleAssigneeCard = ({data})=>{
                     </>
                         :
                     <>
-                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                        </Box>
-                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                        </Box>
-                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                        </Box>
-                        <Box mt={'.2rem'} mb={'1.25rem'}  sx={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                            <Skeleton width={'100%'} height={'1.5rem'} />
-                        </Box>
+                        <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Vehicle Assignee</Typography>
+                        <Skeleton width={'100%'} height={'12rem'} sx={{mt: '-1.5rem', mb: '-1.25rem'}} />
                     </>}
 
             </CardContent>

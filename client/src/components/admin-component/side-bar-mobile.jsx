@@ -25,6 +25,7 @@ import { FaCarAlt } from "react-icons/fa";
 
 const AdminSideBarMobile = ()=>{
     const [page, setPage] = useState("")
+    const [menu, setMenu] = useState(false)
 
     const navigate = useNavigate()
 

@@ -1,24 +1,18 @@
 import React, {useState, useEffect} from 'react'
-import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined } from '@mui/icons-material';
-import { Button, Box, Typography, useTheme, useMediaQuery, Hidden } from '@mui/material'
+import { Button, Box, Typography, } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
-// import '../index.css'
-import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
+import { MdHelpCenter } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { FaCar ,FaTools} from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
-import { RiLogoutBoxFill,RiArrowGoBackFill } from "react-icons/ri";
-import { TfiLayoutAccordionList } from "react-icons/tfi";
-import { FaLocationDot } from "react-icons/fa6";
-import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
-import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
+import { RiLogoutBoxFill } from "react-icons/ri";
+
 import { AiOutlineRollback } from "react-icons/ai";
+import { FaCarAlt } from "react-icons/fa";
+
 
 const MaintSideBarMobile = ()=>{
     const [page, setPage] = useState("")
@@ -65,7 +59,7 @@ const MaintSideBarMobile = ()=>{
                         <AiOutlineRollback size={'1.5rem'} color={'white'} /> 
                     </Box>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-12rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-4rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <FaHouse size={'1.4rem'} />
@@ -73,9 +67,37 @@ const MaintSideBarMobile = ()=>{
                         <Typography variant='h5' >Dashboard</Typography> 
                     </Box>
 
+                    <Box className={page === "workbay" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("workbay")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaTools size={'1.2rem'} />
+                        </Box>
+                        <Typography variant='h5'>Workbay</Typography> 
+                    </Box>
+                    
+                    <Box className={page === "vehicle-log" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-log")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <CgNotes size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicle log</Typography> 
+                    </Box>
+
+                    <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
+                        <Box className="icon">
+                            <FaCar size={'1.5rem'} />
+                        </Box>
+                        <Typography variant='h5'>Assigned Vehicle</Typography> 
+                    </Box>
+
+                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                        <Box className="icon">
+                            <FaCarAlt size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Vehicles</Typography> 
+                    </Box>
+
                     <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>
                         <Box className="icon">
-                            <FaTools size={'1.3rem'} />
+                            <FaTools size={'1.2rem'} />
                         </Box>
                         <Typography variant='h5'>Vehicle Service</Typography> 
                     </Box>
@@ -86,7 +108,8 @@ const MaintSideBarMobile = ()=>{
                         </Box>
                         <Typography variant='h5'>Service History</Typography> 
                     </Box>
-                    
+
+                
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
                     <Box className='btn-1' sx={{width: '100%', }} >

@@ -141,7 +141,6 @@ export function PlannedMaintTables() {
 
     const fetchTableInfo = async(vehicle) =>{
         try {
-            console.log(vehicle)
             const token = sessionStorage.getItem('token')
             if(token === null){
                 navigate('/login')
@@ -231,13 +230,20 @@ export function PlannedMaintTables() {
 
     const handleClick = (row, ind)=>{ 
         sessionStorage.setItem("workbayRow", JSON.stringify(row))
-        navigate(`./${row.maint_id}`)
+        navigate(`./${row.maint_id.toLowerCase()}`)
     }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+        };
+
     return (
         <>
             {!show ?  
                 <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
-                    <Table sx={{ minWidth: 900 }} aria-label="customized table">
+                    <Table sx={{ minWidth: 1000 }} aria-label="customized table">
                         <TableHead>
                         <TableRow>
                             <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maixntenance Id</Typography> </StyledTableCell>
@@ -253,11 +259,11 @@ export function PlannedMaintTables() {
                         {[1,2,3,4,5,6,7].map((row, ind) => {
                             return (
                             <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                                <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
                             </StyledTableRow>
                             )
                         })}
@@ -272,11 +278,11 @@ export function PlannedMaintTables() {
                     <Table sx={{ minWidth: 900 }} aria-label="customized table">
                         <TableHead>
                         <TableRow>
-                            <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
-                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
-                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Personnel In Charge</Typography></StyledTableCell>
-                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
-                            <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                            <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'500'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}}>Maintenance Id</Typography> </StyledTableCell>
+                            <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'500'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}}>Concerns</Typography></StyledTableCell>
+                            <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'500'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}}>Personnel In Charge</Typography></StyledTableCell>
+                            <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'500'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}}>Planned Date</Typography></StyledTableCell>
+                            <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'500'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}}>Status</Typography></StyledTableCell>
                         </TableRow>
                         </TableHead>
 
@@ -286,11 +292,11 @@ export function PlannedMaintTables() {
                             const {proposedDate, services, personnel, status, maint_id} = row
                             return (
                             <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{services[0]}</Typography></StyledTableCell>
-                                <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{"Oladimeji"}</Typography></StyledTableCell>
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{proposedDate}</Typography></StyledTableCell>
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{maint_id}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{services[0]}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{"Oladimeji Adebisi"}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{formatDate(proposedDate)}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{status}</Typography></StyledTableCell>
                             </StyledTableRow>
                             )
                         })}
@@ -454,7 +460,7 @@ export function DriverLogTable() {
             };
 
     const handleClick = (row)=>{
-        navigate(`./${row._id}`)
+        console.log('information present here should be displayed on the modal')
     }
 
     const formatDate = (dateString) => {
@@ -472,17 +478,11 @@ export function DriverLogTable() {
                     <TableHead>
                     <TableRow>
                         <StyledTableCellVlog><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCellVlog>
-
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Log Time</Typography></StyledTableCellVlog>
-                        
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Current Location</Typography></StyledTableCellVlog>
-
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Mileage</Typography></StyledTableCellVlog>
-
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Mileage</Typography></StyledTableCellVlog>
-
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Starting Fuel Level</Typography></StyledTableCellVlog>
-
                         <StyledTableCellVlog ><Typography variant='h5' fontWeight={'500'}>Ending Fuel Level</Typography></StyledTableCellVlog>
                     </TableRow>
                     </TableHead>
@@ -491,22 +491,13 @@ export function DriverLogTable() {
                         const {_id, createdAt, logTime, addedBy, vehicle, currentLocation, startingMileage, endingMileage, startingFuelLevel, endingFuelLevel} = row
                         return (
                             <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{formatDate(createdAt)}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{logTime}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{currentLocation}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{startingMileage}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{endingMileage}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{startingFuelLevel}</Typography></StyledTableCell>
-
-                                <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{endingFuelLevel}</Typography></StyledTableCell>
-
-        
-                                
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{formatDate(createdAt)}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{logTime}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{currentLocation}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{startingMileage}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{endingMileage}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{startingFuelLevel}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{endingFuelLevel}</Typography></StyledTableCell>
                             </StyledTableRowVlog>
 
                         )
@@ -551,13 +542,13 @@ export function DriverLogTable() {
                         {[1,2,3,4,5,6,7].map((row, ind)=>{
                             return (
                                 <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
-                                    <StyledTableCell ><Skeleton animation="wave" width={'100%'} height={'100%'} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
                                 </StyledTableRowVlog>
 
                             )

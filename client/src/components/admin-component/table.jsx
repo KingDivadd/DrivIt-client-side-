@@ -59,9 +59,8 @@ export default function VehicleTables() {
             setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
         }else{
             fetchVehicle()
-            console.log('fetching vehicles...')
         }
-    }, [])
+    }, [navigator.onLine])
 
     const fetchVehicle = async()=>{
         const token = sessionStorage.getItem('token')
@@ -91,6 +90,7 @@ export default function VehicleTables() {
 
     const handleClick = (data)=>{
         navigate(`./${data._id}`)
+        console.log(data)
     }
     return (
         <>
@@ -114,12 +114,12 @@ export default function VehicleTables() {
                     const {brand, vehicle_name, vehicle_color, plate_no, engine_no, chasis_no, _id } = data
                     return (
                     <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(data)} >
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{brand}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{vehicle_name}</Typography></StyledTableCell>
-                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{vehicle_color}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{plate_no}</Typography></StyledTableCell>
-                        <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{engine_no}</Typography></StyledTableCell>
-                        <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{chasis_no}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{brand}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{vehicle_name}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{vehicle_color}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{plate_no}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{engine_no}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{chasis_no}</Typography></StyledTableCell>
                     </StyledTableRow>
                     )
                 })}
@@ -147,15 +147,16 @@ export default function VehicleTables() {
             </TableRow>
             </TableHead>
             <TableBody>
-                {[1,2,3,4,5,6,7].map((row, ind) => {
+                {[1,2,3,4,5,6,7,8,9,10].map((row, ind) => {
                     return (
                     <StyledTableRow key={ind} sx={{cursor: 'pointer'}} >
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
-                        <StyledTableCell ><Skeleton animation="wave"  width={'100%'} height={'100%'} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem'}} /></StyledTableCell>
+
                     </StyledTableRow>
                     )
                 })}
@@ -209,10 +210,10 @@ export function DriversTable() {
                 const {staffId, lastName, firstName, phone } = row
                 return (
                 <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{staffId}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{lastName}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{firstName}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{phone}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{staffId}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{lastName}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{firstName}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{phone}</Typography></StyledTableCell>
                 </StyledTableRow>
                 )
             })}

@@ -32,7 +32,7 @@ const Dash = ()=>{
     try {
         const token = sessionStorage.getItem('token')
         if (token=== null){
-        navigate('login')}
+        navigate('/login')}
         const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user", {}, {
                     headers: {
                         "Content-type": "Application/json",

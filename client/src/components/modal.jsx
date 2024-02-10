@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
+import {Box, useMediaQuery} from '@mui/material';
 import { ChatState } from 'context/chatContext';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -24,11 +24,23 @@ const style = {
     top: '40%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 550,
     bgcolor: 'background.paper',
     // border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    borderRadius: '.3rem'
+};
+const styleMobile = {
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 340,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 2,
     borderRadius: '.3rem'
 };
 const planMaintStyle = {
@@ -36,24 +48,51 @@ const planMaintStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 550,
     bgcolor: 'background.paper',
     // border: '2px solid #000',
     boxShadow: 24,
     p: 4,
     borderRadius: '.3rem'
 };
+const planMaintStyleMobile = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 340,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 2,
+    borderRadius: '.3rem'
+};
+
 const reportStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 550,
     bgcolor: 'background.paper',
     // border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    borderRadius: '.3rem'
+    borderRadius: '.3rem',
+    outline: 'none', 
+};
+const reportStyleMobile = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 340,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 2,
+    borderRadius: '.3rem',
+    outline: 'none', 
 };
 
 const styleVlog = {
@@ -61,11 +100,24 @@ const styleVlog = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 550,
     bgcolor: 'background.paper',
     // border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    borderRadius: '.3rem'
+};
+
+const styleVlogMobile = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 340,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 2,
     borderRadius: '.3rem'
 };
 
@@ -173,11 +225,31 @@ export default function PlanMaintenance() {
     const [openServices, setOpenServices]= useState(false)
     const {setAlertMsg, setOpenAlert, setAlertSeverity,newPlannedMaint, setNewPlannedMaint} = ChatState()
     const [loading, setLoading] = useState(false)
+    const [modalStyle, setModalStyle] = useState(true)
     const navigate = useNavigate()
+    const [width, setWidth] = useState(window.innerWidth)
+
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
 
     const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    useEffect(() => {
+    window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(true)
+        }
+        if (width > 599){
+            setModalStyle(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width])
 
 
     const handleChange = (e)=>{
@@ -281,16 +353,24 @@ export default function PlanMaintenance() {
         setMaintLog({...maintLog, services: newServices})
     }
 
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '11rem' }} >
+            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '13rem' }} >
                 <Typography variant='h5'>Plan Maintenance</Typography> 
-            </Box>
+            </Box>}
+
+            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '11rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Plan Maintenance</Typography> 
+            </Box>}
 
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-                <Box sx={planMaintStyle}>
-                    <Box >
-                        <Typography variant="h4" fontWeight={'500'}>Plan new Maintenance</Typography>
+                <Box sx={modalStyle ? planMaintStyleMobile : planMaintStyle }>
+                    <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                        <Typography variant="h4"  fontWeight={'500'}>Plan new Maintenance</Typography>
                     </Box>
 
                     <Box sx={{mt: 4}}>
@@ -312,13 +392,19 @@ export default function PlanMaintenance() {
                             })}
                         </Box>}
 
-                        <Box  sx={{ position: 'relative', background: 'cyan' }}>
+                        <Box  sx={{ position: 'relative'}}>
 
-                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem', background: 'coral' }}>
+                            {!isSM && <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem',}}>
 
                                 <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
                                 <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
-                            </Box>
+                            </Box>}
+
+                            {isSM && <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.25rem', border: '1px solid gray',borderRadius: '.3rem', }}>
+
+                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
+                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.35rem'} />:<FaCaretUp size={'1.35rem'} />} </Box>
+                            </Box>}
 
                             {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto', zIndex: '2'}}>
                                 {services.map((data,ind)=>{
@@ -338,18 +424,24 @@ export default function PlanMaintenance() {
                     </Box>
 
                     <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'flex-end',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
-                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '9rem', display: 'flex' }}>
+                        {!isSM && <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '9rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
-                        </Box>
+                        </Box>}
 
-                        <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  fullWidth  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
+                        {isSM && <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '7rem', display: 'flex', height: '2.25rem' }}>
+                            <Typography variant='h5'>Back</Typography>
+                        </Box>}
+
+                        {!isSM && <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  fullWidth  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
                             {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
                             {!loading ? <Typography variant='h5'>Plan Maint</Typography> : ''}
-                        </Box>
+                        </Box>}
 
-                        {/* <Box className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Plan maint</Typography>
-                        </Box> */}
+                        {isSM && <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  fullWidth  sx={{height: '2.25rem', textTransform: 'none', position: 'relative', width: '7rem',}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Plan Maint</Typography> : ''}
+                        </Box>}
+
                     </Box>
                 </Box>
             </Modal>
@@ -367,7 +459,26 @@ export function CreateLogModal() {
     const [openServices, setOpenServices]= useState(false)
     const [loading, setLoading] = useState(false)
     const {setOpenAlert, setAlertMsg, setAlertSeverity, newDailyLog, setNewDailyLog} = ChatState()
+    const [width, setWidth] = useState(window.innerWidth)
+    const [modalStyle, setModalStyle] = useState(false)
 
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useEffect(() => {
+    
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(false)
+        }
+        if (width > 599){
+            setModalStyle(true)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width])
 
     const [age, setAge] = useState("")
     const [open, setOpen] = React.useState(false);
@@ -455,14 +566,20 @@ export function CreateLogModal() {
         setStartingFuel(false)
     }
 
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
+            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
                 <Typography variant='h5'>Create Log</Typography> 
-            </Box>
+            </Box>}
+            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '8rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Create Log</Typography> 
+            </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-                <Box sx={styleVlog}>
-                    <Box >
+                <Box sx={modalStyle ? styleVlog : styleVlogMobile}>
+                    <Box sx={{display: 'flex', justifyContent: 'center'}}>
                         <Typography variant="h4" fontWeight={'500'}>New Vehicle Log</Typography>
                     </Box>
 
@@ -561,6 +678,26 @@ export function ReportModal() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [loading, setLoading] = useState(false)
+    const [width, setWidth] = useState(window.innerWidth)
+    const [bigWidth, setBigWidth] = useState(true)
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useState(()=>{
+
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setBigWidth(false)
+        }
+        if (width > 599){
+            setBigWidth(true)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    },[width])
 
     const handleChange = (e)=>{
         const name = e.target.name
@@ -604,13 +741,17 @@ export function ReportModal() {
         }
     }
     
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
+            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem', }} >
                 <Typography variant='h5'>Create Report</Typography> 
-            </Box>
+            </Box>}
+            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '8rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Create Report</Typography> 
+            </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-                <Box sx={reportStyle}>
+                <Box sx={bigWidth ? reportStyle : reportStyleMobile}>
                     <Box >
                         <Typography variant="h4" fontWeight={'500'}>Incedent Report</Typography>
                     </Box>
@@ -690,11 +831,16 @@ export function FeedBackModal() {
             setIndex(newIndex)
         }
     }
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
+            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
                 <Typography variant='h5'>Give Feedback</Typography> 
-            </Box>
+            </Box>}
+            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Give Feedback</Typography> 
+            </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
                     <Typography variant="h4" fontWeight={'600'}>Rate your experience</Typography>

@@ -18,8 +18,8 @@ import {CreateLogModal, ReportModal} from 'components/modal';
 import SideBar from 'components/side-bar';
 import { TbSortAscending, TbSortDescending, TbList } from "react-icons/tb";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
-import david from '../asset/david.jpg'
 import NotificationPopover from './notification';
+import david from '../asset/david.jpg'
 
 const MenuBar = ({img})=>{
     const [currentTime, setCurrentTime] = useState(new Date())
@@ -61,8 +61,15 @@ const MenuBar = ({img})=>{
             setMenu(true)
         }
     }
+
+    const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
     return (
-            <Box sx={{background: 'white',height: '3.5rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', p: '0 .5rem'}}>
+            <>
+
+            {!isSM && <Box sx={{background: 'white',height: '3.5rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', p: '0 .5rem'}}>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start',height: '100%', gap: '.75rem'}}>
                     {menu ? 
                     <Box sx={{height: '100', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
@@ -72,23 +79,51 @@ const MenuBar = ({img})=>{
                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
                         {menuIcon && <BsFillMenuButtonWideFill color={'#1B61E4'} size={'1.5rem'} /> }
                     </Box>}
-                    <Box sx={{width: '10rem', height: '100%', display: 'grid', placeItems: 'center'}}>
+                    <Box sx={{width: '8.5rem', height: '100%', display: 'grid', placeItems: 'center'}}>
                         <Typography variant={'h4'} fontWeight={'500'}>{formatDate(currentTime)}</Typography>
                     </Box>
-                    <Box sx={{width: '9rem', height: '100%', display: 'grid', placeItems: 'center'}}>
+                    <Box sx={{width: '8rem', height: '100%', display: 'grid', placeItems: 'center'}}>
                         <Typography variant={'h4'} fontWeight={'500'}>{currentTime.toLocaleTimeString()}</Typography>
                     </Box>
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <NotificationPopover />
                         <Box sx={{
-                            backgroundImage: `url(${img})`,
+                            backgroundImage: `url(${david})`,
                             backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
-                            height: '2.5rem', width: '2.5rem', borderRadius: '50%',p: '.2rem', background: '#E5E5FF'
+                            height: '2.5rem', width: '2.5rem', borderRadius: '50%',p: '.2rem'
                         }}>
                         </Box>
                 </Box>
-            </Box>
+            </Box>}
+
+            {isSM && <Box sx={{background: 'white',height: '3rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', p: '0 .5rem'}}>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start',height: '100%', gap: '.25rem'}}>
+                    {!menu && 
+                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
+                        {menuIcon && <BsFillMenuButtonWideFill color={'#1B61E4'} size={'1.3rem'} /> }
+                    </Box>}
+
+                    <Box sx={{width: '6.75rem', height: '100%', display: 'grid', placeItems: 'center',}}>
+                        <Typography variant={'h5'} fontWeight={'500'}>{formatDate(currentTime)}</Typography>
+                    </Box>
+                    <Box sx={{width: '6.5rem', height: '100%', display: 'grid', placeItems: 'center', }}>
+                        <Typography variant={'h5'} fontWeight={'500'}>{currentTime.toLocaleTimeString()}</Typography>
+                    </Box>
+                </Box>
+                <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <NotificationPopover />
+                        <Box sx={{
+                            backgroundImage: `url(${david})`,
+                            backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
+                            height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem'
+                        }}>
+                        </Box>
+                </Box>
+            </Box>}
+
+            </>
+
     )
 }
 

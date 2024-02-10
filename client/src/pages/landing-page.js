@@ -89,7 +89,7 @@ const LandingPage = ()=>{
 
             <Box sx={{minHeight: '90vh',height: 'auto', hackground: 'cyan',}}>
                 {/* the first part */}
-                <Grid container component={'main'}  sx={{height: '100%', overflowY: 'hidden'}} spacing={'1rem'} >
+                <Grid container component={'main'}  sx={{height: '100%', overflowY: 'hidden'}}  >
                     {!isSM && <>{!isMD && <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', pl: '5rem', height: '80vh'}} >
                         <Box sx={{width: '100%', }}>
                             <Typography variant='h1' fontWeight={'700'} lineHeight={'3.5rem'}>Efficient Vehicle Management Made Easy</Typography>
@@ -110,7 +110,7 @@ const LandingPage = ()=>{
                             </Box>
                         </Grid>}</> }
 
-                    {isSM && <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', p: '.75rem', height: '55vh'}} >
+                    {isSM && <Grid item xs={12} sm={12} md={6} lg={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', p: '.75rem', height: '65vh'}} >
                         <Box sx={{width: '100%', }}>
                             <Typography variant='h2' fontWeight={'600'} lineHeight={'3.5rem'}>Efficient Vehicle Management Made Easy</Typography>
                             <Typography variant='h5' fontWeight={'500'} mt={'1.75rem'}  lineHeight={'2rem'}>From preventive maintenance scheduling to repair tracking, this system is designed to simplified and allow you experience seamless management and enhanced productivity. </Typography>
@@ -165,7 +165,7 @@ const LandingPage = ()=>{
             
             {/* page 2 */}
             <Box  sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: '5rem 0', background: '#E8F0FC'}}>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',  width: '100%', gap: '.75rem',}} >
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',  width: '100%', gap: '1rem',}} >
                     
                         {!isSM && <>{!isMD && <Box sx={{width: '90%',mb: '1rem'}}>
                             <Typography variant='h1' textAlign={'center'} fontWeight={'600'}>Discover How our Vehicle Maintenance Web App Simplifies Your Life </Typography>
@@ -195,7 +195,7 @@ const LandingPage = ()=>{
                         <LandingPageCard title={'Enhanced Safety and Compliance'}  note={'Stay on top of safety regulations and ensure your vehicles are in compliance with our built-in safety checks and maintenance logs. Maintain a safe working environment for your drivers and ensure your fleet meets all industry standards.'} />
                     </Box>} </> }
 
-                    {isSM && <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(25rem, 1fr))', justifyContent: 'space-between', gap: '1rem', m: '0 .75rem' }}>
+                    {isSM && <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', justifyContent: 'space-between', gap: '1rem', m: '0 .75rem' }}>
                         <LandingPageCard title={'Hassle-Free Maintenance Scheduling'}  note={'Our user-friendly interface allows you to easily schedule vehicle maintenance, track service history, and receive reminders for upcoming maintenance tasks. Say goodbye to missed appointments and unexpected breakdowns. '} />
                         <LandingPageCard title={'Cost and Time Savings'}  note={`Our advanced analytics and proactive maintenance approach help optimize your fleet's performance, ultimately saving you both time and money. Minimize downtime, reduce unexpected repairs, and maximize the lifespan of your vehicles.`} />
                         <LandingPageCard title={'Simplified Inventory Management '}  note={'With our inventory management feature, you can efficiently track and manage spare parts and supplies. Avoid unnecessary purchases, keep inventory levels optimized, and ensure you always have the right parts on-hand when needed. '} />

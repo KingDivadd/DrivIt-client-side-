@@ -30,9 +30,7 @@ function App() {
   const theme = useMemo(() => createTheme(themeSettings(persistData.mode)), [persistData.mode]);
   // const isAuth = Boolean(useSelector((state) => state.token));
 
-  useEffect(() => {
-  // here we will fetch userinfo and replace user
-  }, [])
+  
 
   return (
     <div className="app">

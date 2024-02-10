@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import {CreateLogModal, ReportModal} from 'components/modal';
 import SideBar from 'components/side-bar';
+import SideBarMobile from 'components/side-bar-mobile';
 import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
@@ -36,8 +37,14 @@ const Report = ()=>{
     const [show, setShow] = useState(false)
     const [vehiclePresent, setVehiclePresent] = useState(true)
     const [role, setRole] = useState("")
-
     const navigate = useNavigate()
+    const [width, setWidth] = useState(window.innerWidth)
+    const [menuIcon, setMenuIcon] = useState(false)
+
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('userInfo'))
@@ -68,13 +75,20 @@ const Report = ()=>{
                 }
             }
         }
-    }, [])
+
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setMenuIcon(true)
+        }
+        if (width > 599){
+            setMenuIcon(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [newIncedentReport , width])
 
 
-    useEffect(() => {
-
-        
-    }, [newIncedentReport])
 
     const fetchIncedentReport = async()=>{
         if (!navigator.onLine){
@@ -93,7 +107,6 @@ const Report = ()=>{
                     }
                 })
                 setReports(report.data.incedentReports)
-                console.log('reports', report.data.incedentReports)
                 setShow(true)
             } catch (err) {
                 if (!navigator.onLine) {
@@ -107,6 +120,8 @@ const Report = ()=>{
         }
     }
 
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
     return (
 
         <>
@@ -117,6 +132,7 @@ const Report = ()=>{
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             {role === "vehicle_assignee" && <SideBar />}
             {role === "driver" && <SideBar />}
+            {menuIcon && <SideBarMobile />}
             {role === "maintenance_personnel" && <SideBar />}
             {role === "vehicle_coordinator" && <AdminSideBar />}
             {/* right side */}
@@ -127,12 +143,30 @@ const Report = ()=>{
                     {/* right bottom section */}
                     <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden", }}  >
                         <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
-                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1.5fr))',justifyContent: 'space-between',gap: '1rem',mb: '1rem'}}>
-                                <Typography variant="h2" fontWeight={'600'}>Incedent Report</Typography>
-                                <Box sx={{width:'100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+
+                            {!isSM && 
+                            <>
+                                {!isMD && <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1.5fr))',justifyContent: 'space-between', alignItems: 'center', gap: '1rem',m: '1rem 0'}}>
+                                    <Typography variant="h2" fontWeight={'600'}>Incedent Report</Typography>
+                                    <Box sx={{width:'100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+                                        <ReportModal />
+                                    </Box>
+                                </Box>}
+                                {isMD && <Box sx={{width: '100%', display: 'flex',justifyContent: 'space-between', alignItems: 'center', gap: '1rem',m: '.75rem 0'}}>
+                                    <Typography variant="h2" fontWeight={'600'}>Incedent Report</Typography>
+                                    <ReportModal />
+                                </Box>} 
+                            </>
+                            }
+
+                            {isSM && <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', }}>
+                                <Typography variant="h3" textAlign={'center'} fontWeight={'600'}>Incedent Reports</Typography>
+                                <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%', gap: '1rem'}}>
+                                    <Box className="mid-btn primary-btn" sx={{height: '2.25rem', width: '8rem'}}> Filter</Box>
                                     <ReportModal />
                                 </Box>
-                            </Box>
+                            </Box>}
+
                         </Box>
                         
                         <Box sx={{width: '100%',  mt: '.75rem',background: 'white', borderRadius: '.3rem',p:'.5rem', }}>
@@ -143,7 +177,7 @@ const Report = ()=>{
                                     No Report created yet
                                 </Typography>
 
-                                <Typography variant='h4' mt={'1.5rem'} fontWeight={'500'}>
+                                <Typography variant='h4' mt={'1.5rem'} textAlign={'center'} fontWeight={'500'}>
                                     Click on the Create log button to create incedent logs
                                 </Typography>
 

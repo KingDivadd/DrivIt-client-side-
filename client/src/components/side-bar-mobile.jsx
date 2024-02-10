@@ -1,27 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
-import { PersonOutlineOutlined, NotificationsActiveOutlined } from '@mui/icons-material';
-import { Button, Box, Typography, useTheme, useMediaQuery, Hidden } from '@mui/material'
+import {  Box, Typography, useTheme, useMediaQuery, Hidden } from '@mui/material'
 import { ChatState } from 'context/chatContext'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
-import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, ServiceChartCard, ActiveDriverCard } from 'components/role-card';
 // import '../index.css'
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { FaCar ,FaTools} from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
-import { RiLogoutBoxFill,RiArrowGoBackFill } from "react-icons/ri";
-import { TfiLayoutAccordionList } from "react-icons/tfi";
-import { FaLocationDot } from "react-icons/fa6";
-import { GiPathDistance, GiAutoRepair } from "react-icons/gi";
-import { BsCalendarEventFill ,BsCalendar2PlusFill} from "react-icons/bs";
+import { RiLogoutBoxFill } from "react-icons/ri";
 import { AiOutlineRollback } from "react-icons/ai";
 
 const SideBarMobile = ()=>{
     const [page, setPage] = useState("")
+    const {menu, setMenu} = ChatState()
 
     const navigate = useNavigate()
 
@@ -43,6 +36,7 @@ const SideBarMobile = ()=>{
     
     const handlePage = (value)=>{
         navigate(`/${value}`)
+        setMenu(false)
     }
 
     const handleMenu =()=>{
@@ -52,6 +46,11 @@ const SideBarMobile = ()=>{
         if (!menu){
             setMenu(true)
         }
+    }
+
+    function handleLogout(){
+        sessionStorage.clear()
+        navigate('/')
     }
 
     return (
@@ -64,7 +63,8 @@ const SideBarMobile = ()=>{
                         <AiOutlineRollback size={'1.5rem'} color={'white'} /> 
                     </Box>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-12rem'}}>
+
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-15rem'}}>
                     <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
                         <Box className="icon">
                             <FaHouse size={'1.4rem'} />
@@ -109,7 +109,7 @@ const SideBarMobile = ()=>{
                         </Box>
                         <Typography variant='h5'>Help Center</Typography> 
                     </Box>
-                    <Box className='btn-1 warning-btn-1' onClick={()=> handlePage("/")}  sx={{width: '100%', }} >
+                    <Box className='btn-1 warning-btn-1' onClick={handleLogout}  sx={{width: '100%', }} >
                         <Box className="icon">
                             <RiLogoutBoxFill size={'1.5rem'} />
                         </Box>
