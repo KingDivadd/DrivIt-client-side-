@@ -10,13 +10,14 @@ import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, Serv
 // import '../index.css'
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
-import { FaCar, FaTools } from "react-icons/fa";
+import {  FaTools } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { IoMdPerson } from "react-icons/io";
 import { BsPerson } from "react-icons/bs";
 import { FaCarAlt } from "react-icons/fa";
+import { FaCar } from "react-icons/fa";
 
 
 const AdminSideBar = ()=>{
@@ -75,14 +76,14 @@ const AdminSideBar = ()=>{
 
                     <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
                         <Box className="icon">
-                            <FaCar size={'1.5rem'} />
+                            <FaCar size={'1.3rem'} />
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
 
                     <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
                         <Box className="icon">
-                            <FaCarAlt size={'1.3rem'} />
+                            <FaCar size={'1.3rem'} />
                         </Box>
                         <Typography variant='h5'>Vehicles</Typography> 
                     </Box>

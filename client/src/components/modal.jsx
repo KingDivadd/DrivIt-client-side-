@@ -298,20 +298,7 @@ export default function PlanMaintenance() {
 
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
-                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
-                            {maintLog.services.map((data, ind)=>{
-                                return(
-                                        <Box key={ind} className={'small-rounded-btn'}>
-                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
-                                            <Typography variant='h6'>{data}</Typography> 
-                                        </Box>
-
-                                )
-                            })}
-                        </Box>}
-
                         <Box  sx={{ position: 'relative'}}>
-
                             {maintLog.services.length > 0 && 
                         <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
                             {maintLog.services.map((data, ind)=>{
@@ -332,12 +319,12 @@ export default function PlanMaintenance() {
                             </Box>
                             {showDrop && 
                             <Box className="cont-abs">
-                                {[1,2,3,4,5,6,7].map((data, ind)=>{
+                                {services.map((data, ind)=>{
                                     return(
                                     <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
                                         {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
                                         <IoIosSquareOutline size={'1.5rem'} />}
-                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                        <Typography variant={'h5'} fontWeight={'500'}>{data}</Typography>
                                     </Box>
                                     )
                                 })}

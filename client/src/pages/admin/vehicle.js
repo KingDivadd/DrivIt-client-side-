@@ -20,6 +20,7 @@ const Vehicles = ()=>{
     const navigate = useNavigate()
     const [width, setWidth] = useState(window.innerWidth)
     const [role, setRole] = useState("")
+    const {menu, setMenu} = ChatState()
 
 
     const resize = ()=>{
@@ -27,6 +28,7 @@ const Vehicles = ()=>{
     }
 
     useEffect(() => {
+        if (menu){setMenu(false)}
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
         if (user !== null){
             setRole(user.loggedInUser.role)

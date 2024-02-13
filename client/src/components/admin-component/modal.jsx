@@ -18,7 +18,8 @@ import { IoIosCheckboxOutline } from "react-icons/io";  //checked box
 import { IoIosSquareOutline } from "react-icons/io"; // uncheck box
 import SelectFetchedUser from 'components/check-box-list';
 import { GoStar, GoStarFill } from 'react-icons/go';
-
+import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -129,23 +130,121 @@ export default function AddVehicleModal() {
     const [next, setNext] = useState(true)
     const [age, setAge] = useState("")
     const [open, setOpen] = React.useState(false);
+    const {setOpenAlert, setAlertSeverity, setAlertMsg, updateVehicle, setUpdateVehicle} = ChatState()
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [showDrop, setShowDrop] = useState(false)
+    const [showVehDrop, setShowVehDrop] = useState(false)
+    const [showTransDrop, setShowTransDrop] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+    const [width, setWidth] = useState(window.innerWidth)
+    const [modalStyle, setModalStyle] = useState(false)
+
+    useEffect(()=>{
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(true)
+        }
+        if (width > 599){
+            setModalStyle(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    },[width])
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
 
     const handleChange = (e)=>{
         const name = e.target.name
         const value = e.target.value
-        setCreateVehicle({...createVehicle, [name]: value})
-        console.log('vehicle', vehicle)
+        if (name === "current_mileage"){
+            console.log('Mileage', Number(value).toLocaleString())
+            const newValue = value.replace(/,/g,"")
+            setCreateVehicle({...createVehicle, current_mileage: newValue})
+        }
+        if (name !== "current_mileage"){
+            setCreateVehicle({...createVehicle, [name]: value})
+        }
     }
 
     function handleNext() {setNext(false)}
     function handleBack() {setNext(true)}
 
-    const handleAddVehicle = async()=>{
-        console.log('adding')
+    const handleSubmit = async()=>{
+        setLoading(true)
+
+        if (!createVehicle.brand || !createVehicle.vehicle_name || !createVehicle.fuel_type ||  !createVehicle.vehicle_color || !createVehicle.chasis_no || !createVehicle.plate_no || !createVehicle.current_mileage || !createVehicle.engine_no || !createVehicle.vehicle_type || !createVehicle.transmission  ){
+            setOpenAlert(true); setAlertMsg("Please provide all vehicle information"); setAlertSeverity('warning'); setLoading(false); console.log(createVehicle)
+        }
+        else{
+            handleCreateVehicle()
+        }
+    }
+
+    const handleCreateVehicle = async()=>{
+        const token = sessionStorage.getItem('token')
+        if (token === null){navigate('/login')}
+        try {
+            const newVehicle = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/add-vehicle",
+            createVehicle,{
+                headers: {
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${token}`
+                }
+            }
+            );
+            setAlertMsg(newVehicle.data.msg); setAlertSeverity("success"); setOpenAlert(true); setLoading(false);
+            if (updateVehicle){setUpdateVehicle(false)}
+            if (!updateVehicle){setUpdateVehicle(true)}
+            setCreateVehicle({...createVehicle, brand:'', vehicle_name: "", fuel_type:"", vehicle_color:"", chasis_no:"", manufacture_year:"", vehicle_image:"", plate_no:"", current_mileage:"", engine_no:"", vehicle_type:"", transmission:"", })
+
+            } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
+            } else if (err.response) {
+                // Handle server errors
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
+            } else {
+                // Handle network errors
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
+            }
+        }
     }
     
+    const handleDropdown = ()=>{
+        if (showDrop){setShowDrop(false)}
+        if (!showDrop){setShowDrop(true); setShowTransDrop(false); setShowVehDrop(false); }
+    }
+    const handleVehDropdown = ()=>{
+        if (showVehDrop){setShowVehDrop(false)}
+        if (!showVehDrop){setShowVehDrop(true); setShowTransDrop(false); setShowDrop(false) }
+    }
+    const handleTransDropdown = ()=>{
+        if (showTransDrop){setShowTransDrop(false)}
+        if (!showTransDrop){setShowTransDrop(true); setShowVehDrop(false); setShowDrop(false)}
+    }
+
+    const handleDroplist = (data)=>{
+        const fuel = data.toLowerCase()
+        setCreateVehicle({...createVehicle, fuel_type: fuel})
+        setShowDrop(false)
+    }
+    const handleVehDroplist = (data)=>{
+        const fish = data.toLowerCase()
+        setCreateVehicle({...createVehicle, vehicle_type: fish})
+        setShowVehDrop(false)
+    }
+    const handleTransDroplist = (data)=>{
+        const fish = data.toLowerCase()
+        setCreateVehicle({...createVehicle, transmission: fish})
+        setShowTransDrop(false)
+    }
+
     return (
         <div style={{borderColor: '#FFFFF'}}>
             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem',  gap:'.5rem'}} >
@@ -153,61 +252,95 @@ export default function AddVehicleModal() {
                 <Typography variant='h5'>New Vehicle</Typography> 
             </Box>
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-                <Box sx={styleVlog}>
+                <Box sx={modalStyle? styleVlogMobile: styleVlog}>
+
+                    <Typography variant='h4' fontWeight={'500'} textAlign={'center'} sx={{mb: '.5rem'}}>Add a new Vehicle</Typography>
 
                     {next?  
                     <Grid>
                         <Box sx={{mt: 4}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Vehicle Brand</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Vehicle Brand</Typography>
                             <input className='input' name = {"brand"} value={createVehicle.brand} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Vehicle Name</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Vehicle Name</Typography>
                             <input className='input' name = {"vehicle_name"} value={createVehicle.vehicle_name} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Body Color</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Body Color</Typography>
                             <input className='input' name = {"vehicle_color"} value={createVehicle.vehicle_color} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{width: '100%', mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Vehicle Type</Typography>
-                            <FormControl sx={{ width: '100%'}} size="small">
-                                <Select labelId="demo-select-small-label"  id="demo-select-small" value={createVehicle.vehicle_type} label="Age" onChange={handleChange} >
-                                <MenuItem name={'vehicle_type'} value={"Car"}><Typography variant="h6">Car</Typography> </MenuItem>
-                                <MenuItem name={'vehicle_type'} value={"Quarter Full"}><Typography variant="h6">Pickup Truck</Typography> </MenuItem>
-                                <MenuItem name={'vehicle_type'} value={"Mid"}><Typography variant="h6">Bus</Typography> </MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Vehicle Type</Typography>
+                            <Box className="cont" mb={'1.25rem'}>
+                                <Box onClick={handleVehDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Typography variant={'h5'} fontWeight={'400'} >{createVehicle.vehicle_type}</Typography>
+                                    {!showVehDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                    <AiOutlineCaretUp size={'1rem'} />}
+                                </Box>
+                                {showVehDrop && 
+                                <Box className="cont-abs">
+                                    {["Car","Bus", "SUV", "Pickup Truc"].map((data, ind)=>{
+                                        return(
+                                        <Box  key={ind} onClick={()=> handleVehDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                            <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                        </Box>
+                                        )
+                                    })}
+                                </Box>}
+                            </Box>
                         </Box> 
 
                         <Box sx={{width: '100%', mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Fuel Type</Typography>
-                            <FormControl sx={{ width: '100%'}} size="small">
-                                <Select labelId="demo-select-small-label"  id="demo-select-small" value={createVehicle.fuel_type} label="Age" onChange={handleChange} >
-                                <MenuItem name={'fuel_type'} value={"pms"}><Typography variant="h6">PMS</Typography> </MenuItem>
-                                <MenuItem name={'fuel_type'} value={"diesel"}><Typography variant="h6">Diesel</Typography> </MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Fuel Type</Typography>
+                            <Box className="cont" mb={'1.25rem'}>
+                                <Box onClick={handleDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Typography variant={'h5'} fontWeight={'400'} >{createVehicle.fuel_type.toUpperCase()}</Typography>
+                                    {!showDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                    <AiOutlineCaretUp size={'1rem'} />}
+                                </Box>
+                                {showDrop && 
+                                <Box className="cont-abs">
+                                    {["PMS","Diesel"].map((data, ind)=>{
+                                        return(
+                                        <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                            <Typography variant={'h5'} fontWeight={'500'}>{data}</Typography>
+                                        </Box>
+                                        )
+                                    })}
+                                </Box>}
+                            </Box>
                         </Box> 
 
                         <Box sx={{width: '100%', mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Transmission Type</Typography>
-                            <FormControl sx={{ width: '100%'}} size="small">
-                                <Select labelId="demo-select-small-label"  id="demo-select-small" value={createVehicle.transmission} label="Age" onChange={handleChange} >
-                                <MenuItem name={'transmission'} value={"manual"}><Typography variant="h6">Manual</Typography> </MenuItem>
-                                <MenuItem name={'transmission'} value={"automatic"}><Typography variant="h6">Automatic</Typography> </MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Transmission Type</Typography>
+                            <Box className="cont" mb={'1.25rem'}>
+                                <Box onClick={handleTransDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Typography variant={'h5'} fontWeight={'400'} >{createVehicle.transmission}</Typography>
+                                    {!showTransDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                    <AiOutlineCaretUp size={'1rem'} />}
+                                </Box>
+                                {showTransDrop && 
+                                <Box className="cont-abs">
+                                    {["Manual","Automatic"].map((data, ind)=>{
+                                        return(
+                                        <Box  key={ind} onClick={()=> handleTransDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                            <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                        </Box>
+                                        )
+                                    })}
+                                </Box>}
+                            </Box>
                         </Box> 
 
                         <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 5, width: '100%',}}>
-                            <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
-                                <Typography variant='h5'>Back</Typography>
+                            <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', height: '2.25rem', width: '8rem', display: 'flex' }}>
+                                <Typography variant='h5'>Close</Typography>
                             </Box>
-                            <Box className='mid-btn primary-btn' onClick={handleNext}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
+                            <Box className='mid-btn primary-btn' onClick={handleNext}  sx={{  textTransform: 'none',  height: '2.25rem', width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
                                 <Typography variant='h5'>Next</Typography>
                             </Box>
                         </Box>
@@ -216,43 +349,38 @@ export default function AddVehicleModal() {
                     <Grid>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Plate No</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Plate No</Typography>
                             <input className='input' name = {"plate_no"} value={createVehicle.plate_no} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Engine No</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Engine No</Typography>
                             <input className='input' name = {"engine_no"} value={createVehicle.engine_no} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Chasis No</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Chasis No</Typography>
                             <input className='input' name = {"chasis_no"} value={createVehicle.chasis_no} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
                         
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Vehicle Manufacture Year</Typography>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Vehicle Manufacture Year</Typography>
                             <input className='input' name = {"manufacture_year"} value={createVehicle.manufacture_year} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
 
                         <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Current Mileage</Typography>
-                            <input className='input' name = {"current_mileage"} value={createVehicle.current_mileage} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                            <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Current Mileage</Typography>
+                            <input className='input' name = {"current_mileage"} value={Number(createVehicle.current_mileage).toLocaleString()} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                         </Box>
-
-                        <Box sx={{mt: 3}}>
-                            <Typography variant='h5' sx={{mb: '.5rem'}}>Chasis No</Typography>
-                            <input className='input' name = {"chasis_no"} value={createVehicle.chasis_no} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                        </Box>
-
                         
 
-                    <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 5, width: '100%',}}>
+                    <Box sx={{display: 'flex', algnItems: 'flex-end', justifyContent: 'space-between',gap: '1rem', mt: 5, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleBack}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
                             <Typography variant='h5'>Back</Typography>
                         </Box>
-                        <Box className='mid-btn primary-btn' onClick={handleAddVehicle}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                            <Typography variant='h5'>Add Vehicle</Typography>
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleSubmit}   sx={{ height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem'}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Add Vehicle</Typography> : ''}
                         </Box>
                     </Box>
 
@@ -365,16 +493,15 @@ const FetchedUsers = ({key, data, checkIcon, setCheckIcon, setUserSelect, userSe
     )
 }
 
-export function AssignVehicle() {
-    const [userSelect, setUserSelect] = useState({value: '', show: false})
+export function AssignVehicle({vehicle}) {
+    const [chosen, setChosen] = useState("")
     const [next,setNext] = useState(true)
-    const [checkIcon, setCheckIcon] = useState(false)
     const [open, setOpen] = React.useState(false);
     const [allUsers, setAllUsers] = useState([])
     const [loading, setLoading] = useState(false)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, updateVehicle, setUpdateVehicle} = ChatState()
     const [show, setShow] = useState(false)
     const [width, setWidth] = useState(window.innerWidth)
     const [modalStyle, setModalStyle] = useState(false)
@@ -435,13 +562,41 @@ export function AssignVehicle() {
     }
 
     const handleNext = (e)=>{
-        setNext(false)}
+        setNext(false)
+    }
 
 
     const handleSubmit = async()=>{
-        setNext(true)
-        handleClose()
+        setLoading(true)
+        const token = sessionStorage.getItem('token')
+        const vehicle_id = vehicle._id
+        const assignee_id = chosen._id
+        try {
+            const updatedVehicle = await axios.patch("https://futa-fleet-guard.onrender.com/api/vehicle/assign-vehicle", {vehicle_id, assignee_id}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setOpenAlert(true); setAlertSeverity('success'); setAlertMsg(updatedVehicle.data.msg);
+            if (updateVehicle){setUpdateVehicle(false)}
+            if (!updateVehicle){setUpdateVehicle(true)}
+            setLoading(false)
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false)
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false)
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false)
+            }
+        }
+    }
 
+    const selectUser = (data)=>{
+        console.log(data)
+        setChosen(data)
     }
 
     const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
@@ -451,7 +606,7 @@ export function AssignVehicle() {
             {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem',  gap:'.5rem'}} >
                 <Typography variant='h5'>Assign Vehicle</Typography> 
             </Box>}
-            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '9rem',  gap:'.5rem'}} >
+            {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '9rem',  gap:'.5rem', height: '2.25rem'}} >
                 <Typography variant='h5'>Assign Vehicle</Typography> 
             </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
@@ -459,67 +614,66 @@ export function AssignVehicle() {
 
                     {next?
                     <Box sx={{height: 'auto', maxHeight: '87.5vh'  }}>
-                        {!isSM && <Typography variant="h3" textAlign={'center'} fontWeight={'600'}>Vehicle Assignment</Typography>}
-                        {isSM && <Typography variant="h4" textAlign={'center'} fontWeight={'500'}>Vehicle Assignment</Typography>}
-                        {!isSM && <Typography variant="h4" mt={'1.25rem'} textAlign={'center'} fontWeight={'500'}>Select user to be assigned to the selected vehicle to</Typography>}
-                        {isSM && <Typography variant="h5" mt={'1rem'} textAlign={'center'} fontWeight={'500'}>Select user to be assigned to the selected vehicle to</Typography>}
-                        
-                        {/* <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', mt: '1rem'}}>
-                            <Typography variant='h4' fontWeight='400'>Vehicle Name</Typography>
-                            <Typography variant='h4' fontWeight='500'>Hyuandia Elentia</Typography>
-                        </Box>
-                        
-                        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', mt: '1rem'}}>
-                            <Typography variant='h4' fontWeight='400'>Plate Number</Typography>
-                            <Typography variant='h4' fontWeight='500'>KTU-09EL</Typography>
-                        </Box> */}
+                        <Typography variant='h4' fontWeight='500' mb={'1.25rem'} textAlign='center' >Vehicle Assignment</Typography>
 
-
-                        <Box sx={{mt: '1rem', mb: '1rem'}}>
-                            <input className='input' name = {"startLocation"} placeholder='Search for user.' value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-                            <Box className="mid-btn primary-btn" mt={'.75rem'}>
-                                <Typography variant='h4' fontWeight={'400'} >Filter</Typography>
+                        <input className={'input'} placeholder='Serch for user here.' name = {"search"} value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mt: '.75rem', mb: '1rem'}}>
+                            <Box className="mid-btn" onClick={()=> setChosen("")} sx={{height: '2.25rem', width: '8rem', border: '1px solid gray'}} >
+                                <Typography variant='h5' fontWeight='h5'>Clear </Typography>
+                            </Box>
+                            <Box className="mid-btn" sx={{height: '2.25rem', width: '8rem', border: '1px solid gray'}} >
+                                <Typography variant='h5' fontWeight='h5'>Filter </Typography>
                             </Box>
                         </Box>
-
-                        {userSelect.show &&
-                            <>
-                        {!isSM && <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center', mt: '1rem', p: '0 1rem', border: '1px solid orangered', borderRadius: '.3rem', height: '2.5rem', mb: '.75rem'}}>
-                            <Typography variant='h4' fontWeight='500'>Selected User</Typography>
-                            <Typography variant='h4' fontWeight='500'>{userSelect.value}</Typography>
-                        </Box>}
-                        {isSM && <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center', mt: '1rem', border: '1px solid orangered', borderRadius: '.3rem', height: '2.25rem', p: '0 .5rem', mb: '.75rem'}}>
-                            <Typography variant='h5' fontWeight='500'>Selected User</Typography>
-                            <Typography variant='h5' fontWeight='500'>{userSelect.value}</Typography>
-                        </Box>}
-                        </>}
-
-                        <Box sx={{background: 'whitesmoke', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '20rem', maxHeight: '23.5rem', overflow: 'auto',p: '5rem .25rem'}}>
-
+                        <Box sx={{width: '100%', height: '2.25rem',border: '1px solid gray', borderRadius: '.3rem', p: '0 .5rem', mb: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
+                                <Typography variant='h5' fontWeight='h5'>{chosen.lastName} {chosen.firstName}</Typography>
+                        </Box>
+                        <Box sx={{height: '55vh', borderRadius: '.3rem', background: 'whitesmoke', border: '1px solid whitesmoke', overflowY: 'auto'}}>
                             {allUsers.map((data, ind)=>{
                                 return(
-                                        <SelectFetchedUser data={data} key={ind} />
+                                    <Box className='drop-list' onClick={()=>selectUser(data)} key={ind} sx={{height: '2.25rem', display: 'flex', justifyContent: 'flex-start', gap: '.75rem'}}>
+                                        {chosen === data ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        <IoIosSquareOutline size={'1.5rem'} />}
+                                        <Typography variant='h5' fontWeight={'400'}>{data.lastName} {data.firstName}</Typography>
+                                    </Box>
                                 )
                             })}
-                        </Box> 
-
-                        <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: '2rem', width: '100%',}}>
-                            <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
-                                <Typography variant='h5'>Close</Typography>
+                        </Box>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: '1.25rem'}}>
+                            <Box className="mid-btn back-btn" onClick={handleClose} sx={{width: '8rem', height: '2.25rem'}} >
+                                <Typography variant='h5' fontWeight={'400'} >Cancel</Typography>
                             </Box>
-                            <Box className='mid-btn primary-btn' onClick={handleNext}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-                                <Typography variant='h5'>Next</Typography>
+                            <Box className="mid-btn primary-btn" onClick={handleNext}  sx={{width: '8rem', height: '2.25rem'}} >
+                                <Typography variant='h5' fontWeight={'400'} >Next</Typography>
                             </Box>
                         </Box>
                     </Box>
                     :
                     <Box> 
-                        <Typography variant='h4' fontWeight={'500'}> Vehicle Assignment</Typography>
+                        <Typography variant='h4' fontWeight='500' mb={'1.25rem'} textAlign='center' >Vehicle Assignment</Typography>
+                        <Typography variant='h5' fontWeight='500' mb={'1.25rem'} textAlign='center' >You are about to assign vehicle with the following information to</Typography>
+                        <Typography variant='h4' fontWeight='500' mb={'1.25rem'} textAlign='center' >{chosen.lastName} {chosen.firstName}</Typography>
 
-                        <Box disabled={loading} className='mid-btn primary-btn' onClick={handleSubmit}  fullWidth  sx={{ height: '2.5rem',mt:'1.75rem', textTransform: 'none', position: 'relative'}}>
-                        {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
-                        {!loading ? <Typography variant='h5'>Proceed</Typography> : ''}
-                    </Box>
+                        <Box sx={{display: 'flex', justifyContent:'space-between', alignItems: 'center'}}>
+                            <Typography variant='h5' fontWeight='500' mb={'1.25rem'} >Vehicle Name</Typography>
+                            <Typography variant='h5' fontWeight='500' mb={'1.25rem'} >{vehicle.vehicle_name}</Typography>
+                        </Box>
+
+                        <Box sx={{display: 'flex', justifyContent:'space-between', alignItems: 'center', mb: '1.25rem'}}>
+                            <Typography variant='h5' fontWeight='500' mb={'1.25rem'} >Plate Number</Typography>
+                            <Typography variant='h5' fontWeight='500' mb={'1.25rem'} >{vehicle.plate_no}</Typography>
+                        </Box>
+
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
+                            <Box className="mid-btn back-btn" onClick={()=> setNext(true)} sx={{width: '8.5rem', height: '2.25rem'}} >
+                                <Typography variant='h5' fontWeight='400' >Back</Typography>
+                            </Box>
+
+                            <Box disabled={loading} className='mid-btn primary-btn' onClick={handleSubmit}   sx={{ height: '2.5rem', textTransform: 'none', position: 'relative', width: '8.5rem', height: '2.25rem'}}>
+                                {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                                {!loading ? <Typography variant='h5'>Proceed</Typography> : ''}
+                            </Box>
+                        </Box>
                     </Box>
                     }
                 </Box>

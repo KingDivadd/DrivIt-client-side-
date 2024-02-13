@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import {Box, Grid} from '@mui/material';
+import {Box, CircularProgress, Grid} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -329,7 +329,6 @@ export const WorkbayMaintCard = ({data})=>{
                 setVehicle(fetchedVehicle.data.userVehicle)
 
             } catch (err) {
-                console.log(err)
                 if (!navigator.onLine) {
                     setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
                 } else if (err.response) {
@@ -866,17 +865,31 @@ export const VehicleServiceMaintStatusCard = ({data})=>{
 
 
 
-export const VehicleServiceMaintReportCard = ({})=>{
+export const VehicleServiceMaintReportCard = ({data})=>{
+    const [showReport, setShowReport] = useState(false)
+    const [serv, setServ] = useState([])
+    const [loading, setLoading] = useState(false)
     const [selected, setSelected] = useState(false)
-    const [maintLog, setMaintLog] = useState({services: [], clicked: false })
     const [index, setIndex] = useState([])
-    const [report, setReport] = useState(true)
+    const [report, setReport] = useState(false)
     const [showDrop, setShowDrop] = useState(false)
     const [maintReport, setMaintReport] = useState({services: [], issues: "", date: "", image: ""})
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, personnelReport, setPersonnelReport} = ChatState()
+    const services = ['Oil Change', 'Brake Inspension and Repair', 'Tire replacement', 'Suspension Inspection/Repair', 'Engine Check', 'AC Inspection/Repair', 'Head Lamp Replacement', 'Tracficator(s) Replacement' ]
         
-    const handleDelete = () => {
-        console.info('You clicked the delete icon.');
-    };
+    useEffect(()=>{
+        if(data._id){
+            setShowReport(true)
+            setMaintReport({...maintReport, issues: data.personnelFeedback.issues, date: data.personnelFeedback.completion_date, services: data.personnelFeedback.services})
+            setServ(data.personnelFeedback.repair_done)
+            if (data.personnelFeedback.images){
+                setMaintReport({...maintReport, image: data.personnelFeedback.images[0]})
+            }
+        }
+    },[data])
+
+    
+
     const showInfoPage = ()=>{
         setReport(false)
     }
@@ -885,10 +898,55 @@ export const VehicleServiceMaintReportCard = ({})=>{
         setReport(true)
     }
 
+    const handleSubmit = ()=>{
+        setLoading(true)
+        if(!maintReport.issues || !maintReport.services.length || !maintReport.date){
+            setOpenAlert(true); setAlertSeverity("warning"); setAlertMsg("Please fill all fields."); setLoading(false)
+        }else{
+            updateMaintLog()
+        }
+    }
+
     const handleChange = (e)=>{
         const name = e.target.name
         const value = e.target.value
-        console.log(name, value)
+        setMaintReport({...maintReport, [name]: value})
+    }
+
+    const updateMaintLog = async()=>{
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token');
+            if (token === null){navigate('/login')}
+                const maint_id = data._id
+                const issues = maintReport.issues
+                const repair_done = maintReport.services
+                const completion_date = maintReport.date
+                const box = []
+                const images = box.push(maintReport.image)
+
+                const updateMaint = await axios.patch("https://futa-fleet-guard.onrender.com/api/maint-log/maintenance-feedback",
+                {maint_id, issues, repair_done, completion_date, images},{
+                    headers: {
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                    }
+                }
+                );
+                setAlertMsg("Maintenance report has been created successfully"); setOpenAlert(true); setAlertSeverity('success');setLoading(false);
+                setMaintReport({services: [], issues: "", date: "", image: ""}); setReport(false)
+                if (personnelReport){setPersonnelReport(false)}
+                if (!personnelReport){setPersonnelReport(true)}
+
+        } catch (err) {
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);setLoading(false);
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);setLoading(false);
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);setLoading(false);
+            }
+        }
     }
 
     const handleDropdown = ()=>{
@@ -897,21 +955,27 @@ export const VehicleServiceMaintReportCard = ({})=>{
     }
 
     const handleDroplist = (data, ind)=>{
-        const services = maintLog.services
+        const services = maintReport.services
         if(services.includes(data)){
             const newServices = services.filter((res)=> res !== data)
-            setMaintLog({...maintLog, services: newServices})
+            setMaintReport({...maintReport, services: newServices})
         }else{
         services.push(data)
-        setMaintLog({...maintLog, services: services})
-        // console.log(maintLog.services)
+        setMaintReport({...maintReport, services: services})
         }
     }
 
     const handleRemoveService = (data)=>{
-        const newServices = maintLog.services.filter((res)=> res !== data)
-        setMaintLog({...maintLog, services: newServices})
+        const newServices = maintReport.services.filter((res)=> res !== data)
+        setMaintReport({...maintReport, services: newServices})
     }
+
+    const {images, repair_done, issues, completion_date, concerns } = data
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options);
+    };
     
     return (
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', }}>
@@ -930,19 +994,19 @@ export const VehicleServiceMaintReportCard = ({})=>{
                     </Box>
 
                     {report ? 
-                    <Box>
 
+                    <Box>
                         <Typography variant='h4' mb={'2rem'} fontWeight={'500'} textAlign={'center'} >Maintenance Reports</Typography>
                         
                         {/* The is a drop down with a list of things done */}
                         <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service Description</Typography>
-                        <input className='input  search-input' name = {"username"} value={""} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', marginBottom: '1.5rem'}}/>
+                        <textArea className='input  search-input' name = {"issues"} value={maintReport.issues} onChange={(e)=> handleChange(e) } type="text" cols={'30'} rows={'10'} style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', marginBottom: '1.5rem', resize: 'none'}} />
 
                         <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service(s) Done</Typography>
 
-                        {maintLog.services.length > 0 && 
+                        {maintReport.services.length > 0 && 
                         <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
-                            {maintLog.services.map((data, ind)=>{
+                            {maintReport.services.map((data, ind)=>{
                                 return(
                                     <Box key={ind} className={'small-rounded-btn'}>
                                         <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
@@ -960,12 +1024,12 @@ export const VehicleServiceMaintReportCard = ({})=>{
                             </Box>
                             {showDrop && 
                             <Box className="cont-abs">
-                                {[1,2,3,4,5,6,7].map((data, ind)=>{
+                                {services.map((data, ind)=>{
                                     return(
                                     <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
-                                        {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        {(maintReport.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
                                         <IoIosSquareOutline size={'1.5rem'} />}
-                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                        <Typography variant={'h5'} fontWeight={'500'}>{data}</Typography>
                                     </Box>
                                     )
                                 })}
@@ -973,38 +1037,64 @@ export const VehicleServiceMaintReportCard = ({})=>{
                         </Box>
                         
                         <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
-                        <input className='input  search-input' name = {"datae"} value={maintReport.date} onChange={(e)=> handleChange(e) }type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray',  marginBottom: '1.5rem'}}/>
+                        <input className='input  search-input' name = {"date"} value={maintReport.date} onChange={(e)=> handleChange(e) }type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray',  marginBottom: '1.5rem'}}/>
 
                         <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
                         <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
 
                         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: '2rem', gap: '1rem'}}>
-                            <Box className="mid-btn back-btn" sx={{width: '11rem'}}>
-                                <Typography variant='h5' >Edit</Typography>
+                            <Box className="mid-btn back-btn" sx={{width: '11rem', height: '2.25rem'}}>
+                                <Typography variant='h5' >Clear</Typography>
                             </Box>
-                            <Box className="mid-btn primary-btn" sx={{ width: '11rem'}}>
-                                <Typography variant='h5'>Submit</Typography>
-                            </Box>
+                            <Box disabled={loading} className='mid-btn primary-btn' onClick={handleSubmit}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', positoin: 'relative' , height: '2.5rem'}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Submit</Typography> : ''}
+                        </Box>
                         </Box>
                     </Box>
                         :
                     <Box>
-                        <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Maintenance Report</Typography>
-                    
-                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Vehicle Type</Typography>
-                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>Car</Typography>
-                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair Done</Typography>
-                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No report available.</Typography>
-                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair done</Typography>
-                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No reports available</Typography>
-                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
-                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>31 January, 2024</Typography>
-                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
-                        <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
-                        <MaintFeedBackModal />
+                    {showReport ? 
+                        <Box>
+                            <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'} textAlign={'center'} >Maintenance Report</Typography>
+                        
+                            <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Vehicle Owner Complain</Typography>
+                            <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>{data.concerns}</Typography>
+
+                            <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service Description</Typography>
+                            <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>{data.personnelFeedback.issues}</Typography>
+
+                            <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service(s) Done</Typography>
+                                {data.personnelFeedback.repair_done.length &&  
+                                <Box sx={{minHeight: '0', height:'fit-content', borderRadius: '.3rem', border: '1px solid gray', p: '.5rem',mb: '1rem'}} >
+                                {serv.map((den, ind)=>{
+                                    return(
+                                        <Box key={ind} className={'small-rounded-btn'}>
+                                            <Typography variant='h5' fontWeight={'400'} >{den}</Typography> 
+                                        </Box>
+                                        )
+                                    })}
+                                </Box>}
+                            <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Completion Date</Typography>
+                            <Typography variant='h5' mb={'1.25rem'} fontWeight={'400'}>{formatDate(data.personnelFeedback.completion_date)}</Typography>
+
+                            <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Image Report</Typography>
+                            <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
+                            <MaintFeedBackModal />
+                        </Box>
+                        :
+                        <Box>
+                            <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'} textAlign={'center'} >Fetching Maintenance Report</Typography>
+                        
+                            <Skeleton animation='wave' width={'100%'} sx={{height: '5rem', mt: '-.75rem', mb: '-.75rem'}} />
+                            <Skeleton animation='wave' width={'100%'} sx={{height: '5rem', mt: '-.75rem', mb: '-.75rem'}} />
+                            <Skeleton animation='wave' width={'100%'} sx={{height: '10rem', mt: '-.75rem', mb: '-.75rem'}} />
+                        </Box>
+                        }
                     </Box>}
 
 
+            <AlertMessage />
 
             </CardContent>
         

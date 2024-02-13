@@ -20,9 +20,11 @@ export const ChatProvider = ({children})=>{
     const [newIncedentReport, setNewIncedentReport] = useState(false)
     const [newVehicle, setNewVehicle] = useState(false)
     const [statusUpdate, setStatusUpdate] = useState(false)
+    const [personnelReport, setPersonnelReport] = useState(false)
+    const [updateVehicle, setUpdateVehicle] = useState(false)
 
     return <ChatContext.Provider 
-            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport, newVehicle, setNewVehicle, statusUpdate, setStatusUpdate }}
+            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport, newVehicle, setNewVehicle, statusUpdate, setStatusUpdate, personnelReport, setPersonnelReport, updateVehicle, setUpdateVehicle }}
             >
             {children}
         </ChatContext.Provider>

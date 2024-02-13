@@ -37,7 +37,7 @@ const VehicleServiceReport = ()=>{
     const [report, setReport] = useState(true)
     const [status, setStatus] = useState('')
     const navigate = useNavigate()
-    const {setAlertMsg, setOpenAlert, setAlertSeverity, statusUpdate, menu, setMenu} = ChatState()
+    const {setAlertMsg, setOpenAlert, setAlertSeverity, statusUpdate, menu, setMenu, personnelReport, setPersonnelReport} = ChatState()
     const [width, setWidth] = useState(window.innerWidth)
     const [menuIcon, setMenuIcon] = useState(false)
 
@@ -51,7 +51,6 @@ const VehicleServiceReport = ()=>{
         const parts = pathname.split('/');
         let maint_id = parts[parts.length - 1];
 
-        console.log('resently updated', maint_id)
         if (!navigator.onLine){setShow(false)}
         if (navigator.onLine){
             fetchPlannedMaint(maint_id)
@@ -66,7 +65,7 @@ const VehicleServiceReport = ()=>{
         return()=>{
             window.removeEventListener('resize', resize)
         }
-    }, [width, statusUpdate])
+    }, [width, statusUpdate, personnelReport])
     
 
     const fetchPlannedMaint = async(maint_id)=>{
@@ -83,7 +82,6 @@ const VehicleServiceReport = ()=>{
             const data = planMaint.data.maint_log.vehicle
             fetchMaintVehicle(data)
         } catch (err) {
-            console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
             } else if (err.response) {
@@ -243,7 +241,7 @@ const VehicleServiceReport = ()=>{
                             {/* the right side */}
                             <Box sx={{width: '100%'}}>
                                 
-                                <VehicleServiceMaintReportCard />
+                                <VehicleServiceMaintReportCard data={maint} />
                                 
                             </Box>
                         </Box> 

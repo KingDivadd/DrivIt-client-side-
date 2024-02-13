@@ -8,7 +8,7 @@ import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import MaintSideBar from 'components/maint-side-bar';
 import MaintSideBarMobile from 'components/maint-side-bar-mobile';
-import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleDriverCard, VehicleMaintCard } from 'components/admin-component/card';
+import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleAssigneeCardEmpty, VehicleDriverCard, VehicleMaintCard } from 'components/admin-component/card';
 import MenuBar from 'components/menu-bar';
 import { AiOutlineRollback } from "react-icons/ai";
 import { FaSquareCheck } from "react-icons/fa6";
@@ -20,7 +20,7 @@ import { AssignVehicle } from 'components/admin-component/modal';
 
 const VehicleReport = ()=>{
     const navigate = useNavigate()
-    const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, updateVehicle, setUpdateVehicle} = ChatState()
     const [vehicle, setVehicle] = useState([])
     const [show, setShow] = useState(false)
     const [assigned, setAssigned] = useState(false)
@@ -56,7 +56,7 @@ const VehicleReport = ()=>{
         return()=>{
             window.removeEventListener('resize', resize)
         }
-    }, [width])
+    }, [width, updateVehicle])
 
     const fetchVehicleInfo = async()=>{
         const pathname = window.location.pathname;
@@ -186,8 +186,8 @@ const VehicleReport = ()=>{
                                     </Box>
                                     :
                                     <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                        {!isSM && <AssignVehicle />}
-                                        {isSM && <AssignVehicle />}
+                                        {!isSM && <AssignVehicle vehicle={vehicle} />}
+                                        {isSM && <AssignVehicle vehicle={vehicle} />}
                                     </Box>
                                 }
                             </Box>
@@ -203,13 +203,16 @@ const VehicleReport = ()=>{
                                 </Box>
                                 {/* the right side */}
                                 <Box sx={{width: '100%'}}>
-                                    {vehicle.assigned_to.map((data, ind)=>{
+                                    {vehicle.assigned_to.length ? <>
+                                        {vehicle.assigned_to.map((data, ind)=>{
 
-                                        return (
-                                            <VehicleAssigneeCard key={ind} data={data} />
-                                        )
-                                    })}
-                                    <VehicleMaintCard  vehicle={vehicle} />
+                                            return (
+                                                <VehicleAssigneeCard key={ind} data={data} />
+                                            )
+                                        })}
+                                    </>:<VehicleAssigneeCardEmpty vehicle={vehicle} /> }
+
+                                    {/* <VehicleMaintCard  vehicle={vehicle} /> */}
                                 </Box>
                             </Box> 
                         </Box>
@@ -267,8 +270,8 @@ const VehicleReport = ()=>{
                                 </Box>
                                 :
                                 <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                    {!isSM && <AssignVehicle />}
-                                    {isSM && <AssignVehicle />}
+                                    {!isSM && <AssignVehicle vehicle={vehicle} />}
+                                    {isSM && <AssignVehicle vehicle={vehicle} />}
                                 </Box>
                                 
                                 }

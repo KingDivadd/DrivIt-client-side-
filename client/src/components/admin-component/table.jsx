@@ -50,7 +50,7 @@ function createData(maint, concern, mileage, supervisor, cost, status) {
 
 export default function VehicleTables() {
     const navigate = useNavigate()
-    const {setOpenAlert, setAlertMsg, setAlertSeverity, newVehicle} = ChatState()
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, newVehicle, updateVehicle, setUpdateVehicle} = ChatState()
     const [allVehicles, setAllVehicles] = useState([])
     const [show, setShow] = useState(false)
 
@@ -60,7 +60,7 @@ export default function VehicleTables() {
         }else{
             fetchVehicle()
         }
-    }, [navigator.onLine])
+    }, [updateVehicle, navigator.onLine])
 
     const fetchVehicle = async()=>{
         const token = sessionStorage.getItem('token')
@@ -95,8 +95,8 @@ export default function VehicleTables() {
         <>
         {show ?
         <> 
-            {allVehicles.length ? <TableContainer component={Paper} sx={{height: '32.5rem'}}>
-            <Table sx={{ minWidth: 900 }} aria-label="customized table">
+            {allVehicles.length ? <TableContainer component={Paper} sx={{height: '100%'}}>
+            <Table sx={{ minWidth: 1200 }} aria-label="customized table">
                 <TableHead>
                 <TableRow>
                     <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Brand</Typography> </StyledTableCell>
@@ -105,12 +105,13 @@ export default function VehicleTables() {
                     <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Plate No.</Typography></StyledTableCell>
                     <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Engine No.</Typography></StyledTableCell>
                     <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Chasis No.</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Assignment Status</Typography></StyledTableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
                 
                 {allVehicles.map((data, ind) => {
-                    const {brand, vehicle_name, vehicle_color, plate_no, engine_no, chasis_no, _id } = data
+                    const {brand, vehicle_name, vehicle_color, plate_no, engine_no, chasis_no, _id, assigned_to } = data
                     return (
                     <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(data)} >
                         <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{brand}</Typography></StyledTableCell>
@@ -119,6 +120,10 @@ export default function VehicleTables() {
                         <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{plate_no}</Typography></StyledTableCell>
                         <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{engine_no}</Typography></StyledTableCell>
                         <StyledTableCell size={'small'} ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{chasis_no}</Typography></StyledTableCell>
+                        <StyledTableCell size={'small'} >
+                            <>{assigned_to.length && <Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center', color:'green'}} >Assigned</Typography>}</>
+                            <>{!assigned_to.length && <Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center', color: '#FF571A'}} >Not Assigned Assigned</Typography>}</>
+                        </StyledTableCell>
                     </StyledTableRow>
                     )
                 })}
@@ -133,7 +138,7 @@ export default function VehicleTables() {
             </Box>}
         </>
             :
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '100%'}}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
             <TableHead>
             <TableRow>
@@ -193,7 +198,7 @@ export function DriversTable() {
         console.log(row)
     }
     return (
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '100'}}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
             <TableHead>
             <TableRow>

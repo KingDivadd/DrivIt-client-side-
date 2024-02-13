@@ -10,7 +10,7 @@ import MaintPersonnel, { Assigee, DashCard, DriverCard, MaintAnalyticsCard, Serv
 // import '../index.css'
 import { MdNoteAlt,MdHelpCenter } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
-import { FaCar ,FaTools} from "react-icons/fa";
+import { FaTools} from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill,RiArrowGoBackFill } from "react-icons/ri";
@@ -22,10 +22,11 @@ import { AiOutlineRollback } from "react-icons/ai";
 import { IoMdPerson } from "react-icons/io";
 import { BsPerson } from "react-icons/bs";
 import { FaCarAlt } from "react-icons/fa";
+import { FaCar } from "react-icons/fa";
 
 const AdminSideBarMobile = ()=>{
     const [page, setPage] = useState("")
-    const [menu, setMenu] = useState(false)
+    const {menu, setMenu} = ChatState()
 
     const navigate = useNavigate()
 
@@ -76,7 +77,7 @@ const AdminSideBarMobile = ()=>{
                     </Box>
                     <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
                         <Box className="icon">
-                            <FaCarAlt size={'1.2rem'} />
+                            <FaCar size={'1.2rem'} />
                         </Box>
                         <Typography variant='h5'>Vehicles</Typography> 
                     </Box>

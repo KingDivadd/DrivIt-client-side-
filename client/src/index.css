@@ -459,13 +459,15 @@ body,
 
 .cont-abs {
     background-color: whitesmoke;
+    border: 1px solid gray;
     border-radius: .3rem;
     position: absolute;
-    top: 2.51rem;
+    top: 2.75rem;
     left: 0;
     height: auto;
     min-height: 0;
-    padding: .5rem;
+    max-height: 12rem;
+    /* padding: .5rem; */
     width: 100%;
     overflow-y: auto;
     z-index: 2;
@@ -473,12 +475,12 @@ body,
 
 .drop-list {
     background-color: white;
-    padding: 0 .25rem;
+    padding: 0 .5rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: .75rem;
-    border-bottom: whitesmoke;
+    border-bottom: 1px solid whitesmoke;
 }
 
 .drop-list:last-child {
