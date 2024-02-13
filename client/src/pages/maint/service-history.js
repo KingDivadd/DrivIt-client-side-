@@ -71,8 +71,8 @@ const ServiceHistory = ()=>{
                     <>
                         {!isMD && <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
-                                <Typography variant='h2' sx={{fontWeight: '600'}}>Registered Vehicles</Typography>
-                                <AddVehicleModal />
+                                <Typography variant='h2' sx={{fontWeight: '600'}}>Serviced Vehicles</Typography>
+                                {/* <AddVehicleModal /> */}
                             </Box>
                             <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>

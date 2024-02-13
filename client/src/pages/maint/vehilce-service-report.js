@@ -23,50 +23,113 @@ import { AcceptRequestModal } from 'components/modal';
 import { GrInProgress } from "react-icons/gr";
 import { GiHomeGarage } from "react-icons/gi";
 import { FaSquareCheck } from "react-icons/fa6";
-
-
+import { VehicleServiceVehicleCard } from 'components/admin-component/card';
+import { VehicleServiceMaintStatusCard, VehicleServiceMaintReportCard } from 'components/role-card';
+import { VehicleServiceSeletctStatusModal } from 'components/modal';
+import { VehicleServiceWorkbayMaintCard } from 'components/admin-component/card';
 
 const VehicleServiceReport = ()=>{
-    const [page, setPage] = useState("")
-    const [text, setText] = useState("")
-    const [age, setAge] = useState("")
+    const [show, setShow] = useState(false)
+    const [acceptBoo, setAcceptBoo] = useState(false)
+    const [accept, setAccept] = useState(false)
+    const [maint, setMaint] = useState({})
+    const [vehicle, setVehicle] = useState({})
     const [report, setReport] = useState(true)
+    const [status, setStatus] = useState('')
     const navigate = useNavigate()
-    const {status, setStatus} = ChatState()
+    const {setAlertMsg, setOpenAlert, setAlertSeverity, statusUpdate, menu, setMenu} = ChatState()
+    const [width, setWidth] = useState(window.innerWidth)
+    const [menuIcon, setMenuIcon] = useState(false)
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useEffect(() => {
+        if(menu){setMenu(false)}
+        const pathname = window.location.pathname;
+        const parts = pathname.split('/');
+        let maint_id = parts[parts.length - 1];
+
+        console.log('resently updated', maint_id)
+        if (!navigator.onLine){setShow(false)}
+        if (navigator.onLine){
+            fetchPlannedMaint(maint_id)
+        }
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setMenuIcon(true)
+        }
+        if (width > 599){
+            setMenuIcon(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width, statusUpdate])
+    
+
+    const fetchPlannedMaint = async(maint_id)=>{
+        const token = sessionStorage.getItem('token'); if (token === null){navigate('/login')}
+        try {
+            const planMaint = await axios.post(`https://futa-fleet-guard.onrender.com/api/maint-log/all-planned-maint/${maint_id}`, {}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setMaint(planMaint.data.maint_log)
+            setStatus(planMaint.data.maint_log.status)
+            const data = planMaint.data.maint_log.vehicle
+            fetchMaintVehicle(data)
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            }
+        }
+    }
+
+    const fetchMaintVehicle = async(data)=>{
+        const token = sessionStorage.getItem('token')
+        try {
+            const vehicle = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/user-vehicle", {vehicle_id: data}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setVehicle(vehicle.data.userVehicle)
+        } catch (err) {
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            }
+            
+        }
+    }
 
     
+    const acceptRequest = ()=>{
+        if (acceptBoo){setAcceptBoo(false)}
+        if (!acceptBoo){setAcceptBoo(true)}
+        setAccept(true)
+    }
 
-    const handlePage = (value)=>{
-        console.log(value)
-        localStorage.setItem("page", value)
-        navigate(`/${value}`)
-    }
-    
-    const handlePlanMaint = ()=>{
-        console.log("plan maintenance")
-    }
-    
-    const handleWorkbay = (e)=>{
-        setText(e.target.value)
-    }
-    
-    const handleChange = (e)=>{
-        setAge(e.target.value)
-    }
-    const handleBack = ()=>{
-        console.log('going back')
-        navigate(-1)
-    }
-    const handleShowReport = ()=>{
-        if (!report){setReport(true)}
-    }
-    const handleShowFeedback = ()=>{
-        if(report){setReport(false)}
-    }
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
     return (
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
             {/* <SideBar /> */}
             <MaintSideBar />
+            {menuIcon && <MaintSideBarMobile /> }
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
                 <Box sx={{width: '100%', height: 'auto'}}>
@@ -75,15 +138,33 @@ const VehicleServiceReport = ()=>{
                 {/* right bottom section */}
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
                     <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem',}}>
-                        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '.75rem' }} >
-                            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem'}}>
-                                <Box className='mid-btn back-btn' onClick={()=> navigate(-1)} sx={{width: '7rem',}}>
-                                    <AiOutlineRollback size={'1.35rem'} />
-                                    <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
-                                </Box>
-                                <Typography variant='h3' sx={{fontWeight: '600'}}>FUTAWORK-0010</Typography>
-                            </Box>
+                        <Grid container component={'main'} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '.75rem' }} >
+                            <Grid item xs={7} sm={8} md={9} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '1rem'}}>
+                                {!isSM && <>{!isMD &&<Typography variant='h3' sx={{fontWeight: '600'}}>{maint.maint_id}</Typography>}
+                                {isMD &&<Typography variant='h4' sx={{fontWeight: '500'}}>{maint.maint_id}</Typography>}</>}
+                                {isSM &&<Typography variant='h5' sx={{fontWeight: '500'}}>{maint.maint_id}</Typography>}
+                            </Grid>
 
+                            <Grid item xs={5} sm={4} md={3} sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                                {status === 'pending' &&  
+                                <> {!isMD && <Box onClick={acceptRequest} className="mid-btn hollow-btn"sx={{p: '0 .5rem'}} >
+                                    <Typography variant='h5'>Accept Request </Typography>
+                                </Box>}</> 
+                                }
+                                {status === 'pending' && <>{isMD && <Box onClick={acceptRequest} className="mid-btn hollow-btn"sx={{p: '0 .5rem', height: '2.25rem'}} >
+                                    <Typography variant='h5'>Accept Request </Typography>
+                                </Box> }</>}
+                            </Grid>
+
+                        </Grid>
+
+                        
+                        {!isMD && <Grid container component={'main'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%', gap: '.75rem', }}>
+                            <Box item xs={3} sm={3} md={2.5} className='mid-btn back-btn' onClick={()=> navigate(-1)} sx={{width: '7rem',}}>
+                                <AiOutlineRollback size={'1.35rem'} />
+                                <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
+                            </Box>
+                            <>
                             {status=== "pending" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.5rem', borderRadius: '.3rem', p: '0 .75rem' }}>
                                 <MdOutlinePendingActions size={'1.5rem'} color={'#1B61E4'} />
                                 <Typography variant='h5' sx={{fontWeight: '500'}}>Pending</Typography>
@@ -108,18 +189,42 @@ const VehicleServiceReport = ()=>{
                                 <FaSquareCheck size={'1.4rem'} />
                                 <Typography variant='h5' sx={{fontWeight: '500'}}>Completed</Typography>
                             </Box>}
+                            </>
+                        </Grid>}
 
-                        </Box>
+                        {isMD && <Grid container component={'main'}  sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%', gap: '.75rem', }}>
+                            <Box item xs={3} sm={3} md={2.5} className='mid-btn back-btn' onClick={()=> navigate(-1)} sx={{width: '7rem', height: '2.25rem'}}>
+                                <AiOutlineRollback size={'1.35rem'} />
+                                <Typography variant='h5' sx={{ml: '.5rem'}}>Back</Typography> 
+                            </Box>
+                            <>
+                            {status=== "pending" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.25rem', borderRadius: '.3rem', p: '0 .75rem' }}>
+                                <MdOutlinePendingActions size={'1.5rem'} color={'#1B61E4'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>Pending</Typography>
+                            </Box>}
 
-                        <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(13rem, 1fr))',justifyContent: 'space-between',width: '100%', gap: '.75rem' }}>
-                            <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(11rem, 1fr))',justifyContent: 'flex-start' ,alignItems: 'flex-end', gap: '.75rem'}}>
-                                <Box onClick={handleShowReport} className={report ? "mid-btn active-report" : " mid-btn in-active-report"} sx={{width: '10rem'}}><Typography variant='h5'>Information Page</Typography></Box>
-                                <Box onClick={handleShowFeedback} className={report ? "mid-btn in-active-report" : "mid-btn active-report"} sx={{width: '11.75rem'}}><Typography variant='h5'>Personnel Report</Typography> </Box>
-                            </Box>
-                            <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                <AcceptRequestModal />
-                            </Box>
-                        </Box>
+                            {status=== "accepted" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.25rem', borderRadius: '.3rem', p: '0 .75rem' }}>
+                                <GiHomeGarage size={'1.5rem'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>Accepted</Typography>
+                            </Box>}
+
+                            {status=== "in-shop" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.25rem', borderRadius: '.3rem', p: '0 .75rem' }}>
+                                <GiHomeGarage size={'1.5rem'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>In Shop</Typography>
+                            </Box>}
+
+                            {status=== "in-progress" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.25rem', borderRadius: '.3rem', p: '0 .75rem' }}>
+                                <GrInProgress size={'1.3rem'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>In Progress</Typography>
+                            </Box>}
+
+                            {status=== "completed" &&<Box bgColor='primary.light' sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',gap: '1rem', border: '1px solid gray', height: '2.25rem', borderRadius: '.3rem', p: '0 .75rem' }}>
+                                <FaSquareCheck size={'1.4rem'} />
+                                <Typography variant='h5' sx={{fontWeight: '500'}}>Completed</Typography>
+                            </Box>}
+                            </>
+                        </Grid>}
+                        
                     </Box>
 
                     <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.5rem'}}>
@@ -127,21 +232,25 @@ const VehicleServiceReport = ()=>{
                         <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
                             {/* The left side */}
                             <Box sx={{width: '100%'}}>
-                                <WorkbayMaintCard />
-                                <MaintStatusCard/>
+                                <VehicleServiceVehicleCard vehicle={vehicle} />
                                 
+                            </Box>
+                            {/* The Middle Basically the planners complain*/}
+                            <Box sx={{width: '100%'}}>
+                                <VehicleServiceWorkbayMaintCard data={maint} />
+                                <VehicleServiceMaintStatusCard data={maint} />
                             </Box>
                             {/* the right side */}
                             <Box sx={{width: '100%'}}>
-                                {report? 
-                                <MaintFeedbackCard />:
-                                <MaintReportCard />}
+                                
+                                <VehicleServiceMaintReportCard />
                                 
                             </Box>
                         </Box> 
                     </Box>
                 </Grid>
                 </Box>
+                {accept && <VehicleServiceSeletctStatusModal newStatus={'pending'} statusModal={acceptBoo} res={maint} />}
             </Grid> 
         </Grid>
     )

@@ -243,23 +243,14 @@ const VehiclePage = ()=>{
                 {/* right bottom section */}
                 <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden",}}  >
                     {!isSM && <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(11rem, 1fr))', gap: '.75rem',}}>
-                        <Box sx={{height: '19rem',}}>
-                            <Skeleton animation="wave" height={'100%'} width={'100%'} />
-                        </Box>
+                            <Skeleton animation="wave" width={'100%'} sx={{mt: '-1.25rem', mb: '-1.25rem', height: '19rem'}} />
+                            <Skeleton animation="wave" width={'100%'} sx={{mt: '-1.25rem', mb: '-1.25rem', height: '19rem'}} />
+                            <Skeleton animation="wave" width={'100%'} sx={{mt: '-1.25rem', mb: '-1.25rem', height: '19rem'}} />
 
-                        <Box sx={{height: '19rem',}}>
-                            <Skeleton animation="wave" height={'100%'} width={'100%'} />
-                        </Box>
-
-                        <Box sx={{height: '19rem',}}>
-                            <Skeleton animation="wave" height={'100%'} width={'100%'} />
-                        </Box>
                     </Box>}
 
                     {isSM && <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'.75rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(11rem, 1fr))', gap: '.75rem',}}>
-                        <Box sx={{height: '19rem',}}>
-                            <Skeleton animation="wave" height={'100%'} width={'100%'} />
-                        </Box>
+                            <Skeleton animation="wave" width={'100%'} sx={{mt: '-1.25rem', mb: '-1.25rem', height: '19rem'}} />
 
                     </Box>}
 

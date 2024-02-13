@@ -12,11 +12,12 @@ import { FaCaretDown } from "react-icons/fa"
 import { FaCaretUp } from "react-icons/fa"
 import { GoStarFill, GoStar } from "react-icons/go";
 import MenuItem from '@mui/material/MenuItem';
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import { IoIosCheckboxOutline, IoIosCloseCircleOutline, IoIosSquareOutline } from "react-icons/io";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { FaLessThanEqual } from 'react-icons/fa6';
+import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
 
 
 const style = {
@@ -121,101 +122,7 @@ const styleVlogMobile = {
     borderRadius: '.3rem'
 };
 
-// export default function WorkModal() {
-//     const [planMaint, setPlanMaint] = useState({conserns: '', services: '', date: ''})
-//     const [age, setAge] = useState("")
-//     const [open, setOpen] = React.useState(false);
-//     const [statusIcon, setStatusIcon] = useState(true)
-//     const [activeService, setActiveService] = useState(true)
-//     const handleOpen = () => setOpen(true);
-//     const handleClose = () => setOpen(false);
 
-//     const handleChange = (e)=>{
-//         setAge(e.target.value)
-        
-//     }
-//     const handleSubmit = ()=>{
-//     }
-//     const handleService = ()=>{
-//         if (statusIcon){
-//             setStatusIcon(false)
-//         }
-//         if(!statusIcon){
-//             setStatusIcon(true)
-//         }
-//     }
-//     const handleActiveService = (den)=>{
-//         if (activeService) {
-//             setActiveService(false)
-//         }
-//         if (!activeService){
-//             setActiveService(true)
-//         }
-//     }
-//     return (
-//         <div style={{borderColor: '#FFFFF'}}>
-//             <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '12rem' }} >
-//                 <Typography variant='h5'>Plan Maintenance</Typography> 
-//             </Box>
-//             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-//                 <Box sx={planMaintStyle}>
-//                     <Box >
-//                         <Typography variant="h4" fontWeight={'500'}>Plan Maintenance</Typography>
-//                     </Box>
-//                     <Box sx={{width: '100%', mt: 4 }}>
-//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Services</Typography>
-//                         <Box sx={{borderRadius: '.3rem', border: '1px solid red', width: '100%', height: '7rem',   mb: '.75rem', height: '7rem', overFlowY: 'hidden'}}>
-
-//                             <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))', gap: '.5rem',padding: '.25rem', background: 'orange', overflowY:'auto'}}>                                
-//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-//                                 </Box>
-//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-//                                 </Box>
-//                                 <Box sx={{borderRadius: '.3rem', border: '1px solid gray', height: '1.75rem', width: 'fit-content', p: '0 .75rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-//                                     <Box sx={{height: '100%', display: 'flex', alignItems: 'center', mr: '.5rem', cursor: 'pointer', }}><RiCloseCircleLine color='gray' size={'1.15rem' } /> </Box>         
-//                                     <Typography variant='h6' fontWeight={'500'} >Check Oil</Typography>
-//                                 </Box>
-//                             </Box>    
-//                         </Box>
-
-//                         <Box onClick={handleService } sx={{cursor: 'pointer',width: '100%', height: '2.5rem',display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid gray', borderRadius: '.3rem', p: '0 .5rem'}}>
-//                             <Typography variant='h5' fontWeight={'500'}>{"Select ..."}</Typography>
-//                             <Box sx={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{statusIcon ?<FaCaretDown /> : <FaCaretUp />} </Box>
-//                         </Box>
-//                         {statusIcon && 
-//                         <Box sx={{ positon: 'absolute', top: '0', left: '0', background: 'red', mt: '.5rem', height: 'auto', }}>
-//                             <Box onClick={()=>handleActiveService("Check Oil")} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '.5rem', p: '0 .5rem', height: '2.5rem', borderRadius: '.3rem', background: 'cyan'}}>
-//                                 <Box sx={{display: 'flex', alignItems: 'center', height: '100%'}}>{activeService ? <IoSquareOutline size={'1.5rem'} /> : <FaRegSquareCheck size={'1.5rem'} />} </Box>
-//                                 <Typography variant={'h5'} fontWeight={'500'}>Check Oil</Typography>
-//                             </Box>
-//                         </Box>
-//                         }
-//                     </Box>
-//                     <Box sx={{mt: 3}}>
-//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Concerns</Typography>
-//                         <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-//                     </Box>
-//                     <Box sx={{mt: 3}}>
-//                         <Typography variant='h5' sx={{mb: '.5rem'}}>Date</Typography>
-//                         <input className='input' name = {"concern"} value={planMaint.concern} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
-//                     </Box>
-//                     <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
-//                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex' }}>
-//                             <Typography variant='h5'>Back</Typography>
-//                         </Box>
-//                         <Box className='mid-btn primary-btn' onClick={handleSubmit}  sx={{  textTransform: 'none' , width: '8rem', display: 'flex', justifySelf: 'flex-end' }}>
-//                             <Typography variant='h5'>Create Log</Typography>
-//                         </Box>
-//                     </Box>
-//                 </Box>
-//             </Modal>
-//         </div>
-//     );
-// }
 
 
 export default function PlanMaintenance() {
@@ -225,8 +132,9 @@ export default function PlanMaintenance() {
     const [openServices, setOpenServices]= useState(false)
     const {setAlertMsg, setOpenAlert, setAlertSeverity,newPlannedMaint, setNewPlannedMaint} = ChatState()
     const [loading, setLoading] = useState(false)
-    const [modalStyle, setModalStyle] = useState(true)
+    const [showDrop, setShowDrop] = useState(false)
     const navigate = useNavigate()
+    const [modalStyle, setModalStyle] = useState(true)
     const [width, setWidth] = useState(window.innerWidth)
 
 
@@ -302,16 +210,10 @@ export default function PlanMaintenance() {
                         console.log(err)
                         if (!navigator.onLine) {
                             setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-                            // setInterval(handleSubmit, 3000)
-                            setLoading(false)
                         } else if (err.response) {
-                            // Handle server errors
-                            setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                            setLoading(false)
+                            setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false)
                         } else {
-                            // Handle network errors
-                            setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-                            setLoading(false)
+                            setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false)
                         }
                     }
 
@@ -337,6 +239,22 @@ export default function PlanMaintenance() {
         if(!openServices){setOpenServices(true)}
     }
     const handleServiceSelect =(data)=>{
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
+        // console.log(maintLog.services)
+        }
+    }
+    const handleDropdown = ()=>{
+        if (showDrop){setShowDrop(false)}
+        if (!showDrop){setShowDrop(true)}
+    }
+
+    const handleDroplist = (data, ind)=>{
         const services = maintLog.services
         if(services.includes(data)){
             const newServices = services.filter((res)=> res !== data)
@@ -394,27 +312,37 @@ export default function PlanMaintenance() {
 
                         <Box  sx={{ position: 'relative'}}>
 
-                            {!isSM && <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem',}}>
+                            {maintLog.services.length > 0 && 
+                        <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                            {maintLog.services.map((data, ind)=>{
+                                return(
+                                    <Box key={ind} className={'small-rounded-btn'}>
+                                        <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                        <Typography variant='h6'>{data}</Typography> 
+                                    </Box>
+                                )
+                            })}
+                        </Box>}
 
-                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
-                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
-                            </Box>}
-
-                            {isSM && <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.25rem', border: '1px solid gray',borderRadius: '.3rem', }}>
-
-                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
-                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.35rem'} />:<FaCaretUp size={'1.35rem'} />} </Box>
-                            </Box>}
-
-                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto', zIndex: '2'}}>
-                                {services.map((data,ind)=>{
-                                    return (
-                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
-                                            <Typography variant='h6'>{data}</Typography>
-                                        </Box>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >Select services</Typography>
+                                {!showDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+                            {showDrop && 
+                            <Box className="cont-abs">
+                                {[1,2,3,4,5,6,7].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        <IoIosSquareOutline size={'1.5rem'} />}
+                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                    </Box>
                                     )
                                 })}
                             </Box>}
+                        </Box>
                         </Box>
                     </Box>
 
@@ -839,7 +767,7 @@ export function FeedBackModal() {
                 <Typography variant='h5'>Give Feedback</Typography> 
             </Box>}
             {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem', height: '2.25rem' }} >
-                <Typography variant='h5'>Give Feedback</Typography> 
+                <Typography variant='h6'>Give Feedback</Typography> 
             </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
@@ -880,11 +808,24 @@ export function AcceptRequestModal() {
         // run a request to patch the planMaint and change it to accepted
         setOpen(false)
     }
+
+    const acceptRequest = ()=>{
+
+    }
+
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '10rem',mt: '1rem' }} >
+            {!isSM && <>{!isMD && <Box className='mid-btn primary-btn' onClick={acceptRequest} sx={{width: '10rem',mt: '1rem' }} >
                 <Typography variant='h5'>Accept Request</Typography> 
-            </Box>
+            </Box>}
+            {isMD && <Box className='mid-btn primary-btn' onClick={acceptRequest} sx={{width: '9.5rem',mt: '1rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Accept Request</Typography> 
+            </Box>}</>}
+            {isSM && <Box className='mid-btn primary-btn' onClick={acceptRequest} sx={{width: '9rem',mt: '1rem', height: '2.25rem' }} >
+                <Typography variant='h5'>Accept Request</Typography> 
+            </Box>}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={reportStyle}>
                     <Typography variant="h4" fontWeight={'500'}>Accept Request</Typography>
@@ -1069,39 +1010,37 @@ export function CreateMaintLogModal() {
                         <textarea cols={'30'} rows={'10'} className='input' name = {"concerns"} value={maintLog.concerns} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'4.5rem', background: "white", color: 'black', resize: 'none'}}/>
                     </Box>
 
-                    <Box sx={{mt: 3}}>
-                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
-                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                    {maintLog.services.length > 0 && 
+                        <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
                             {maintLog.services.map((data, ind)=>{
                                 return(
-                                        <Box key={ind} className={'small-rounded-btn'}>
-                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
-                                            <Typography variant='h6'>{data}</Typography> 
-                                        </Box>
-
+                                    <Box key={ind} className={'small-rounded-btn'}>
+                                        <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                        <Typography variant='h6'>{data}</Typography> 
+                                    </Box>
                                 )
                             })}
                         </Box>}
 
-                        <Box  sx={{ position: 'relative', }}>
-
-                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
-
-                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
-                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >Select services</Typography>
+                                {!showDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
                             </Box>
-
-                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
-                                {services.map((data,ind)=>{
-                                    return (
-                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
-                                            <Typography variant='h6'>{data}</Typography>
-                                        </Box>
+                            {showDrop && 
+                            <Box className="cont-abs">
+                                {services.map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        <IoIosSquareOutline size={'1.5rem'} />}
+                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                    </Box>
                                     )
                                 })}
                             </Box>}
                         </Box>
-                    </Box>
 
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Cost</Typography>
@@ -1212,31 +1151,33 @@ export function MaintHisModal() {
 
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight={'500'} sx={{mb: '.5rem'}}>Services</Typography>
-                        {maintLog.services.length > 0 && <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                        {maintLog.services.length > 0 && 
+                        <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
                             {maintLog.services.map((data, ind)=>{
                                 return(
-                                        <Box key={ind} className={'small-rounded-btn'}>
-                                            <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
-                                            <Typography variant='h6'>{data}</Typography> 
-                                        </Box>
+                                    <Box key={ind} className={'small-rounded-btn'}>
+                                        <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                        <Typography variant='h6'>{data}</Typography> 
+                                    </Box>
                                 )
                             })}
                         </Box>}
 
-                        <Box  sx={{ position: 'relative', }}>
-
-                            <Box onClick={handleServices} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
-
-                                <Typography variant='h5' fontWeight={'400'} >Select Service(s)</Typography>
-                                <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >Select services</Typography>
+                                {!showDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
                             </Box>
-
-                            {openServices && <Box sx={{position: 'absolute', top: '2.6rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
-                                {services.map((data,ind)=>{
-                                    return (
-                                        <Box key={ind} onClick={()=>handleServiceSelect(data)} className={'service-list'}>
-                                            <Typography variant='h6'>{data}</Typography>
-                                        </Box>
+                            {showDrop && 
+                            <Box className="cont-abs">
+                                {services.map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        <IoIosSquareOutline size={'1.5rem'} />}
+                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                    </Box>
                                     )
                                 })}
                             </Box>}
@@ -1265,6 +1206,105 @@ export function MaintHisModal() {
                 
             </Modal>
             <AlertMessage />
+        </div>
+    );
+}
+
+
+export function VehicleServiceSeletctStatusModal({res, statusModal, newStatus}) {
+    const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = useState(false)
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, statusUpdate, setStatusUpdate} = ChatState()
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [modalStyle, setModalStyle] = useState(true)
+    const [width, setWidth] = useState(window.innerWidth)
+    
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+
+    useEffect(() => {
+        if (newStatus === 'pending'){
+            handleClose()
+        }
+        handleOpen()
+
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(true)
+        }
+        if (width > 599){
+            setModalStyle(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [statusModal])
+    
+    const handleProceed = ()=>{
+        console.log('selected status', newStatus)
+        if (navigator.onLine){
+            changeStatus()
+        }
+    }
+
+    const changeStatus = async()=>{
+        setLoading(true)
+        const token = sessionStorage.getItem('token')
+        if (token === null){navigate('/login')}
+        const maint_id = res._id
+        const status = newStatus
+        console.log( status, maint_id)
+        try {
+            const maint = await axios.patch("https://futa-fleet-guard.onrender.com/api/maint-log/update-maint-status", {maint_id, status}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            console.log(maint.data)
+            setAlertMsg(maint.data.msg); setOpenAlert(true); setAlertSeverity("success");
+            setLoading(false)
+            handleClose()
+            if (statusUpdate){setStatusUpdate(false)}
+            if (!statusUpdate){setStatusUpdate(true)}
+            
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false)
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false)
+            }
+        }
+    }
+
+    return (
+        <div style={{borderColor: '#FFFFF', width: '100%'}}>
+
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={modalStyle ? reportStyleMobile: reportStyle}>
+                    <Typography variant="h4" fontWeight={'600'} textAlign={'center'}>{loading? "Updating...": "Update"} Maintenance Status</Typography>
+                    <Typography variant='h5' fontWeight={'500'} textAlign='center' sx={{mt: '1.25rem'}}>Click the button below to proceed</Typography>                    
+                    
+                    <Box sx={{display: 'flex',alignItems: 'center',justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem' }}>
+                            <Typography variant='h5'>Cancel</Typography>
+                        </Box>
+                        <Box disabled={loading} type="submit" className='mid-btn primary-btn' onClick={handleProceed}  fullWidth  sx={{height: '2.25rem', textTransform: 'none', position: 'relative', width: '8rem',}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Proceed</Typography> : ''}
+                        </Box>
+                    </Box>
+
+                </Box>
+            </Modal>
         </div>
     );
 }

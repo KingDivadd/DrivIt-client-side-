@@ -256,14 +256,14 @@ export function PlannedMaintTables() {
 
                         <TableBody>
                         
-                        {[1,2,3,4,5,6,7].map((row, ind) => {
+                        {[1,2,3,4,5,6,7,8,9,0].map((row, ind) => {
                             return (
                             <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
                             </StyledTableRow>
                             )
                         })}
@@ -539,16 +539,16 @@ export function DriverLogTable() {
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {[1,2,3,4,5,6,7].map((row, ind)=>{
+                        {[1,2,3,4,5,6,7,8,9,10].map((row, ind)=>{
                             return (
                                 <StyledTableRowVlog key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
-                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                                    <StyledTableCell size='small' ><Skeleton animation="wave" width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
                                 </StyledTableRowVlog>
 
                             )
@@ -566,63 +566,151 @@ export function DriverLogTable() {
 }
 
 
-function createMaintData(date, maint_id, concern, personnel, status) {
-    return {date, maint_id, concern, personnel, status };
+function createMaintData(date, maint_id, concern,services, personnel, status) {
+    return {date, maint_id, concern, services, personnel, status };
 }
 
 const maintRows = [
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
-    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+    createMaintData('01 Feb, 2024' ,'FUTAWORK/0001', "Service required","Brake Repair", "Engr Osasona", 'In Shop'),
+
     ];
 
 export function VehicleServiceTables() {
+    const [show, setShow] = useState(false)
+    const [plannedMaint, setPlannedMaint] = useState([])
     const navigate = useNavigate()
-    const handleClick = (row)=>{
-        navigate(`./${row.maint_id.replace(/\//g, '-').toLowerCase()}`)
+    const {setOpenAlert, setAlertMsg, setAlertSeverity} = ChatState()
+
+    useEffect(() => {
+        const user = JSON.parse(sessionStorage.getItem('userInfo'))
+        if (user === null){navigate('/login')}
+        if (navigator.onLine){
+            allVehiclesPlannedMaint()
+        }
+    }, [])
+
+    const allVehiclesPlannedMaint = async()=>{
+        
+        try {
+            const start_date =""
+            const end_date = ""
+            const status = ""
+                const token = sessionStorage.getItem('token')
+                if(token === null){
+                    navigate('/login')
+                }
+                const table = await axios.post("https://futa-fleet-guard.onrender.com/api/maint-log/all-vehicles-planned-maint", {start_date, end_date, status}, {
+                    headers: {
+                        "Content-Type":  "Application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                setPlannedMaint(table.data.allVehiclesPlannedMaint)
+                setShow(true)
+            } catch (err) {
+                console.log(err)
+                if(!navigator.onLine){
+                setAlertMsg(err.message); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
+                }else{
+                    setAlertMsg(err.response.data.err); setAlertSeverity('warning'); setOpenAlert(true); setShow(false)
+                }
+            }
+    
     }
+
+    const handleClick = (data)=>{
+        navigate(`./${data._id}`)
+    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+        };
     return (
+        <>
+        {show ?
         <TableContainer component={Paper} sx={{height: '32.5rem'}}>
-        <Table sx={{ minWidth: 800 }} aria-label="customized table">
+        <Table sx={{ minWidth: 1150 }} aria-label="customized table">
             <TableHead>
             <TableRow>
-                <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Date</Typography> </StyledTableCell>
                 <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
                 <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
-                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Attending personnel</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Repair Area(s)</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
                 <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Maint. Supervisor</Typography></StyledTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
             
-            {maintRows.map((row, ind) => {
-                const {date,maint_id, concern, personnel, status } = row
+            {plannedMaint.map((data, ind) => {
+                const {maint_id, concerns,services, personnel,proposedDate, status,_id } = data
                 return (
-                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row)} >
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{date}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{maint_id}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{concern}</Typography></StyledTableCell>
-                    <StyledTableCell><Typography variant='h5' fontWeight={'400'}>{personnel}</Typography></StyledTableCell>
-                    <StyledTableCell ><Typography variant='h5' fontWeight={'400'}>{status}</Typography></StyledTableCell>
+                <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(data)} >
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{maint_id}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5'  noWrap  fontWeight={'400'} sx={{ maxWidth: '15rem'}}>{concerns} </Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' noWrap fontWeight={'400'} sx={{ maxWidth: '15rem'}} >{services}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{formatDate(proposedDate)}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' className={`${status}`} fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{status}</Typography></StyledTableCell>
+                    <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{personnel}</Typography></StyledTableCell>
                 </StyledTableRow>
                 )
             })}
             </TableBody>
         </Table>
         </TableContainer>
+        :
+        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <Table sx={{ minWidth: 800 }} aria-label="customized table">
+            <TableHead>
+                <TableRow>
+                    <StyledTableCell><Typography variant='h5' fontWeight={'500'}>Maintenance Id</Typography> </StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Concerns</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Repair Area(s)</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Planned Date</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Status</Typography></StyledTableCell>
+                    <StyledTableCell ><Typography variant='h5' fontWeight={'500'}>Maint. Supervisor</Typography></StyledTableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+
+                {[1,2,3,4,5,6,7,8,9,10].map((row, ind) => {
+                    return (
+                    <StyledTableRow key={ind} sx={{cursor: 'pointer'}} onClick={()=> handleClick(row, ind)} >
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                        <StyledTableCell size='small' ><Skeleton animation="wave"  width={'100%'} sx={{mt: '-.7rem', mb: '-.7rem', height: '3.5rem', display: 'flex', alignItems: 'center'}} /></StyledTableCell>
+                    </StyledTableRow>
+                    )
+                })}
+            </TableBody>
+        </Table>
+        <AlertMessage />
+        </TableContainer>
+        }
+        </>
     );
 }
 

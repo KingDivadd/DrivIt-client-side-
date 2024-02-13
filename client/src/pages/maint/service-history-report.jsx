@@ -8,7 +8,7 @@ import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
 import MaintSideBar from 'components/maint-side-bar';
 import MaintSideBarMobile from 'components/maint-side-bar-mobile';
-import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleMaintCard, VehiclePlannedMaintCard } from 'components/admin-component/card';
+import { VehicleInformationCard, VehicleStatusCard, VehicleAssigneeCard, VehicleMaintCard, VehiclePlannedMaintCard, EmptyVehiclePlannedMaintCard, EmptyVehicleMaintCard, SkeletonBox } from 'components/admin-component/card';
 import MenuBar from 'components/menu-bar';
 import { AiOutlineRollback } from "react-icons/ai";
 import { FaSquareCheck } from "react-icons/fa6";
@@ -260,16 +260,16 @@ const ServiceHistoryReport = ()=>{
                                 {assigned?
                                     <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
                                         {!isSM && <Box className='mid-btn hollow-btn' sx={{width: '8rem',height: '2.5rem'}}>
-                                        Export
+                                        Filter
                                         </Box>}
                                         {isSM && <Box className='mid-btn hollow-btn' sx={{width: '7rem',height: '2.25rem'}}>
-                                            Export
+                                            Filter
                                         </Box>}
                                     </Box>
                                     :
                                     <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
-                                        {!isSM && <AssignVehicle />}
-                                        {isSM && <AssignVehicle />}
+                                        {/* {!isSM && <AssignVehicle />}
+                                        {isSM && <AssignVehicle />} */}
                                     </Box>
                                 }
                             </Box>
@@ -288,9 +288,11 @@ const ServiceHistoryReport = ()=>{
                                     })}
                                 </Box>
                                 {/* the middle */}
-                                <Box sx={{width: '100%', p: '.5rem 0' , background: 'white', borderRadius: '.3rem', background: 'whitesmoke'}}>
-                                    <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >Planned Maintenance Logs</Typography>
-                                    <>{presentPlanMaint ? 
+                                <Box sx={{width: '100%' , borderRadius: '.3rem', overflowY: 'hidden',mb: '.5rem' }}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1rem'} textAlign={'center'} sx={{height: '5rem', borderRadius: '.3rem', display: 'flex',alignItems: 'center', justifyContent: 'center', background: 'white'}} >Planned Maintenance Logs</Typography>
+
+                                    <Box sx={{background: 'whitesmoke', overflowY: 'auto', height: 'auto', maxHeight: '151vh', width: '100%'}}>
+                                    {presentPlanMaint ? 
                                         <>
                                         {planMaint.map((data, ind)=>{
                                             return (
@@ -299,14 +301,15 @@ const ServiceHistoryReport = ()=>{
                                         })}
                                         </>
                                         :
-                                            <VehicleMaintCard  vehicle={vehicle} />
+                                            <EmptyVehiclePlannedMaintCard />
                                     }
-                                    </>
+                                    </Box>
                                 </Box>
                                 {/* the right side */}
-                                <Box sx={{width: '100%', p: '.5rem 0', background: 'white', borderRadius: '.3rem', background: 'whitesmoke' }}>
-                                    <Typography variant='h4' fontWeight={'500'} mb={'1.75rem'} textAlign={'center'} >UnPlanned Maintenance Logs</Typography>
-                                    <>{presentUnPlannedMaint ? 
+                                <Box sx={{width: '100%',borderRadius: '.3rem',mb: '.5rem', overflowY: 'hidden' }}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1rem'} textAlign={'center'} sx={{height: '5rem', borderRadius: '.3rem', display: 'flex',alignItems: 'center', justifyContent: 'center', background: 'white'}} >UnPlanned Maintenance Logs</Typography>
+                                    
+                                    <Box sx={{background: 'whitesmoke', overflowY: 'auto', height: 'auto', maxHeight: '151vh',}}>{presentUnPlannedMaint ? 
                                         <>
                                         {unPlannedMaint.map((data, ind)=>{
                                             return(
@@ -315,9 +318,9 @@ const ServiceHistoryReport = ()=>{
                                         })}
                                         </>
                                         :
-                                            <VehicleMaintCard  vehicle={vehicle} />
+                                            <EmptyVehicleMaintCard />
                                     }
-                                    </>
+                                    </Box>
                                 </Box>
                             </Box> 
                         </Box>
@@ -338,15 +341,17 @@ const ServiceHistoryReport = ()=>{
 
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{ overflowY:'auto', height: '100vh'}} >
-                {/* right top section */}
                 <Box sx={{width: '100%', height: 'auto'}}>
+                    {/* right top section */}
                     <MenuBar />
                     {/* right bottom section */}
-                    <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden",}}  >
-                        <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem',}}>
-                            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: '2rem' }} >
+                    <Grid container sx={{ mt: '.5rem',  p: '0 .5rem', overflow: "hidden"}}  >
+                        {/* Right bottom top section */}
+                        <Box sx={{width: '100%', background: 'white', borderRadius: '.3rem',p:'1rem'}}>
+                            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', mb: '2rem' }} >
                                     <Skeleton animation="wave" width={'100%'} height={'5rem'} sx={{mt: '-1rem', mb:'-1rem'}} />
                             </Box>
+
                             <Box  sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))',justifyContent: 'space-between',width: '100%'}}>
                                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
                                     <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '2rem'}}>
@@ -367,10 +372,10 @@ const ServiceHistoryReport = ()=>{
                                     
                                 <Box sx={{width: '100%', height: '100%',display: 'flex', justifyContent: 'flex-end'}}>
                                     {!isSM && <Box className='mid-btn hollow-btn' sx={{width: '8rem',height: '2.5rem'}}>
-                                    Export
+                                    Filter
                                     </Box>}
                                     {isSM && <Box className='mid-btn hollow-btn' sx={{width: '9rem',height: '2.25rem'}}>
-                                        Export
+                                        Filter
                                     </Box>}
                                 </Box>
                                 :
@@ -384,24 +389,60 @@ const ServiceHistoryReport = ()=>{
                             </Box>
                         </Box>
 
-                        <Box sx={{width: '100%',  mt: '.5rem',background: 'white', borderRadius: '.3rem',p:'.5rem'}}>
-                            {/* the table */}
-                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.75rem'}}>
+                        {/* Right bottom body section */}
+                        <Box sx={{width: '100%',  mt: '.5rem', borderRadius: '.3rem',}}>
+                            {/* the body */}
+                            <Box sx={{width: '100%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',justifyContent: 'space-between', gap: '.5rem', borderRadius: '.3rem'}}>
                                 {/* The left side */}
                                 <Box sx={{width: '100%'}}>
                                     <VehicleInformationCard vehicle={vehicle} />
-                                    <VehicleStatusCard  vehicle={vehicle}/>
+                                    <VehicleAssigneeCard />
+                                    <VehicleAssigneeCard />
+                                </Box>
+                                {/* the middle */}
+                                <Box sx={{width: '100%' , borderRadius: '.3rem', overflowY: 'hidden',mb: '.5rem' }}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1rem'} textAlign={'center'} sx={{height: '5rem', borderRadius: '.3rem', display: 'flex',alignItems: 'center', justifyContent: 'center', background: 'white'}} >Planned Maintenance Logs</Typography>
+
+                                    <Box sx={{background: 'whitesmoke', overflowY: 'auto', height: 'auto', maxHeight: '151vh', width: '100%'}}>
+                                    {presentPlanMaint ? 
+                                        <>
+                                        {planMaint.map((data, ind)=>{
+                                            return (
+                                                <VehiclePlannedMaintCard key={ind} data={data}  vehicle={vehicle} />
+                                            )
+                                        })}
+                                        </>
+                                        :
+                                            <SkeletonBox />
+                                    }
+                                    </Box>
                                 </Box>
                                 {/* the right side */}
-                                <Box sx={{width: '100%'}}>
-                                    <VehicleAssigneeCard />
-                                    <VehicleAssigneeCard />
+                                <Box sx={{width: '100%',borderRadius: '.3rem',mb: '.5rem', overflowY: 'hidden' }}>
+                                    <Typography variant='h4' fontWeight={'500'} mb={'1rem'} textAlign={'center'} sx={{height: '5rem', borderRadius: '.3rem', display: 'flex',alignItems: 'center', justifyContent: 'center', background: 'white'}} >UnPlanned Maintenance Logs</Typography>
+                                    
+                                    <Box sx={{background: 'whitesmoke', overflowY: 'auto', height: 'auto', maxHeight: '151vh',}}>{presentUnPlannedMaint ? 
+                                        <>
+                                        {unPlannedMaint.map((data, ind)=>{
+                                            return(
+                                                <VehicleMaintCard  data={data} key={ind} vehicle={vehicle} />
+                                            )
+                                        })}
+                                        </>
+                                        :
+                                            <SkeletonBox />
+                                    }
+                                    </Box>
                                 </Box>
                             </Box> 
                         </Box>
                     </Grid>
                 </Box>
-            </Grid> 
+            </Grid>
+
+
+
+
             <AlertMessage />
         </Grid>
         </>

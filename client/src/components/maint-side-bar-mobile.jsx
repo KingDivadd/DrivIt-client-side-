@@ -9,9 +9,10 @@ import { FaCar ,FaTools} from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
-
+import { MdManageHistory } from "react-icons/md";
 import { AiOutlineRollback } from "react-icons/ai";
 import { FaCarAlt } from "react-icons/fa";
+import { IoLogoModelS } from "react-icons/io";
 
 
 const MaintSideBarMobile = ()=>{
@@ -83,7 +84,7 @@ const MaintSideBarMobile = ()=>{
 
                     <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
                         <Box className="icon">
-                            <FaCar size={'1.5rem'} />
+                            <IoLogoModelS size={'1.5rem'} />
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
                     </Box>
@@ -104,9 +105,16 @@ const MaintSideBarMobile = ()=>{
 
                     <Box className={page === "service-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("service-history")} sx={{width: '100%', }} >
                         <Box className="icon">
-                            <CgNotes size={'1.3rem'} />
+                            <MdManageHistory size={'1.4rem'} />
                         </Box>
                         <Typography variant='h5'>Service History</Typography> 
+                    </Box>
+
+                    <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <CgNotes size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Incedent Report</Typography> 
                     </Box>
 
                 

@@ -11,6 +11,8 @@ import { CgNotes } from "react-icons/cg";
 import { VscFeedback } from "react-icons/vsc";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { FaCarAlt } from "react-icons/fa";
+import { MdManageHistory } from "react-icons/md";
+import { IoLogoModelS } from "react-icons/io";
 
 
 
@@ -26,15 +28,12 @@ const MaintSideBar = ()=>{
             lastPart = parts[parts.length - 1]
             setPage(lastPart)
             navigate(`/${lastPart}`)
-            console.log(lastPart)
         }
         
         if(parts.length === 3){
             lastPart = parts[parts.length - 2]
             setPage(lastPart)
-            console.log(lastPart)
         }
-        console.log(lastPart)
     }, [])
 
     const handlePage = (value)=>{
@@ -71,19 +70,19 @@ const MaintSideBar = ()=>{
                         <Typography variant='h5'>Vehicle log</Typography> 
                     </Box>
 
-                    {/* <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
+                    <Box className={page === "vehicle"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle")} sx={{width: '100%'}}>
                         <Box className="icon">
-                            <FaCar size={'1.5rem'} />
+                            <IoLogoModelS size={'1.5rem'} />
                         </Box>
                         <Typography variant='h5'>Assigned Vehicle</Typography> 
-                    </Box> */}
+                    </Box>
 
-                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                    {/* <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
                         <Box className="icon">
                             <FaCarAlt size={'1.3rem'} />
                         </Box>
                         <Typography variant='h5'>Vehicles</Typography> 
-                    </Box>
+                    </Box> */}
 
                     <Box className={page === "vehicle-service" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-service")} sx={{width: '100%', }}>
                         <Box className="icon">
@@ -94,9 +93,16 @@ const MaintSideBar = ()=>{
 
                     <Box className={page === "service-history" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("service-history")} sx={{width: '100%', }} >
                         <Box className="icon">
-                            <CgNotes size={'1.3rem'} />
+                            <MdManageHistory size={'1.4rem'} />
                         </Box>
                         <Typography variant='h5'>Service History</Typography> 
+                    </Box>
+
+                    <Box className={page === "reports" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("reports")} sx={{width: '100%', }} >
+                        <Box className="icon">
+                            <CgNotes size={'1.3rem'} />
+                        </Box>
+                        <Typography variant='h5'>Incedent Report</Typography> 
                     </Box>
 
                 

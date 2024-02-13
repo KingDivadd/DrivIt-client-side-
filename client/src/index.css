@@ -20,13 +20,13 @@ body,
  */
 
 ::-webkit-scrollbar {
-    width: .5rem;
-    height: .5rem;
+    width: 0rem;
+    height: 0rem;
 }
 
 ::-webkit-scrollbar-thumb {
-    width: .5rem;
-    height: .5rem;
+    width: 0rem;
+    height: 0rem;
 }
 
 .input {
@@ -197,6 +197,7 @@ body,
 .hollow-btn:hover {
     background-color: #1B61E4;
     color: white;
+    border-color: #1B61E4;
 }
 
 .register {
@@ -348,10 +349,18 @@ body,
     color: white;
 }
 
+.pending {
+    color: #FF571A;
+}
+
 .accepted-stat {
     background-color: orange;
     border-color: orange;
     color: white;
+}
+
+.accepted {
+    color: orange;
 }
 
 .in-shop-stat {
@@ -360,10 +369,18 @@ body,
     color: white;
 }
 
+.in-shop {
+    color: #1B61E4;
+}
+
 .in-progress-stat {
     background-color: #5F91EC;
     border-color: #5F91EC;
     color: white;
+}
+
+.in-progress {
+    color: #5F91EC;
 }
 
 .completed-stat {
@@ -372,19 +389,23 @@ body,
     color: white;
 }
 
+.completed {
+    color: green;
+}
+
 .completed-stat:last-child::after {
     display: none;
     height: 0;
 }
 
 .active-report {
-    border: 1px solid #5F91EC;
-    background: #5F91EC;
-    color: white;
+    border: 1px solid #E8EFFC;
+    background: #E8EFFC;
+    color: #1B61E4;
 }
 
 .in-active-report {
-    border: 1-x solid #5F91EC;
+    border: 1px solid #E8EFFC;
     background: white;
     color: black;
     transition: all 200ms ease;
@@ -430,4 +451,41 @@ body,
 
 .service-list:hover {
     background: whitesmoke;
+}
+
+.cont {
+    position: relative;
+}
+
+.cont-abs {
+    background-color: whitesmoke;
+    border-radius: .3rem;
+    position: absolute;
+    top: 2.51rem;
+    left: 0;
+    height: auto;
+    min-height: 0;
+    padding: .5rem;
+    width: 100%;
+    overflow-y: auto;
+    z-index: 2;
+}
+
+.drop-list {
+    background-color: white;
+    padding: 0 .25rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: .75rem;
+    border-bottom: whitesmoke;
+}
+
+.drop-list:last-child {
+    border-bottom: none;
+}
+
+.drop-list:hover {
+    background: whitesmoke;
+    cursor: pointer;
 }

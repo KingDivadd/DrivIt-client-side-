@@ -17,6 +17,7 @@ import { FaCar } from "react-icons/fa";
 import { IoIosCheckboxOutline } from "react-icons/io";  //checked box
 import { IoIosSquareOutline } from "react-icons/io"; // uncheck box
 import SelectFetchedUser from 'components/check-box-list';
+import { GoStar, GoStarFill } from 'react-icons/go';
 
 
 const style = {
@@ -527,7 +528,8 @@ export function AssignVehicle() {
     );
 }
 
-export function PersonnelFeedBackModal() {
+export function PersonnelFeedBackModal({data}) {
+    const [view, setView] = useState(true)
     const [open, setOpen] = React.useState(false);
     const [feedback, setFeedback] = useState({issues: "", system: [], images: ''})
     const handleOpen = () => setOpen(true);
@@ -537,6 +539,8 @@ export function PersonnelFeedBackModal() {
     const [modalStyle, setModalStyle] = useState(false)
 
     useEffect(()=>{
+
+        console.log('Personnel Feedbcack data ', data)
 
         window.addEventListener('resize', resize)
         if (width <= 599 ){
@@ -554,25 +558,19 @@ export function PersonnelFeedBackModal() {
         setWidth(window.innerWidth)
     }
 
-    const viewFeedback = ()=>{
-
-    }
-
-    const editFeedback = ()=>{
-
-    }
-
     const handleChange = (e)=>{
         const name = e.target.name()
         const value = e.target.value()
     }
+
+    const {completion_date, images, issues, repair_done} = data
     
     const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
 
     return (
         <div style={{borderColor: '#FFFFF'}}>
-            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' }} >
+            {!isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem', height: '2.25rem' }} >
                 <Typography variant='h5'>Personnel Feedback</Typography> 
             </Box>}
             {isSM && <Box className='mid-btn primary-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem', height: '2.25rem' }} >
@@ -582,65 +580,169 @@ export function PersonnelFeedBackModal() {
                 <Box sx={modalStyle? reportStyleMobile : reportStyle}>
                     
                     <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: '1.5rem'}}>
-                        <Box className="primary-btn hollow-btn" onClick={viewFeedback()} sx={{width: '5rem',height: '2.25rem', border: '1px solid #1B61E4'}}>
+                        <Box className={view ?"primary-btn register": "primary-btn hollow-btn"} onClick={()=> setView(true)} sx={{width: '5rem',height: '2.25rem', border: '1px solid #1B61E4'}}>
                             <Typography variant={'h5'} >View</Typography>
                         </Box>
-                        <Box className="primary-btn register" onClick={editFeedback()} sx={{height: '2.25rem', width: '5rem'}} >
+                        <Box className={!view ? "primary-btn register" : "primary-btn hollow-btn"} onClick={()=> setView(false)} sx={{height: '2.25rem', width: '5rem'}} >
                             <Typography variant={'h5'}>Edit</Typography>
                         </Box>
                     </Box>
 
-                    {/* The View part */}
-                    <Box>
 
+                    {view ? 
+                    <Box>
+                        <Typography variant='h4' fontWeight='500' mb={'1.25rem'} textAlign={'center'} >Personnel Feedback</Typography>                        
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Diagnostic Findings</Typography>
+                            {issues ?
+                            <Typography variant='h5' fontWeight={'400'} mb='.75rem'>{issues}</Typography>:
+                            <Typography variant='h5' fontWeight={'400'} mb='.75rem'>Nil</Typography>}
+                        </Box>
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Repair Done</Typography>
+                            <Box>
+                            {repair_done.map((data, ind)=>{
+                                return (
+                                    <Box key={ind} className={'mid-btn small-rounded-btn'} sx={{height: '2rem'}}>
+                                        <Typography variant='h5' fontWeight={'400'} >{data}</Typography>
+                                    </Box>
+                                )
+                            })}
+                            </Box>
+                        </Box>
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Completetion Date</Typography>
+                            <Typography variant='h5' fontWeight={'400'} mb='.75rem'>31 Feb, 2o24</Typography>
+                        </Box>
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Image</Typography>
+                            {images.lenth ?
+                            <Box sx={{height: '11rem'}}>image here</Box>
+                            
+                            :
+                            <Avatar sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar  size={'1.5rem'}/> </Avatar>}
+                        </Box>
+                        <Box className="mid-btn back-btn" onClick={()=> handleClose()}>
+                            <Typography variant='h5' >Close</Typography>
+                        </Box>
+
+                        
                     </Box>
-                    {/* The Edit side */}
-                    <Box mb={'1rem'}>
-                        <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Diagnostic Findings</Typography>
-                        <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
+                        :
+                    <Box>
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Diagnostic Findings</Typography>
+                            <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
+                        </Box>
+                        
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.7rem'>System Repaired</Typography>
+
+                            {/* <SelectFetchedUser /> */}
+                            <Box sx={{height: '2.25rem', border: '1px solid gray', borderRadius: '.3rem' }}></Box>
+                        </Box>
+
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Completion Date</Typography>
+                            <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
+                        </Box>
+
+                        <Box mb={'1rem'}>
+                            <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Add Image</Typography>
+                            <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
+                        </Box>
+
+                        <Box>
+                            <Avatar sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar  size={'1.5rem'}/> </Avatar>
+                        </Box>
+
+                        {!isSM && <Box sx={{display: 'flex', justifyContent: 'space-between'}}> 
+                            <Box className='mid-btn back-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '10rem' }}>
+                                <Typography variant='h5'>Cancel</Typography>
+                            </Box>
+                            <Box className='mid-btn primary-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '10rem' }}>
+                                <Typography variant='h5'>Submit</Typography>
+                            </Box>
+                        </Box>}
+                        
+                        {isSM && <Box sx={{display: 'flex', justifyContent: 'space-between'}}> 
+                            <Box className='mid-btn back-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '7rem' }}>
+                                <Typography variant='h5'>Cancel</Typography>
+                            </Box>
+                            <Box className='mid-btn primary-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '7rem' }}>
+                                <Typography variant='h5'>Submit</Typography>
+                            </Box>
+                        </Box>}
+                    </Box>}
+
+                </Box>
+            </Modal>
+        </div>
+    );
+}
+
+export function PlannersFeedBackModal({data}) {
+    const [feedback, setFeedback] = useState("")
+    const [open, setOpen] = React.useState(false);
+    const [count, setCount] = useState(data.rating)
+    const [width, setWidth] = useState(window.innerWidth)
+    const [modalStyle, setModalStyle] = useState(false)
+
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useEffect(() => {
+        setCount(data.rating)
+        setFeedback(data.feedback)
+
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(true)
+        }
+        if (width > 599){
+            setModalStyle(false)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width])
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            <Box className='mid-btn hollow-btn' onClick={handleOpen} sx={{width: '100%',mt: '1rem' , height: '2.25rem' }} >
+                <Typography variant='h5'>View Feedback</Typography> 
+            </Box>
+
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={modalStyle? reportStyleMobile : reportStyle}>
+                    <Typography variant="h4" fontWeight={'500'} textAlign={'center'} >Vehicle's Owner Rating</Typography>
+                    {/* <Typography variant='h5' fontWeight={'500'} sx={{mt: '.75rem'}}>Are you satisfied </Typography> */}
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', m: '1.25rem 0', gap: '.75rem'}}>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 1? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 2? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 3? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 4? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+                        <Box sx={{cursor: 'pointer'}}>{count >= 5? <GoStarFill className='starFill' size={'2rem'} />:<GoStar className='star' size={'2rem'} />} </Box>
+
                     </Box>
                     
-                    <Box mb={'1rem'}>
-                        <Typography variant='h5' fontWeight={'500'} mb='.7rem'>System Repaired</Typography>
+                    <Typography variant='h5' fontWeight={'500'} sx={{mb: '1.3rem'}}>Feedback</Typography>
+                    <Typography variant='h5' fontWeight={'400'} sx={{mb: '1.3rem'}}>{feedback}</Typography>
 
-                        {/* <SelectFetchedUser /> */}
-                        <Box sx={{height: '2.25rem', border: '1px solid gray', borderRadius: '.3rem' }}></Box>
+                    <Box className='mid-btn back-btn' onClick={handleClose}  sx={{mt: '1.5rem', height: '2.25rem' }}>
+                        <Typography variant='h5'>Close</Typography>
                     </Box>
-
-                    <Box mb={'1rem'}>
-                        <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Completion Date</Typography>
-                        <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="date" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
-                    </Box>
-
-                    <Box mb={'1rem'}>
-                        <Typography variant='h5' fontWeight={'500'} mb='.75rem'>Add Image</Typography>
-                        <input className={inputError?'input input-error':'input'} name = {"issues"} value={''} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.25rem', background: "white", color: 'black'}}/>
-                    </Box>
-
-                    <Box>
-                        <Avatar sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar  size={'1.5rem'}/> </Avatar>
-                    </Box>
-
-                    {!isSM && <Box sx={{display: 'flex', justifyContent: 'space-between'}}> 
-                        <Box className='mid-btn back-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '10rem' }}>
-                            <Typography variant='h5'>Cancel</Typography>
-                        </Box>
-                        <Box className='mid-btn primary-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '10rem' }}>
-                            <Typography variant='h5'>Submit</Typography>
-                        </Box>
-                    </Box>}
-                    
-                    {isSM && <Box sx={{display: 'flex', justifyContent: 'space-between'}}> 
-                        <Box className='mid-btn back-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '7rem' }}>
-                            <Typography variant='h5'>Cancel</Typography>
-                        </Box>
-                        <Box className='mid-btn primary-btn'  sx={{mt: '1.5rem', height: '2.25rem', width: '7rem' }}>
-                            <Typography variant='h5'>Submit</Typography>
-                        </Box>
-                    </Box>}
                     
                 </Box>
             </Modal>
         </div>
     );
 }
+

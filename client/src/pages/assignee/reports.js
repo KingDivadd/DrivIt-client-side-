@@ -21,6 +21,8 @@ import SideBar from 'components/side-bar';
 import SideBarMobile from 'components/side-bar-mobile';
 import AdminSideBar from 'components/admin-component/side-bar';
 import AdminSideBarMobile from 'components/admin-component/side-bar-mobile';
+import MaintSideBar from 'components/maint-side-bar'
+import MaintSideBarMobile from 'components/maint-side-bar-mobile'
 import { TbSortAscending, TbSortDescending } from "react-icons/tb";
 import one from '../../asset/one.jpg'
 import two from '../../asset/two.jpg'
@@ -130,11 +132,14 @@ const Report = ()=>{
         <>
         {show ?
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            {role === "vehicle_assignee" && <SideBar />}
-            {role === "driver" && <SideBar />}
-            {menuIcon && <SideBarMobile />}
-            {role === "maintenance_personnel" && <SideBar />}
+            {(role === "vehicle_assignee" || role === "driver") && <SideBar />}
+            {((role === "vehicle_assignee" || role === "driver") && menuIcon) && <SideBarMobile />}
+
             {role === "vehicle_coordinator" && <AdminSideBar />}
+            {(role === "vehicle_coordinator" && menuIcon) && <AdminSideBarMobile />}
+
+            {role === "maintenance_personnel" && <MaintSideBar />}
+            {(role === "maintenance_personnel" && menuIcon) && <MaintSideBarMobile />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}
@@ -201,10 +206,14 @@ const Report = ()=>{
         </Grid>
             :
             <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            {role === "vehicle_assignee" && <SideBar />}
-            {role === "driver" && <SideBar />}
-            {role === "maintenance_personnel" && <SideBar />}
+            {(role === "vehicle_assignee" || role === "driver") && <SideBar />}
+            {((role === "vehicle_assignee" || role === "driver") && menuIcon) && <SideBarMobile />}
+
             {role === "vehicle_coordinator" && <AdminSideBar />}
+            {(role === "vehicle_coordinator" && menuIcon) && <AdminSideBarMobile />}
+
+            {role === "maintenance_personnel" && <MaintSideBar />}
+            {(role === "maintenance_personnel" && menuIcon) && <MaintSideBarMobile />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}
@@ -223,7 +232,7 @@ const Report = ()=>{
                         
                         <Box sx={{width: '100%',  mt: '.75rem',background: 'white', borderRadius: '.3rem',p:'.5rem', }}>
                             
-                            <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))', gap: '1rem',mt: '.75rem'}} >
+                            <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))', gap: '1rem',mt: '.5rem'}} >
                                 {[1,2,3,4,5,6,7,8].map((data, ind)=>{
 
                                     return (
@@ -243,10 +252,14 @@ const Report = ()=>{
         </>
         :
         <Grid container component={'main'}  sx={{height: '100vh', overflowY: 'hidden',}}>
-            {role === "vehicle_assignee" && <SideBar />}
-            {role === "driver" && <SideBar />}
-            {role === "maintenance_personnel" && <SideBar />}
+            {(role === "vehicle_assignee" || role === "driver") && <SideBar />}
+            {((role === "vehicle_assignee" || role === "driver") && menuIcon) && <SideBarMobile />}
+
             {role === "vehicle_coordinator" && <AdminSideBar />}
+            {(role === "vehicle_coordinator" && menuIcon) && <AdminSideBarMobile />}
+
+            {role === "maintenance_personnel" && <MaintSideBar />}
+            {(role === "maintenance_personnel" && menuIcon) && <MaintSideBarMobile />}
             {/* right side */}
             <Grid item xs={12} sm={8} md={9.5} lg={10} direction="column" justifyContent="space-between" alignItems="flex-start" sx={{overflowY:'auto', height: '100vh' }} >
                 {/* right top section */}

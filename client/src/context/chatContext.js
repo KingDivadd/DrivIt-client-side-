@@ -9,7 +9,6 @@ export const ChatProvider = ({children})=>{
     const [userRole, setUserRole] = useState({boo: true, value: ""})
     const [persistData, setPersistData] = useState({mode: 'light', user: null, isAuth: false, chat: null,})
     const [menu, setMenu] = useState(false)
-    const [status, setStatus] = useState("pending")
     const [alertMsg, setAlertMsg]= useState("Field cannot be empty")
     const [openAlert, setOpenAlert] = useState(false)
     const [alertSeverity, setAlertSeverity] = useState('warning')
@@ -20,15 +19,10 @@ export const ChatProvider = ({children})=>{
     const [newDailyLog, setNewDailyLog] = useState(false)
     const [newIncedentReport, setNewIncedentReport] = useState(false)
     const [newVehicle, setNewVehicle] = useState(false)
-
-    useEffect(() => {
-    const fetched_status = localStorage.getItem('status')
-    setStatus(fetched_status)
-    }, [])
-
+    const [statusUpdate, setStatusUpdate] = useState(false)
 
     return <ChatContext.Provider 
-            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, status, setStatus, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport, newVehicle, setNewVehicle }}
+            value={{mode, setMode,userInfo, setUserInfo, isAuth, setIsAuth, persistData, setPersistData, userRole, setUserRole, menu, setMenu, alertMsg, setAlertMsg, openAlert, setOpenAlert, alertSeverity, setAlertSeverity, showHis, setShowHis, maintData, setMaintData, planMaintInput, setPlanMaintInput, newPlannedMaint, setNewPlannedMaint, newDailyLog, setNewDailyLog, newIncedentReport, setNewIncedentReport, newVehicle, setNewVehicle, statusUpdate, setStatusUpdate }}
             >
             {children}
         </ChatContext.Provider>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import Box from '@mui/material/Box';
+import {Box, Grid} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -12,16 +12,19 @@ import { FaSquareCheck } from "react-icons/fa6";
 import BarChart from './bar-chart';
 import DoughnutChart from "./donut-chart";
 import david from "../asset/david.jpg"
-import { FeedBackModal, MaintFeedBackModal } from './modal';
+import { FeedBackModal, MaintFeedBackModal, VehicleServiceSeletctStatusModal, SelectMaintStatusModal } from './modal';
 import { FaCar } from "react-icons/fa6";
-import { SelectMaintStatusModal } from './modal';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AlertMessage from "./snackbar";
 import { GoChecklist } from "react-icons/go";
 import Skeleton from '@mui/material/Skeleton';
 import { useMediaQuery } from '@mui/material';
-
+import MultiSelectDropdown from "./check-box-list";
+import { IoIosCloseCircleOutline, IoIosSquareOutline } from "react-icons/io";
+import { IoIosCheckboxOutline } from "react-icons/io";
+import { AiOutlineCaretDown } from "react-icons/ai";
+import { AiOutlineCaretUp } from "react-icons/ai";
 
 
 
@@ -484,11 +487,11 @@ export const ReportCardSkeleton = ()=>{
     return (
         <Card  sx={{ minWidth: '15rem', cursor: 'pointer', p: '0' }}>
             <CardContent sx={{p: '0 .5rem'}}>
-                <Box sx={{mb: '1rem',mt: '.5rem',height: '8rem',}}><Skeleton animation="wave" width={'100%'} height={'100%'} /> </Box>
+                <Skeleton animation="wave" width={'100%'} height={'10rem'} sx={{mt: '-.75rem', mb: '-.75rem'}} />
 
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'flex-start', mb: '-.85rem', gap: '.75rem'}}>
-                        <Skeleton animation="wave" width={'100%'} height={'1.5rem'}  />
-                        <Skeleton animation="wave" width={'100%'} height={'1.5rem'}  />
+                        <Skeleton animation="wave" width={'100%'} height={'4rem'} sx={{mt: '-.75rem', mb: '-.75rem'}} />
+                        <Skeleton animation="wave" width={'100%'} height={'4rem'} sx={{mt: '-.75rem', mb: '-.75rem'}} />
 
                 </Box>
             </CardContent>
@@ -692,7 +695,7 @@ export const MaintReportCard = ({})=>{
     return (
         <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', }}>
             <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
-                    <Typography variant='h4' mb={'2rem'} fontWeight={'500'}>Maintenance Report</Typography>
+                    <Typography variant='h4' mb={'2rem'} fontWeight={'500'} textAlign={'center'} >Maintenance Report</Typography>
                     
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Service(s) Done</Typography>
                     <input className='input  search-input' name = {"username"} value={""} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', marginBottom: '1.5rem'}}/>
@@ -700,9 +703,6 @@ export const MaintReportCard = ({})=>{
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Service Description</Typography>
                     <input className='input  search-input' name = {"username"} value={""} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', marginBottom: '1.5rem'}}/>
                     
-                    <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Service Cost</Typography>
-                    <input className='input  search-input' name = {"username"} value={""} onChange={(e)=> handleChange(e) }type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray',  marginBottom: '1.5rem'}}/>
-
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
                     <input className='input  search-input' name = {"username"} value={"Select date"} onChange={(e)=> handleChange(e) }type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray',  marginBottom: '1.5rem'}}/>
 
@@ -726,13 +726,9 @@ export const MaintReportCard = ({})=>{
 
 export const MaintStatusCard = ()=>{
 
-    const {status, setStatus} = ChatState()
 
     useEffect(() => {
-        localStorage.setItem('status', status)
-        if(status === 'accepted'){
-            
-        }
+        
     }, [status])
     return (
         <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
@@ -784,6 +780,232 @@ export const MaintFeedbackCard = ({})=>{
                     <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
                     <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
                     <MaintFeedBackModal />
+            </CardContent>
+        
+        </Card>
+    )
+}
+
+
+export const VehicleServiceMaintStatusCard = ({data})=>{
+    const [statusModal, setStatusModal] = useState(false)
+    const [show, setShow] = useState(false)
+    const [status, setStatus] = useState(data.status)
+
+    useEffect(() => {
+        if(data){
+            setStatus(data.status);
+            setShow(true)};
+    }, [data])
+
+    const handleStatus = (fish)=>{
+        setStatus(fish)
+        if(statusModal){
+            setStatusModal(false)
+        }
+        if (!statusModal){
+            setStatusModal(true)
+        }
+    }
+    
+    return (
+        <>
+        {show?
+        <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
+            <CardContent sx={{ }}>
+                <Typography variant='h4' fontWeight={'500'} mb={'2rem'} textAlign={'center'} >Current Maintenance Status</Typography>
+                <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start',gap: '1.5rem', width: '100%'}}>
+                    
+                    <Box className={status === "pending" ? "pending-stat stat":"stat"} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Pending</Typography>
+                    </Box>                    
+                    
+                    <Box className={status === "accepted" ? "accepted-stat stat":"stat"} onClick={()=> handleStatus('accepted')}  sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><GoChecklist size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Accepted</Typography>
+                    </Box>                    
+
+                    <Box className={status === "in-shop" ? "in-shop-stat stat":"stat"} onClick={()=> handleStatus('in-shop')} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><GiHomeGarage size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Shop</Typography>
+                    </Box>                    
+
+                    <Box className={status === "in-progress" ? "in-progress-stat stat":"stat"} onClick={()=> handleStatus('in-progress')} sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><GiHomeGarage size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">In Progress</Typography>
+                    </Box>                    
+
+                    <Box className={status === "completed" ? "completed-stat stat":"stat"}onClick={()=> handleStatus('completed')}  sx={{}}>
+                        <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><FaSquareCheck size={'1.6rem'} /> </Box>
+                        <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Completed</Typography>
+                    </Box>                                     
+
+                </Box>
+            
+                {statusModal && <VehicleServiceSeletctStatusModal newStatus={status} res={data} statusModal={statusModal} />}
+            </CardContent>
+        
+        </Card>
+        :
+        <Card  sx={{ width: '100%', cursor: 'pointer', mt: '.75rem'}}>
+            <CardContent sx={{ }}>
+                <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Current Maintenance Status</Typography>
+                <Box>
+                    <Skeleton animation="wave" width={'100%'} height={'5rem'} sx={{mt: '-1rem', mb: '-1rem'}} />
+                    <Skeleton animation="wave" width={'100%'} height={'5rem'} sx={{mt: '-1rem', mb: '-1rem'}} />
+                </Box>
+            
+            </CardContent>
+        
+        </Card>}
+
+        </>
+    )
+}
+
+
+
+export const VehicleServiceMaintReportCard = ({})=>{
+    const [selected, setSelected] = useState(false)
+    const [maintLog, setMaintLog] = useState({services: [], clicked: false })
+    const [index, setIndex] = useState([])
+    const [report, setReport] = useState(true)
+    const [showDrop, setShowDrop] = useState(false)
+    const [maintReport, setMaintReport] = useState({services: [], issues: "", date: "", image: ""})
+        
+    const handleDelete = () => {
+        console.info('You clicked the delete icon.');
+    };
+    const showInfoPage = ()=>{
+        setReport(false)
+    }
+
+    const showFeedbackPage = ()=>{
+        setReport(true)
+    }
+
+    const handleChange = (e)=>{
+        const name = e.target.name
+        const value = e.target.value
+        console.log(name, value)
+    }
+
+    const handleDropdown = ()=>{
+        if (showDrop){setShowDrop(false)}
+        if (!showDrop){setShowDrop(true)}
+    }
+
+    const handleDroplist = (data, ind)=>{
+        const services = maintLog.services
+        if(services.includes(data)){
+            const newServices = services.filter((res)=> res !== data)
+            setMaintLog({...maintLog, services: newServices})
+        }else{
+        services.push(data)
+        setMaintLog({...maintLog, services: services})
+        // console.log(maintLog.services)
+        }
+    }
+
+    const handleRemoveService = (data)=>{
+        const newServices = maintLog.services.filter((res)=> res !== data)
+        setMaintLog({...maintLog, services: newServices})
+    }
+    
+    return (
+        <Card  sx={{ background: '#FFFFF' , width: '100%', cursor: 'pointer', }}>
+            <CardContent sx={{ p: '.5rem', pb: '0', borderRadius: '.5rem' }}>
+                    <Box  mb={'1.5rem'} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} >
+                        <Box  onClick={()=>showInfoPage()} sx={{width: '100%'}}>
+                            <Box className="mid-btn hollow-btn" sx={{height: '2.25rem', width: 'fit-content', padding: '0 .5rem'}}>
+                                <Typography variant={'h5'}>View Report</Typography>
+                            </Box>
+                        </Box>
+                        <Box  onClick={()=>showFeedbackPage()} sx={{width: '100%', display: 'flex', justifyContent: 'flex-end'}}>
+                            <Box className="mid-btn hollow-btn" sx={{height: '2.25rem', width: 'fit-content', padding: '0 .5rem'}}>
+                                <Typography variant={'h5'}>Edit Report</Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    {report ? 
+                    <Box>
+
+                        <Typography variant='h4' mb={'2rem'} fontWeight={'500'} textAlign={'center'} >Maintenance Reports</Typography>
+                        
+                        {/* The is a drop down with a list of things done */}
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service Description</Typography>
+                        <input className='input  search-input' name = {"username"} value={""} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray', marginBottom: '1.5rem'}}/>
+
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'500'}>Service(s) Done</Typography>
+
+                        {maintLog.services.length > 0 && 
+                        <Box sx={{ maxHeight: '11rem',p: '.5rem', borderRadius: '.3rem', mb: '.75rem', border: '1px solid gray', overflowY: 'auto'}}>
+                            {maintLog.services.map((data, ind)=>{
+                                return(
+                                    <Box key={ind} className={'small-rounded-btn'}>
+                                        <Box onClick={()=>handleRemoveService(data)} className={'service-icon'} sx={{display: 'flex', alignItems: 'center', height: '100%', mr: '.5rem', cursor: 'pointer'}}><IoIosCloseCircleOutline size={'1.2rem'} /> </Box>
+                                        <Typography variant='h6'>{data}</Typography> 
+                                    </Box>
+                                )
+                            })}
+                        </Box>}
+
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >Select services</Typography>
+                                {!showDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+                            {showDrop && 
+                            <Box className="cont-abs">
+                                {[1,2,3,4,5,6,7].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        {(maintLog.services.includes(data)) ? <IoIosCheckboxOutline size={'1.25rem'} />:
+                                        <IoIosSquareOutline size={'1.5rem'} />}
+                                        <Typography variant={'h5'} fontWeight={'500'}>The firstt</Typography>
+                                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                        
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
+                        <input className='input  search-input' name = {"datae"} value={maintReport.date} onChange={(e)=> handleChange(e) }type="date" style={{width: '100%', height:'2.5rem', background: "white", color: 'black', border: '1px solid gray',  marginBottom: '1.5rem'}}/>
+
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
+                        <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
+
+                        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: '2rem', gap: '1rem'}}>
+                            <Box className="mid-btn back-btn" sx={{width: '11rem'}}>
+                                <Typography variant='h5' >Edit</Typography>
+                            </Box>
+                            <Box className="mid-btn primary-btn" sx={{ width: '11rem'}}>
+                                <Typography variant='h5'>Submit</Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                        :
+                    <Box>
+                        <Typography variant='h4' mb={'1.5rem'} fontWeight={'500'}>Maintenance Report</Typography>
+                    
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Vehicle Type</Typography>
+                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>Car</Typography>
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair Done</Typography>
+                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No report available.</Typography>
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Repair done</Typography>
+                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>No reports available</Typography>
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Completion Date</Typography>
+                        <Typography variant='h6' mb={'1.25rem'} fontWeight={'500'}>31 January, 2024</Typography>
+                        <Typography variant='h5' mb={'.75rem'} fontWeight={'400'}>Image Report</Typography>
+                        <Avatar sizes='10rem' sx={{ background: '#1B61E4', color: 'white', height:'11rem', width: '100%', borderRadius: '.3rem', }}> <FaCar /> </Avatar> 
+                        <MaintFeedBackModal />
+                    </Box>}
+
+
+
             </CardContent>
         
         </Card>
