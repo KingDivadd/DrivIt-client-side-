@@ -11,7 +11,9 @@ import { ChatState } from 'context/chatContext';
 import { FaSquareCheck } from "react-icons/fa6";
 import BarChart from './bar-chart';
 import DoughnutChart from "./donut-chart";
-import david from "../asset/david.jpg"
+import driver from "../asset/driver.png"
+import user from "../asset/user.png"
+import maint_personnel from "../asset/maint_personnel.png"
 import { FeedBackModal, MaintFeedBackModal, VehicleServiceSeletctStatusModal, SelectMaintStatusModal } from './modal';
 import { FaCar } from "react-icons/fa6";
 import axios from "axios";
@@ -229,10 +231,32 @@ export const ServiceChartCard = ({})=>{
     return (
         <Card  sx={{ background: '#FFFFF', cursor: 'pointer', mb: '.75rem' }}>
             <CardContent>
-                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} >
+                <Typography variant="h4" mb={'2rem'} fontWeight={'500'} textAlign={'center'} >
                     Maintenance Services Analytics
                 </Typography>
-                <BarChart />
+                <DoughnutChart />
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1.5rem' , mt: '1rem'}}>
+                    <Box sx={{display: 'flex', justifyContent: 'flex-start', gap: '1rem'}}>
+                        <Box sx={{height: '1rem', background: '#1B61E4', width: '2.5rem', borderRadius: '.2rem'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'}>Braking System Inspection and Repair</Typography>
+                    </Box>
+                    <Box sx={{display: 'flex', justifyContent: 'flex-start', gap: '1rem'}}>
+                        <Box sx={{height: '1rem', background: '#5E90ED', width: '2.5rem', borderRadius: '.2rem'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'}>Tire / Wheel Inspection and replacement</Typography>
+                    </Box>
+                    <Box sx={{display: 'flex', justifyContent: 'flex-start', gap: '1rem'}}>
+                        <Box sx={{height: '1rem', background: '#0F3A8A', width: '2.5rem', borderRadius: '.2rem'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'}>Engine Inspection and Service (Oil Change)</Typography>
+                    </Box>
+                    <Box sx={{display: 'flex', justifyContent: 'flex-start', gap: '1rem'}}>
+                        <Box sx={{height: '1rem', background: '#0A275C', width: '2.5rem', borderRadius: '.2rem'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'}>Suspension Inspection and replacement</Typography>
+                    </Box>
+                    <Box sx={{display: 'flex', justifyContent: 'flex-start', gap: '1rem'}}>
+                        <Box sx={{height: '1rem', background: '#154EB7', width: '2.5rem', borderRadius: '.2rem'}}></Box>
+                        <Typography variant='h5' fontWeight={'400'}>Other Services</Typography>
+                    </Box>
+                </Box>
             </CardContent>
         
         </Card>
@@ -246,8 +270,7 @@ export const ActiveAssigneeCard = ({})=>{
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'500'}} gutterBottom>
                     Vehicle Owner
                 </Typography>
-                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
-                {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
+                <Box sx={{backgroundImage: `url(${user})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
                         { "Isogun Oluwakemi"}
@@ -279,7 +302,7 @@ export const ActiveDriverCard = ({info})=>{
                 <Typography variant="h4" mb={'2rem'} fontWeight={'500'} sx={{ display: 'flex', justifyContent: 'center'}} gutterBottom>
                     Assigned Driver
                 </Typography>
-                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '13rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}>
+                <Box sx={{backgroundImage: `url(${driver})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '13rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}>
                 </Box>
 
                 <Box  sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
@@ -602,7 +625,7 @@ export const MaintPersonnelCard = ({info})=>{
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'500',}} gutterBottom>
                     Maintenance Personnel
                 </Typography>
-                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
+                <Box sx={{backgroundImage: `url(${maint_personnel})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
                         {info.lastName} {info.firstName}

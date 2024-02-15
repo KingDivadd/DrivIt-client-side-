@@ -20,22 +20,30 @@ import { TbSortAscending, TbSortDescending, TbList } from "react-icons/tb";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import NotificationPopover from './notification';
 import david from '../asset/david.jpg'
+import user from '../asset/user.png'
+import admin from '../asset/assignee.png'
+import driver from '../asset/driver.png'
+import maint_personnel from '../asset/maint_personnel.png'
 
 const MenuBar = ({img})=>{
     const [currentTime, setCurrentTime] = useState(new Date())
     const [menuIcon, setMenuIcon] = useState(false)
     const [width, setWidth] = useState(window.innerWidth)
     const {menu, setMenu} = ChatState()
+    const [role, setRole] = useState("")
+    const navigate = useNavigate()
 
     const resize = ()=>{
         setWidth(window.innerWidth)
     }
 
     useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        if (userInfo === 'null'){navigate('/login')}
+        setRole(userInfo.loggedInUser.role)
         setInterval(() => {
             setCurrentTime(new Date())
         }, 1000);
-        localStorage.setItem('menu',menu)
         window.addEventListener('resize', resize)
         if (width <= 599 ){
             setMenuIcon(true)
@@ -88,12 +96,10 @@ const MenuBar = ({img})=>{
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <NotificationPopover />
-                        <Box sx={{
-                            backgroundImage: `url(${david})`,
-                            backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
-                            height: '2.5rem', width: '2.5rem', borderRadius: '50%',p: '.2rem'
-                        }}>
-                        </Box>
+                        {role === "driver" && <Box sx={{ backgroundImage: `url(${driver})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "maintenance_personnel" && <Box sx={{ backgroundImage: `url(${maint_personnel})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "vehicle_assignee" && <Box sx={{ backgroundImage: `url(${user})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "vehicle_coordinator" && <Box sx={{ backgroundImage: `url(${admin})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
                 </Box>
             </Box>}
 
@@ -113,12 +119,10 @@ const MenuBar = ({img})=>{
                 </Box>
                 <Box sx={{display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <NotificationPopover />
-                        <Box sx={{
-                            backgroundImage: `url(${david})`,
-                            backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',
-                            height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem'
-                        }}>
-                        </Box>
+                        {role === "driver" && <Box sx={{ backgroundImage: `url(${driver})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "maintenance_personnel" && <Box sx={{ backgroundImage: `url(${maint_personnel})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "vehicle_assignee" && <Box sx={{ backgroundImage: `url(${user})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
+                        {role === "vehicle_coordinator" && <Box sx={{ backgroundImage: `url(${admin})`,  backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',  height: '2.25rem', width: '2.25rem', borderRadius: '50%',p: '.15rem' }}>  </Box>}
                 </Box>
             </Box>}
 

@@ -162,7 +162,6 @@ export default function AddVehicleModal() {
         const name = e.target.name
         const value = e.target.value
         if (name === "current_mileage"){
-            console.log('Mileage', Number(value).toLocaleString())
             const newValue = value.replace(/,/g,"")
             setCreateVehicle({...createVehicle, current_mileage: newValue})
         }
@@ -283,7 +282,7 @@ export default function AddVehicleModal() {
                                 </Box>
                                 {showVehDrop && 
                                 <Box className="cont-abs">
-                                    {["Car","Bus", "SUV", "Pickup Truc"].map((data, ind)=>{
+                                    {["Car","Bus", "SUV", "Pickup Truck"].map((data, ind)=>{
                                         return(
                                         <Box  key={ind} onClick={()=> handleVehDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
                                             <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>

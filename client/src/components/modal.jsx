@@ -167,7 +167,6 @@ export default function PlanMaintenance() {
     }
 
     const handleSubmit = async()=>{
-        // console.log('creating', maintLog)
         setLoading(true)
             if (!navigator.onLine){
                 setAlertMsg("Network Error !!!"); setAlertSeverity("warning"); setOpenAlert(true);
@@ -199,7 +198,6 @@ export default function PlanMaintenance() {
                             "Authorization": `Bearer ${token}`
                         }
                     });
-                        console.log(maint.data)
                         if(newPlannedMaint){setNewPlannedMaint(false)}
                         if (!newPlannedMaint){setNewPlannedMaint(true)}
                         setMaintLog({vehicle:'', concerns: '', services: [], date: ''})
@@ -207,7 +205,6 @@ export default function PlanMaintenance() {
                         clearInterval(handleSubmit)
                         setLoading(false)
                     } catch (err) {
-                        console.log(err)
                         if (!navigator.onLine) {
                             setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
                         } else if (err.response) {
@@ -218,7 +215,6 @@ export default function PlanMaintenance() {
                     }
 
                 } catch (err) {
-                    console.log(err)
                     if (!navigator.onLine) {
                         setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
                         // setInterval(handleSubmit, 3000)
@@ -246,7 +242,6 @@ export default function PlanMaintenance() {
         }else{
         services.push(data)
         setMaintLog({...maintLog, services: services})
-        // console.log(maintLog.services)
         }
     }
     const handleDropdown = ()=>{
@@ -262,7 +257,6 @@ export default function PlanMaintenance() {
         }else{
         services.push(data)
         setMaintLog({...maintLog, services: services})
-        // console.log(maintLog.services)
         }
     }
 
@@ -367,13 +361,16 @@ export default function PlanMaintenance() {
 
 
 export function CreateLogModal() {
-    const [createLog, setCreateLog] = useState({vehicle_id: '', logTime: 'Morning', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
+    const [createLog, setCreateLog] = useState({vehicle_id: '', logTime: 'Select log time.', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: 'Select fuel level', endingFuelLevel: 'Select fuel level' })
     const [logTime, setLogTime] = useState(false)
     const [startingFuel, setStartingFuel] = useState(false)
     const [endingFuel, setEndingFuel] = useState(false)
     const [openServices, setOpenServices]= useState(false)
     const [loading, setLoading] = useState(false)
     const {setOpenAlert, setAlertMsg, setAlertSeverity, newDailyLog, setNewDailyLog} = ChatState()
+    const [showLogDrop, setShowLogDrop] = useState(false)
+    const [showMFuelDrop, setShowMFuelDrop] = useState(false)
+    const [showEFuelDrop, setShowEFuelDrop] = useState(false)
     const [width, setWidth] = useState(window.innerWidth)
     const [modalStyle, setModalStyle] = useState(false)
 
@@ -403,7 +400,12 @@ export function CreateLogModal() {
     const handleChange = (e)=>{
         const name = e.target.name
         const value = e.target.value
-        setCreateLog({...createLog, [name]: value})
+        if (name === "startingMileage" || name === "endingMileage"){
+            const newValue = value.replace(/,/g, '')
+            setCreateLog({...createLog, [name]: newValue})
+        }else{
+            setCreateLog({...createLog, [name]: value})
+        }
         
     }
 
@@ -414,16 +416,14 @@ export function CreateLogModal() {
             setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true); setLoading(false);
         }
         else{
-            console.log(createLog)
-            console.log('still here')
             try {
             const token = localStorage.getItem('token');
             if (token === null){navigate('/login')}
             const user = JSON.parse(sessionStorage.getItem('userInfo'))
             if (user=== null){navigate('/login')}
+
             const vehicle = JSON.parse(sessionStorage.getItem('userInfo')).loggedInUser.vehicle
             setCreateLog({...createLog, vehicle_id: vehicle })
-            console.log(createLog)
 
             const logInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/drivers-log/new-log", {vehicle_id: createLog.vehicle_id, currentLocation: createLog.currentLocation, startingMileage: createLog.startingMileage, endingMileage: createLog.endingMileage, startingFuelLevel: createLog.startingFuelLevel, endingFuelLevel: createLog.endingFuelLevel, logTime: createLog.logTime}, {
                 headers: {
@@ -431,12 +431,13 @@ export function CreateLogModal() {
                     "Authorization": `Bearer ${token}`
                 }
             });
-            console.log(logInfo.data)
             setLoading(false)
+            setOpenAlert(true); setAlertMsg(logInfo.data.msg); setAlertSeverity('success');
             if (newDailyLog){setNewDailyLog(false)}
             if (!newDailyLog){setNewDailyLog(true)}
+            handleClose()
+            setCreateLog({...createLog, vehicle_id: '', logTime: 'Select log time.', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
         } catch (err) {
-            console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
             } else if (err.response) {
@@ -449,36 +450,29 @@ export function CreateLogModal() {
         }
     }
 
-
-    function handleLogTime(){
-        if (logTime){setLogTime(false)}
-        if (!logTime){setLogTime(true)}
+    function handleLogDropdown(){
+        if (showLogDrop){setShowLogDrop(false)}
+        if (!showLogDrop){setShowLogDrop(true); setShowMFuelDrop(false); setShowEFuelDrop(false) }
+    }
+    function handleMFuelDropdown(){
+        if (showMFuelDrop){setShowMFuelDrop(false)}
+        if (!showMFuelDrop){setShowMFuelDrop(true); setShowEFuelDrop(false); setShowLogDrop(false)}
+    }
+    function handleEFuelDropdown(){
+        if (showEFuelDrop){setShowEFuelDrop(false)}
+        if (!showEFuelDrop){setShowEFuelDrop(true); setShowMFuelDrop(false); setShowLogDrop(false) }
     }
 
-    function handleStartingFuel(){
-        if(startingFuel){setStartingFuel(false)}
-        if (!startingFuel){setStartingFuel(true)}
+    function handleLogDroplist(data){
+        const fish = data.toLowerCase(); setCreateLog({...createLog, logTime: fish}); setShowLogDrop(false);
     }
 
-    function handleEndingFuel(){
-        if(endingFuel){setEndingFuel(false)}
-        if (!endingFuel){setEndingFuel(true)}
+    function handleMFuelDroplist(data){
+        setCreateLog({...createLog, startingFuelLevel: data}); setShowMFuelDrop(false);
     }
 
-    function handleLogTimeSelect(data){
-        setCreateLog({...createLog, logTime: data})
-        setLogTime(false)
-        console.log(data)
-    }
-
-    function handleStartingFuelSelect(data) {
-        setCreateLog({...createLog, startingFuelLevel: data})
-        setStartingFuel(false)
-    }
-
-    function handleEndingFuelSelect(data) {
-        setCreateLog({...createLog, endingFuelLevel: data})
-        setStartingFuel(false)
+    function handleEFuelDroplist(data){
+        setCreateLog({...createLog, endingFuelLevel: data}); setShowEFuelDrop(false);
     }
 
     const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
@@ -498,84 +492,329 @@ export function CreateLogModal() {
                         <Typography variant="h4" fontWeight={'500'}>New Vehicle Log</Typography>
                     </Box>
 
-                    <Box  sx={{ position: 'relative', mt: 4 }}>
-                        <Typography variant='h5' fontWeight='500' mb='.75rem' > Log Time</Typography>
-                        <Box onClick={handleLogTime} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
-                            <Typography variant='h5' fontWeight={'400'} >{createLog.logTime !== "" ? createLog.logTime : "Select log time" }</Typography>
-                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
-                        </Box>
 
-                        {logTime && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
-                            {['Morning', 'Evening'].map((data,ind)=>{
-                                return (
-                                    <Box key={ind} onClick={()=>handleLogTimeSelect(data)} className={'service-list'}>
-                                        <Typography variant='h5'>{data}</Typography>
+                    <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Log Time</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleLogDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.logTime}</Typography>
+                                {!showLogDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+
+                            {showLogDrop && 
+                            <Box className="cont-abs">
+                                {["Morning", "Evening"].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleLogDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
                                     </Box>
-                                )
-                            })}
-                        </Box>}
-                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box> 
+
 
                     <Box sx={{mt: 3}}>
                         <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Current Location</Typography>
                         <input className='input' name = {"currentLocation"} value={createLog.currentLocation} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>
 
-                    {createLog.logTime === 'Morning' && <Box sx={{mt: 3}}>
-                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.5rem'}}>Starting Odometer</Typography>
-                        <input className='input' name = {"startingMileage"} value={createLog.startingMileage } onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    {createLog.logTime === 'morning' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Starting Odometer</Typography>
+                        <input className='input' name = {"startingMileage"} value={Number(createLog.startingMileage).toLocaleString() } onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>}
 
-                    {createLog.logTime === 'Evening' && <Box sx={{mt: 3}}>
-                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.5rem'}}>Ending Odometer</Typography>
-                        <input className='input' name = {"endingMileage"} value={createLog.endingMileage} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    {createLog.logTime === 'evening' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Ending Odometer</Typography>
+                        <input className='input' name = {"endingMileage"} value={Number(createLog.endingMileage).toLocaleString()} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
                     </Box>}
 
-                    {createLog.logTime === 'Morning' && <Box  sx={{ position: 'relative', mt: 4 }}>
-                        <Typography variant='h5' fontWeight={'500'} mb='.75rem' >Starting Fuel Level</Typography>
-                        <Box onClick={handleStartingFuel} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
-                            <Typography variant='h5' fontWeight={'400'} >{createLog.startingFuelLevel !== "" ? createLog.startingFuelLevel : "Starting Fuel Level" }</Typography>
-                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
-                        </Box>
+                    {createLog.logTime === 'morning' && <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Fuel Level</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleMFuelDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .75rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.startingFuelLevel}</Typography>
+                                {!showMFuelDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
 
-                        {startingFuel && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
-                            {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data,ind)=>{
-                                return (
-                                    <Box key={ind} onClick={()=>handleStartingFuelSelect(data)} className={'service-list'}>
-                                        <Typography variant='h5'>{data}</Typography>
+                            {showMFuelDrop && 
+                            <Box className="cont-abs">
+                                {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleMFuelDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
                                     </Box>
-                                )
-                            })}
-                        </Box>}
-                    </Box>}
-
-                    {createLog.logTime === 'Evening' && <Box  sx={{ position: 'relative', mt: 4 }}>
-                            <Typography variant='h5' fontWeight={'500'} mb='.75rem' >Evening Fuel Level</Typography>
-                        <Box onClick={handleEndingFuel} sx={{justifyContent: 'space-between', p: '0 .5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', height: '2.5rem', border: '1px solid gray',borderRadius: '.3rem' }}>
-
-                            <Typography variant='h5' fontWeight={'500'} >{createLog.endingFuelLevel !== "" ? createLog.endingFuelLevel : "Evening Fuel Level" }</Typography>
-                            <Box sx={{height: '1000%', display: 'flex', alignItems: 'center'}}>{!openServices ? <FaCaretDown size={'1.5rem'} />:<FaCaretUp size={'1.5rem'} />} </Box>
+                                    )
+                                })}
+                            </Box>}
                         </Box>
-
-                        {endingFuel && <Box sx={{position: 'absolute', top: '4.75rem', left: '-.5%', width: '100%', background: 'white', border: '1px solid gray', p: '.5rem 0', borderRadius: '.3rem', width: '101%', maxHeight: '10.75rem', overflow: 'auto'}}>
-                        {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data,ind)=>{
-                            return (
-                                <Box key={ind} onClick={()=>handleEndingFuelSelect(data)} className={'service-list'}>
-                                    <Typography variant='h6'>{data}</Typography>
-                                </Box>
-                            )
-                            })}
-                        </Box>}
                     </Box>}
+
+                    {createLog.logTime === 'evening' && <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Fuel Level</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleEFuelDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.endingFuelLevel}</Typography>
+                                {!showEFuelDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+
+                            {showEFuelDrop && 
+                            <Box className="cont-abs">
+                                {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleEFuelDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box>}
+
                     
                     <Box sx={{display: 'flex', alignItems: 'flex-end' ,justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
                         <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', position: 'relative' }}>
-                            <Typography variant='h5'>Back</Typography>
+                            <Typography variant='h5'>Close</Typography>
                         </Box>
                         
                         <Box disabled={loading} className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
                             {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
                             {!loading ? <Typography variant='h5'>Create Log</Typography> : ''}
+                        </Box>
+
+                    </Box>
+                </Box>
+            </Modal>
+            <AlertMessage />
+        </div>
+    );
+}
+
+
+export function UpdateDailyLogModal({showModal, log}) {
+    const [createLog, setCreateLog] = useState({vehicle_id: '', logTime: 'Select log time.', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: 'Select fuel level', endingFuelLevel: 'Select Fuel level' })
+    const [logTime, setLogTime] = useState(false)
+    const [startingFuel, setStartingFuel] = useState(false)
+    const [endingFuel, setEndingFuel] = useState(false)
+    const [openServices, setOpenServices]= useState(false)
+    const [loading, setLoading] = useState(false)
+    const {setOpenAlert, setAlertMsg, setAlertSeverity, newDailyLog, setNewDailyLog} = ChatState()
+    const [showLogDrop, setShowLogDrop] = useState(false)
+    const [showMFuelDrop, setShowMFuelDrop] = useState(false)
+    const [showEFuelDrop, setShowEFuelDrop] = useState(false)
+    const [width, setWidth] = useState(window.innerWidth)
+    const [modalStyle, setModalStyle] = useState(false)
+
+    const resize = ()=>{
+        setWidth(window.innerWidth)
+    }
+
+    useEffect(() => {
+        if(showModal){
+            setCreateLog({...createLog, log_id: log._id, currentLocation: log.currentLocation, startingMileage: log.startingMileage, endingMileage: log.endingMileage, startingFuelLevel: log.startingFuelLevel, endingFuelLevel: log.endingFuelLevel, logTime: log.logTime  })
+            handleOpen()} 
+            if (!showModal){handleClose()}
+        
+        window.addEventListener('resize', resize)
+        if (width <= 599 ){
+            setModalStyle(false)
+        }
+        if (width > 599){
+            setModalStyle(true)
+        }
+        return()=>{
+            window.removeEventListener('resize', resize)
+        }
+    }, [width, showModal])
+
+    const [age, setAge] = useState("")
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleChange = (e)=>{
+        const name = e.target.name
+        const value = e.target.value
+        if (name === "startingMileage" || name === "endingMileage"){
+            const newValue = value.replace(/,/g, '')
+            setCreateLog({...createLog, [name]: newValue})
+        }else{
+            setCreateLog({...createLog, [name]: value})
+        }
+        
+    }
+
+    const handleSubmit = async(e)=>{
+        // e.preventDefault()
+        setLoading(true)
+        if (!navigator.onLine){ 
+            setAlertMsg("Network Error!!!"); setAlertSeverity('warning'); setOpenAlert(true); setLoading(false);
+        }
+        else{
+            try {
+            const token = localStorage.getItem('token');
+            if (token === null){navigate('/login')}
+            const user = JSON.parse(sessionStorage.getItem('userInfo'))
+            if (user=== null){navigate('/login')}
+
+            const logInfo = await axios.patch("https://futa-fleet-guard.onrender.com/api/drivers-log/edit-log", {log_id: log._id, currentLocation: createLog.currentLocation, startingMileage: createLog.startingMileage, endingMileage: createLog.endingMileage, startingFuelLevel: createLog.startingFuelLevel, endingFuelLevel: createLog.endingFuelLevel, logTime: createLog.logTime}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setOpenAlert(true); setAlertMsg(logInfo.data.msg); setAlertSeverity('success');
+            setLoading(false)
+            if (newDailyLog){setNewDailyLog(false)}
+            if (!newDailyLog){setNewDailyLog(true)}
+            handleClose()
+            setCreateLog({...createLog, vehicle_id: '', logTime: 'Select log time.', currentLocation: '', startingMileage: '', endingMileage: '', startingFuelLevel: '', endingFuelLevel: '' })
+        } catch (err) {
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setLoading(false);
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true); setLoading(false);
+            }
+        }
+
+        }
+    }
+
+    function handleLogDropdown(){
+        if (showLogDrop){setShowLogDrop(false)}
+        if (!showLogDrop){setShowLogDrop(true); setShowMFuelDrop(false); setShowEFuelDrop(false) }
+    }
+    function handleMFuelDropdown(){
+        if (showMFuelDrop){setShowMFuelDrop(false)}
+        if (!showMFuelDrop){setShowMFuelDrop(true); setShowEFuelDrop(false); setShowLogDrop(false)}
+    }
+    function handleEFuelDropdown(){
+        if (showEFuelDrop){setShowEFuelDrop(false)}
+        if (!showEFuelDrop){setShowEFuelDrop(true); setShowMFuelDrop(false); setShowLogDrop(false) }
+    }
+
+    function handleLogDroplist(data){
+        const fish = data.toLowerCase(); setCreateLog({...createLog, logTime: fish}); setShowLogDrop(false);
+    }
+
+    function handleMFuelDroplist(data){
+        setCreateLog({...createLog, startingFuelLevel: data}); setShowMFuelDrop(false);
+    }
+
+    function handleEFuelDroplist(data){
+        setCreateLog({...createLog, endingFuelLevel: data}); setShowEFuelDrop(false);
+    }
+
+    const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+    return (
+        <div style={{borderColor: '#FFFFF'}}>
+            
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={modalStyle ? styleVlog : styleVlogMobile}>
+                    <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                        <Typography variant="h4" fontWeight={'500'}>Update Vehicle Log</Typography>
+                    </Box>
+
+
+                    <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Log Time</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleLogDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.logTime}</Typography>
+                                {!showLogDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+
+                            {showLogDrop && 
+                            <Box className="cont-abs">
+                                {["Morning", "Evening"].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleLogDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box> 
+
+
+                    <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Current Location</Typography>
+                        <input className='input' name = {"currentLocation"} value={createLog.currentLocation} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>
+
+                    {createLog.logTime === 'morning' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Starting Odometer</Typography>
+                        <input className='input' name = {"startingMileage"} value={Number(createLog.startingMileage).toLocaleString() } onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>}
+
+                    {createLog.logTime === 'evening' && <Box sx={{mt: 3}}>
+                        <Typography variant='h5' fontWeight='500'  sx={{mb: '.75rem'}}>Ending Odometer</Typography>
+                        <input className='input' name = {"endingMileage"} value={Number(createLog.endingMileage).toLocaleString()} onChange={(e)=> handleChange(e) } type="text" style={{width: '100%', height:'2.5rem', background: "white", color: 'black'}}/>
+                    </Box>}
+
+                    {createLog.logTime === 'morning' && <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Fuel Level</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleMFuelDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .75rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.startingFuelLevel}</Typography>
+                                {!showMFuelDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+
+                            {showMFuelDrop && 
+                            <Box className="cont-abs">
+                                {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleMFuelDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box>}
+
+                    {createLog.logTime === 'evening' && <Box sx={{width: '100%', mt: 4}}>
+                        <Typography variant='h5' fontWeight={'500'} sx={{mb: '.75rem'}}>Fuel Level</Typography>
+                        <Box className="cont" mb={'1.25rem'}>
+                            <Box onClick={handleEFuelDropdown} sx={{width: '100%', minHeight: '2.5rem', height: 'auto', border: '1px solid gray', borderRadius: '.3rem', display: 'flex', p: '0 .5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Typography variant={'h5'} fontWeight={'400'} >{createLog.endingFuelLevel}</Typography>
+                                {!showEFuelDrop ? <AiOutlineCaretDown size={'1rem'} /> :
+                                <AiOutlineCaretUp size={'1rem'} />}
+                            </Box>
+
+                            {showEFuelDrop && 
+                            <Box className="cont-abs">
+                                {['Full', 'Quarter full', 'Half full', 'Quarter empty', 'Reserve'].map((data, ind)=>{
+                                    return(
+                                    <Box  key={ind} onClick={()=> handleEFuelDroplist(data, ind)} className={'drop-list'} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%',height: '2.25rem',}}>
+                                        <Typography variant={'h5'} fontWeight={'400'}>{data}</Typography>
+                                    </Box>
+                                    )
+                                })}
+                            </Box>}
+                        </Box>
+                    </Box>}
+
+                    
+                    <Box sx={{display: 'flex', alignItems: 'flex-end' ,justifyContent: 'space-between',gap: '1rem', mt: 4, width: '100%',}}>
+                        <Box className='mid-btn back-btn' onClick={handleClose}  sx={{ textTransform: 'none', width: '8rem', display: 'flex', position: 'relative' }}>
+                            <Typography variant='h5'>Close</Typography>
+                        </Box>
+                        
+                        <Box disabled={loading} className='mid-btn primary-btn' onClick={(e)=>handleSubmit(e)}  sx={{height: '2.5rem', textTransform: 'none', position: 'relative', width: '9rem',}}>
+                            {loading && <CircularProgress  size={26} style={{ position: 'absolute', left: '50%', top: '50%', marginTop: -12, marginLeft: -12, color: 'white' }} />}
+                            {!loading ? <Typography variant='h5'>Update Log</Typography> : ''}
                         </Box>
 
                     </Box>
@@ -618,11 +857,9 @@ export function ReportModal() {
         const name = e.target.name
         const value = e.target.value
         setReport({...createLog, [name]: value})
-        console.log(report)
     }
 
     const handleCreateReport = async()=>{
-        console.log(report)
         setLoading(true)
         if (!navigator.onLine){
             setOpenAlert(true); setAlertMsg('Network Error!!!'); setAlertSeverity('warning')
@@ -638,7 +875,6 @@ export function ReportModal() {
                         "Authorization": `Bearer ${token}`          
                     }
                 })
-                console.log(newReport.data.report)
                 setLoading(false)
                 setOpenAlert(true); setAlertMsg('Report created successfully.'); setAlertSeverity('success')
                 if (newIncedentReport){setNewIncedentReport(false)}
@@ -724,12 +960,9 @@ export function FeedBackModal() {
 
     const handleSubmit = (e)=>{
         if(!feedback){
-            console.log('feedback missing.')
             setInputError(true)
         }
         if(feedback){
-
-        console.log('feedback not missing.')
         sessionStorage.setItem('count', count)
         sessionStorage.setItem('feedback', feedback)
         setOpen(false)
@@ -935,12 +1168,8 @@ export function CreateMaintLogModal() {
 
     const handleChange = (e)=>{
         const name = e.target.name
-        const value = e.target.value
-        
-        console.log(name, value, alert, typeof(Number(value)))
-        
+        const value = e.target.value        
         if(name === 'cost' && typeof(Number(value)) !== 'number'){
-            console.log('error, not a number')
         }
         if(name === 'cost' && typeof(Number(value)) === 'number'){
             setMaintLog({...maintLog, [name]: value})
@@ -955,7 +1184,6 @@ export function CreateMaintLogModal() {
         // e.target.preventDefault()
         // const ned = {serverity: 'warning', msg: 'Cost cannot be string', open: true}
         // setAlertMsg("Cost cannot...sss") ;setOpenAlert(true) ;setAlertSeverity("warning")
-        // console.log( alertMsg, openAlert, alertSeverity )
         setOpenAlert(true)
     }
     
@@ -971,7 +1199,6 @@ export function CreateMaintLogModal() {
         }else{
         services.push(data)
         setMaintLog({...maintLog, services: services})
-        console.log(maintLog.services)
         }
     }
 
@@ -1070,10 +1297,8 @@ export function MaintHisModal() {
         const name = e.target.name
         const value = e.target.value
         
-        console.log(name, value, alert, typeof(Number(value)))
         
         if(name === 'cost' && typeof(Number(value)) !== 'number'){
-            console.log('error, not a number')
         }
         if(name === 'cost' && typeof(Number(value)) === 'number'){
             setMaintLog({...maintLog, [name]: value})
@@ -1097,7 +1322,6 @@ export function MaintHisModal() {
         }else{
         services.push(data)
         setMaintLog({...maintLog, services: services})
-        console.log(maintLog.services)
         }
     }
 
@@ -1232,7 +1456,6 @@ export function VehicleServiceSeletctStatusModal({res, statusModal, newStatus}) 
     }, [statusModal])
     
     const handleProceed = ()=>{
-        console.log('selected status', newStatus)
         if (navigator.onLine){
             changeStatus()
         }
@@ -1244,7 +1467,6 @@ export function VehicleServiceSeletctStatusModal({res, statusModal, newStatus}) 
         if (token === null){navigate('/login')}
         const maint_id = res._id
         const status = newStatus
-        console.log( status, maint_id)
         try {
             const maint = await axios.patch("https://futa-fleet-guard.onrender.com/api/maint-log/update-maint-status", {maint_id, status}, {
                 headers: {
@@ -1253,7 +1475,6 @@ export function VehicleServiceSeletctStatusModal({res, statusModal, newStatus}) 
                 }
             });
 
-            console.log(maint.data)
             setAlertMsg(maint.data.msg); setOpenAlert(true); setAlertSeverity("success");
             setLoading(false)
             handleClose()
@@ -1261,7 +1482,6 @@ export function VehicleServiceSeletctStatusModal({res, statusModal, newStatus}) 
             if (!statusUpdate){setStatusUpdate(true)}
             
         } catch (err) {
-            console.log(err)
             if (!navigator.onLine) {
                 setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
             } else if (err.response) {

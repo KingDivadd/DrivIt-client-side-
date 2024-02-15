@@ -3,7 +3,7 @@ import {Box, useMediaQuery} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import david from '../../asset/david.jpg'
+import admin from '../../asset/assignee.png'
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaSquareCheck } from "react-icons/fa6";
 import Avatar from '@mui/material/Avatar';
@@ -27,7 +27,7 @@ export default function ActiveAdminCard ({}){
                 <Typography variant="h4" sx={{mb: '1.5rem', display: 'flex', justifyContent: 'center', fontWeight:'400'}} gutterBottom>
                     Admin Personnel
                 </Typography>
-                <Box sx={{backgroundImage: `url(${david})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
+                <Box sx={{backgroundImage: `url(${admin})` ,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center',height: '10rem', width: '15rem', borderRadius: '.5rem', m: '0 auto', mb: '1.5rem'}}></Box>
                 {/* <Avatar sizes='10rem' sx={{ m: 1,  background: '#1B61E4', color: 'white', height:'7rem', width: '9rem', borderRadius: '.3rem',m: '0 auto' , mb: '1.5rem'}}> <img src={david} alt="" /> </Avatar> */}
                 <Typography variant="h6" component="div" sx={{display: 'flex', flexDirection:'column', alignItems: 'center'}}>
                     <Typography variant="h4" sx={{mb: '1rem'}} gutterBottom>
@@ -161,21 +161,50 @@ export const VehicleInformationCard = ({vehicle})=>{
 }
 
 export const VehicleStatusCard = ({vehicle})=>{
-    const [status, setStatus] = useState(true)
+    const [status, setStatus] = useState('')
     const [show, setShow] = useState(false)
     const {updateVehicle, setUpdateVehicle} = ChatState()
 
     useEffect(() => {
         if (vehicle._id){
             setShow(true)
-            if(vehicle.assigned_to.length){
-                setStatus(false)
-            }
-            if(!vehicle.assigned_to.length){
-                setStatus(true)
+            if (navigator.onLine){
+                fetchVehicleAssigneeStatus()
             }
         }
     }, [updateVehicle])
+
+    const fetchVehicleAssigneeStatus = async()=>{
+        const token = sessionStorage.getItem('token')
+        const vehicle_id = vehicle._id
+        try {
+            const registeredVehicle = await axios.post("https://futa-fleet-guard.onrender.com/api/vehicle/user-vehicle", {vehicle_id}, {
+                headers: {
+                    "Content-Type":  "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            console.log(registeredVehicle.data.userVehicle.assigned_to)
+            if (registeredVehicle.data.userVehicle.assigned_to.length){
+                console.log('already assigned')
+                setStatus("completed")
+            }
+            if (!registeredVehicle.data.userVehicle.assigned_to.length){
+                console.log('not assigned')
+                setStatus("pending")
+            }
+
+        } catch (err) {
+            console.log(err)
+            if (!navigator.onLine) {
+                setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else if (err.response) {
+                setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            } else {
+                setAlertMsg("An error occurred"); setAlertSeverity("warning"); setOpenAlert(true); setShow(false)
+            }
+        }
+    }
 
     return (
         <>
@@ -185,13 +214,13 @@ export const VehicleStatusCard = ({vehicle})=>{
                 <Typography variant='h4' fontWeight={'500'} mb={'2rem'} >Vehicle Assignment Status</Typography>
                 <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start',gap: '1.5rem', width: '100%'}}>
                     
-                    <Box className={status? "pending-stat stat":"stat"} sx={{}}>
+                    <Box className={status === 'pending'? "pending-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}><MdOutlinePendingActions size={'1.6rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Not Assigned</Typography>
                     </Box>                    
 
 
-                    <Box className={!status?"completed-stat stat":"stat"} sx={{}}>
+                    <Box className={status === 'completed' ?"completed-stat stat":"stat"} sx={{}}>
                         <Box className={''} sx={{ display: 'flex', alignItems: 'center',  height: '100%', width: '2rem', borderRadius: '.3rem' }}> <FaSquareCheck size={'1.4rem'} /> </Box>
                         <Typography variant="h5" fontWeight={'500'} ml={'.5rem'} component="div">Assigned</Typography>
                     </Box> 

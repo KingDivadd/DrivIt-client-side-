@@ -53,40 +53,6 @@ const Dashboard = ()=>{
     }, [width])
 
 
-        // const fetchUserInfo = async () => {
-        //     try {
-        //         const token = sessionStorage.getItem('token');
-        //         if (token === null){ navigate('/login')}
-        //         const userInfo = await axios.post("https://futa-fleet-guard.onrender.com/api/user/find-user",
-        //         {},{
-        //             headers: {
-        //             "Content-type": "Application/json",
-        //             "Authorization": `Bearer ${token}`
-        //             }
-        //         }
-        //         );
-        //         setUser(userInfo.data);
-        //         console.log('user', userInfo.data)
-        //         setRender(false)
-        //         // setInterval(fetchUserInfo)
-        //     } catch (err) {
-        //         console.log(err)
-        //         if (!navigator.onLine) {
-        //         setAlertMsg("No internet connection"); setAlertSeverity("warning"); setOpenAlert(true);
-        //         // setInterval(fetchUserInfo, 3000)
-        //         } else if (err.response) {
-        //         // Handle server errors
-        //         setAlertMsg(err.response.data.err || "An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-        //         navigate('/')
-        //         } else {
-        //             // Handle network errors
-        //             setAlertMsg("An error occurred"); setAlertSeverity("error"); setOpenAlert(true);
-        //             navigate('/')
-        //             }
-        //     }
-        //     };
-
-    
     const isLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
     const isMD = useMediaQuery(theme => theme.breakpoints.down('md'));
     const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));

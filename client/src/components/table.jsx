@@ -16,6 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {MaintHisModal } from './modal'
+import { UpdateDailyLogModal } from './modal';
 import Skeleton from '@mui/material/Skeleton';
 import AlertMessage from './snackbar';
 
@@ -242,7 +243,7 @@ export function PlannedMaintTables() {
     return (
         <>
             {!show ?  
-                <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
+                <TableContainer component={Paper} sx={{height: '100%' ,maxHeight: '35rem'}}>
                     <Table sx={{ minWidth: 1000 }} aria-label="customized table">
                         <TableHead>
                         <TableRow>
@@ -274,7 +275,7 @@ export function PlannedMaintTables() {
             :
             <>
                 {planMaintTable.length ? 
-                    <TableContainer component={Paper} sx={{height: 'auto' ,maxHeight: '32.5rem'}}>
+                    <TableContainer component={Paper} sx={{height: '100%' ,maxHeight: '35rem'}}>
                     <Table sx={{ minWidth: 900 }} aria-label="customized table">
                         <TableHead>
                         <TableRow>
@@ -305,8 +306,9 @@ export function PlannedMaintTables() {
                     </Table>
                     </TableContainer>
             :
-            <Box sx={{height: '31.5rem', display: 'flex', jusitifyContent: 'center', alignItems: 'center'}}>
-                <Typography variant='h3' fontWeight={'500'} >
+            <Box sx={{height: '31.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%'}}>
+                    
+                <Typography variant='h3' fontWeight={'500'} textAlign={'center'} >
                     Click the plan maintenance button to plan a maintenance
                 </Typography>
             </Box>
@@ -343,25 +345,14 @@ function createVlogData(id,date, startingLocation, endingLocation, route, starti
     return { id,date, startingLocation, endingLocation, route, startingMileage, endingMileage, fuelLevel, createdBy };
 }
 
-const vLogRows = [
-    createVlogData('VHLOG-0001','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0002','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0003','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0004','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0005','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0006','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0007','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0008','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0009','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    createVlogData('VHLOG-0010','27 Jan, 2024', 'Akure, Obanla', 'Akure Obakekere', 'South gate', '123,467', '123, 567', 'mid', 'David'),
-    ];
-
 export function DriverLogTable() {
     const navigate = useNavigate()
     const [dailyLog, setDailyLog] = useState([])
     const {setOpenAlert, setAlertMsg, setAlertSeverity, planMaintInput, newDailyLog} = ChatState()
     const [show, setShow] = useState(false)
     const [user, setUser] = useState({})
+    const [showModal, setShowModal] = useState(false)
+    const [clickedData, setClickedData] = useState([])
 
 
     useEffect(() => {
@@ -460,7 +451,9 @@ export function DriverLogTable() {
             };
 
     const handleClick = (row)=>{
-        console.log('information present here should be displayed on the modal')
+        if (showModal){setShowModal(false)}
+        if (!showModal){setShowModal(true)}
+        setClickedData(row)
     }
 
     const formatDate = (dateString) => {
@@ -473,7 +466,7 @@ export function DriverLogTable() {
     <>
             {show ? <>
             {dailyLog.length ?
-            <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+            <TableContainer component={Paper} sx={{height: '100%', maxHeight: '35rem'}}>
                 <Table sx={{ minWidth: 1100 }} aria-label="customized table">
                     <TableHead>
                     <TableRow>
@@ -494,8 +487,8 @@ export function DriverLogTable() {
                                 <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{formatDate(createdAt)}</Typography></StyledTableCell>
                                 <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{logTime}</Typography></StyledTableCell>
                                 <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{currentLocation}</Typography></StyledTableCell>
-                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{startingMileage}</Typography></StyledTableCell>
-                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{endingMileage}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{Number(startingMileage).toLocaleString()}</Typography></StyledTableCell>
+                                <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{Number(endingMileage).toLocaleString()}</Typography></StyledTableCell>
                                 <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{startingFuelLevel}</Typography></StyledTableCell>
                                 <StyledTableCell size='small' ><Typography variant='h5' fontWeight={'400'} sx={{height: '2rem', display: 'flex', alignItems: 'center'}} >{endingFuelLevel}</Typography></StyledTableCell>
                             </StyledTableRowVlog>
@@ -507,6 +500,7 @@ export function DriverLogTable() {
                     
                 </Table>
                 <AlertMessage />
+                <UpdateDailyLogModal showModal={showModal} log={clickedData} />
             </TableContainer>
             :
             <Box sx={{height: '32rem', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -519,7 +513,7 @@ export function DriverLogTable() {
             </>
                 :
             <>
-                <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+                <TableContainer component={Paper} sx={{height: '100%', maxHeight: '35rem'}}>
                     <Table sx={{ minWidth: 1100 }} aria-label="customized table">
                         <TableHead>
                         <TableRow>
@@ -648,7 +642,7 @@ export function VehicleServiceTables() {
     return (
         <>
         {show ?
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '100%', maxHeight: '35rem'}}>
         <Table sx={{ minWidth: 1150 }} aria-label="customized table">
             <TableHead>
             <TableRow>
@@ -679,7 +673,7 @@ export function VehicleServiceTables() {
         </Table>
         </TableContainer>
         :
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '100%', maxHeight: '35rem'}}>
         <Table sx={{ minWidth: 800 }} aria-label="customized table">
             <TableHead>
                 <TableRow>
@@ -753,7 +747,7 @@ export function MaintLogTable() {
         setShowHis(true)
     }
     return (
-        <TableContainer component={Paper} sx={{height: '32.5rem'}}>
+        <TableContainer component={Paper} sx={{height: '100%', maxHeight: '35rem'}}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
             <TableHead>
             <TableRow>

@@ -62,39 +62,40 @@ const AdminSideBarMobile = ()=>{
         
         <Grid className={menu?"show-menu":"hide-menu"} item container sx={{p: '.25rem', background: '#1B61E4', height: '100vh', width: '15rem',}} >
             <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" >
-                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%',pt: '.75rem', alignItems: 'flex-start',pl: '.5rem', pr: '.5rem'}}>
-                    <Typography component={"h2"} variant='h4' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
-                    <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
-                        <AiOutlineRollback size={'1.5rem'} color={'white'} /> 
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', gap: '4rem', width: '100%'}}>
+                    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',width: '100%',pt: '.75rem', alignItems: 'flex-start',pl: '.5rem', pr: '.5rem'}}>
+                        <Typography component={"h2"} variant='h4' color={'white'} sx={{fontWeight: '500'}}>FleetPro</Typography>
+                        <Box sx={{height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={handleMenu} >
+                            <AiOutlineRollback size={'1.5rem'} color={'white'} /> 
+                        </Box>
+                    </Box>
+                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%'}}>
+                        <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
+                            <Box className="icon">
+                                <FaHouse size={'1.4rem'} />
+                            </Box>
+                            <Typography variant='h5' >Dashboard</Typography> 
+                        </Box>
+                        <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
+                            <Box className="icon">
+                                <FaCar size={'1.2rem'} />
+                            </Box>
+                            <Typography variant='h5'>Vehicles</Typography> 
+                        </Box>
+                        <Box className={page === "drivers" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("drivers")} sx={{width: '100%', }} >
+                            <Box className="icon">
+                                <BsPerson size={'1.3rem'} />
+                            </Box>
+                            <Typography variant='h5'>Drivers</Typography> 
+                        </Box>
+                        <Box className={page === "vehicle-assignees"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignees")} sx={{width: '100%'}}>
+                            <Box className="icon">
+                                <IoMdPerson size={'1.5rem'} />
+                            </Box>
+                            <Typography variant='h5'>Vehicle Assignees</Typography> 
+                        </Box>
                     </Box>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mt: '-12rem'}}>
-                    <Box className={page === "dashboard" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("dashboard")} sx={{width: '100%', }} >
-                        <Box className="icon">
-                            <FaHouse size={'1.4rem'} />
-                        </Box>
-                        <Typography variant='h5' >Dashboard</Typography> 
-                    </Box>
-                    <Box className={page === "vehicles" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicles")} sx={{width: '100%', }}>
-                        <Box className="icon">
-                            <FaCar size={'1.2rem'} />
-                        </Box>
-                        <Typography variant='h5'>Vehicles</Typography> 
-                    </Box>
-                    <Box className={page === "drivers" ? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("drivers")} sx={{width: '100%', }} >
-                        <Box className="icon">
-                            <BsPerson size={'1.3rem'} />
-                        </Box>
-                        <Typography variant='h5'>Drivers</Typography> 
-                    </Box>
-                    <Box className={page === "vehicle-assignees"? 'btn-1 active-btn-1': 'btn-1'} onClick={()=> handlePage("vehicle-assignees")} sx={{width: '100%'}}>
-                        <Box className="icon">
-                            <IoMdPerson size={'1.5rem'} />
-                        </Box>
-                        <Typography variant='h5'>Vehicle Assignees</Typography> 
-                    </Box>
-                </Box>
-
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1,  width: '100%', mb: '1.5rem' }}>
                     <Box className='btn-1' sx={{width: '100%', }} >
                         <Box className="icon">
